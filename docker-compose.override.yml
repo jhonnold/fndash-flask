@@ -5,5 +5,3 @@ services:
     environment:
       - FLASK_APP=manage.py
       - FLASK_ENV=development
-    volumes:
-      - .:/usr/share/fn-dash

@@ -14,7 +14,7 @@ services:
       - fn-dash-db:/var/lib/postgresql/data
 
   app:
-    build: .
+    build: app
     restart: always
     command: python manage.py runserver
     environment:
@@ -23,6 +23,17 @@ services:
       - 5000:5000
     depends_on:
       - postgres
+    volumes:
+      - ./app:/usr/share/fn-dash/app
+
+  worker:
+    build: worker
+    restart: always
+    command: python -u worker.py
+    depends_on:
+      - postgres
+    volumes:
+      - ./worker:/usr/share/fn-dash/worker
 
 volumes:
   fn-dash-db:
