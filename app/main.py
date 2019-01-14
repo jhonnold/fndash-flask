@@ -15,23 +15,25 @@ class User(db.Model):
     wins_total = db.Column(db.Integer())
     matchesplayed_total = db.Column(db.Integer())
     hoursplayed_total = db.Column(db.Integer())
+    lastmodified_total = db.Column(db.Integer())
     kills_solo = db.Column(db.Integer())
     placetop1_solo = db.Column(db.Integer())
     placetop10_solo = db.Column(db.Integer())
     placetop25_solo = db.Column(db.Integer())
     matchesplayed_solo = db.Column(db.Integer())
+    lastmodified_solo = db.Column(db.Integer())
     kills_duo = db.Column(db.Integer())
     placetop1_duo = db.Column(db.Integer())
     placetop10_duo = db.Column(db.Integer())
     placetop25_duo = db.Column(db.Integer())
     matchesplayed_duo = db.Column(db.Integer())
+    lastmodified_duo = db.Column(db.Integer())
     kills_squad = db.Column(db.Integer())
     placetop1_squad = db.Column(db.Integer())
     placetop3_squad = db.Column(db.Integer())
     placetop6_squad = db.Column(db.Integer())
     matchesplayed_squad = db.Column(db.Integer())
-    timestamp = db.Column(db.Integer())
-
+    lastmodified_squad = db.Column(db.Integer())
 
     def __init__(self, uid, username):
         self.uid = uid
@@ -39,7 +41,6 @@ class User(db.Model):
 
     def __repr__(self):
         return "<User '{}'>".format(self.username)
-
 
 
 @app.route('/')
