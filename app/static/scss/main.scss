@@ -1,0 +1,11 @@
+@import 'settings';
+@import 'foundation';
+@include foundation-everything;
+
+.drawer {
+  padding: 0.5rem;
+}
+
+.dashboard {
+  padding: 0.5rem;
+}

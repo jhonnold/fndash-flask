@@ -1,10 +1,27 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
+from flask_assets import Environment, Bundle
 from config import DevConfig
 
 app = Flask(__name__)
 app.config.from_object(DevConfig)
 db = SQLAlchemy(app)
+
+assets = Environment(app)
+assets.config['AUTOPREFIXER_BROWSERS'] = ['> 1%']
+
+js = Bundle(
+    'js/jquery.js',
+    'js/what-input.js',
+    'js/foundation.min.js',
+    'js/app.js',
+    filters='jsmin',
+    output='dist/main.bundle.js')
+assets.register('js_all', js)
+
+css = Bundle(
+    'scss/main.scss', filters=['libsass', 'autoprefixer6'], output='dist/styles.css', depends='**/*.scss')
+assets.register('css_all', css)
 
 
 class User(db.Model):
