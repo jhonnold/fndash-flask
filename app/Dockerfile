@@ -9,7 +9,12 @@ RUN apt-get update && \
 RUN npm install -g postcss-cli autoprefixer
 
 WORKDIR /usr/share/fn-dash/app
+
 ADD requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
+
+RUN cd static && \
+    curl https://codeload.github.com/zurb/foundation-sites/tar.gz/v6.5.1 | tar xvz && \
+    cd ../..

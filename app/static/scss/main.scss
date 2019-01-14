@@ -1,5 +1,6 @@
+// Foundation is loaded in the docker container so it's not committed up
 @import 'settings';
-@import 'foundation';
+@import '../foundation-sites-6.5.1/scss/foundation.scss';
 @include foundation-everything;
 
 .drawer {

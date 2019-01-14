@@ -11,16 +11,14 @@ assets = Environment(app)
 assets.config['AUTOPREFIXER_BROWSERS'] = ['> 1%']
 
 js = Bundle(
-    'js/jquery.js',
-    'js/what-input.js',
-    'js/foundation.min.js',
+    'foundation-sites-6.5.1/dist/js/foundation.min.js',
     'js/app.js',
     filters='jsmin',
     output='dist/main.bundle.js')
 assets.register('js_all', js)
 
 css = Bundle(
-    'scss/main.scss', filters=['libsass', 'autoprefixer6'], output='dist/styles.css', depends='**/*.scss')
+    'scss/main.scss', filters=['libsass', 'autoprefixer6', 'cssmin'], output='dist/styles.css', depends='**/*.scss')
 assets.register('css_all', css)
 
 
