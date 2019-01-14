@@ -1,0 +1,7 @@
+<div class="left-nav">
+  <ul>
+    {% for user in users %}
+    <li>{{ user.username | safe }}</li>
+    {% endfor %}
+  </ul>
+</div>
