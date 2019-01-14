@@ -1,7 +1,7 @@
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 from app import app
-from app.models import db
+from app.models import db, User
 
 manager = Manager(app)
 migrate = Migrate(app, db)
@@ -29,6 +29,11 @@ def recreate_db():
     db.drop_all()
     db.create_all()
     db.session.commit()
+
+
+@app.shell_context_processor
+def make_shell_context():
+    return dict(app=app, db=db, migrate=migrate, User=User)
 
 
 if __name__ == "__main__":
