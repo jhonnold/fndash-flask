@@ -41,13 +41,14 @@ Simply load into the app container and follow the [Flask-Migration Docs](https:/
 +-- _app (The flask application)
 |   +-- _static (Static files for app)
 |   +-- _templates (Template files for app)
-|   +-- models.py (Models for the application)
-+-- _migations (Database migrations folder, managed by alembic)
-+-- config.py
+|   +-- _migations (Database migrations folder, managed by alembic)
+|   +-- config.py
+|   +-- main.py (Main file for the application)
+|   +-- manage.py (Python script file for managing the app)
+|   +-- Dockerfile
+|   +-- requirements.txt
++-- _worker (The worker app to update the DB)
 +-- docker-compose.override.yml (Override for development purposes)
 +-- docker-compose.yml (Main docker-compose management file)
-+-- Dockerfile (./app docker build file)
 +-- LICENSE
-+-- manage.py (Python script file for managing the app)
 +-- README.md
-+-- requirements.txt
