@@ -1,5 +1,5 @@
 import time
 
 while True:
-  print('I am working')
+  print('WOW')
   time.sleep(60)
