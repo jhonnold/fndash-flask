@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_assets import Environment, Bundle
-from config import DevConfig
+from .config import DevConfig
 
 app = Flask(__name__)
 app.config.from_object(DevConfig)
