@@ -8,3 +8,4 @@ jsmin
 libsass
 cssmin
 celery
+redis

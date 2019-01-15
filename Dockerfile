@@ -1,4 +1,4 @@
-FROM python:3.7.1
+FROM python:3.6
 LABEL maintainer "Jay Honnold <jayhonnold@gmail.com>"
 
 RUN apt-get update && \

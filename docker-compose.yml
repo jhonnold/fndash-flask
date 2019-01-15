@@ -32,6 +32,21 @@ services:
     image: redis
     ports:
       - 6379:6379
+    volumes:
+      - fn-dash-redis:/data
+
+  celery:
+    restart: always
+    command: /bin/sh ./docker.celery.sh
+    build:
+      context: .
+      dockerfile: DockerfileCelery
+    volumes:
+      - .:/usr/share/fn-dash
+    depends_on:
+      - postgres
+      - redis
 
 volumes:
   fn-dash-db:
+  fn-dash-redis:

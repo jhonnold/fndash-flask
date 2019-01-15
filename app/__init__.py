@@ -1,11 +1,36 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_assets import Environment, Bundle
+from celery import Celery
 from .config import DevConfig
+from .celeryconfig import CeleryConfig
 
 app = Flask(__name__)
 app.config.from_object(DevConfig)
 db = SQLAlchemy(app)
+
+def make_celery(app):
+    # create context tasks in celery
+    celery = Celery(
+        app.import_name,
+        broker=app.config['CELERY_BROKER_URL']
+    )
+    celery.conf.update(app.config)
+    celery.config_from_object(CeleryConfig)
+    TaskBase = celery.Task
+
+    class ContextTask(TaskBase):
+        abstract = True
+
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return TaskBase.__call__(self, *args, **kwargs)
+
+    celery.Task = ContextTask
+
+    return celery
+
+celery = make_celery(app)
 
 assets = Environment(app)
 assets.config['AUTOPREFIXER_BROWSERS'] = ['> 1%']
