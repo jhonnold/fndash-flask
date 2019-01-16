@@ -9,12 +9,10 @@ app = Flask(__name__)
 app.config.from_object(DevConfig)
 db = SQLAlchemy(app)
 
+
 def make_celery(app):
     # create context tasks in celery
-    celery = Celery(
-        app.import_name,
-        broker=app.config['CELERY_BROKER_URL']
-    )
+    celery = Celery(app.import_name, broker=app.config['CELERY_BROKER_URL'])
     celery.conf.update(app.config)
     celery.config_from_object(CeleryConfig)
     TaskBase = celery.Task
@@ -30,6 +28,7 @@ def make_celery(app):
 
     return celery
 
+
 celery = make_celery(app)
 
 assets = Environment(app)
@@ -43,7 +42,10 @@ js = Bundle(
 assets.register('js_all', js)
 
 css = Bundle(
-    'scss/main.scss', filters=['libsass', 'autoprefixer6', 'cssmin'], output='dist/styles.css', depends='**/*.scss')
+    'scss/main.scss',
+    filters=['libsass', 'autoprefixer6', 'cssmin'],
+    output='dist/styles.css',
+    depends='**/*.scss')
 assets.register('css_all', css)
 
 
@@ -86,4 +88,20 @@ class User(db.Model):
 @app.route('/')
 def home():
     users = User.query.all()
-    return render_template('layout.html', users=users)
+    selected_user = users[0]
+    return render_template(
+        'layout.html', users=users, selected_user=selected_user)
+
+
+@app.route('/users/<user_id>')
+def user_stats(user_id):
+    users = User.query.all()
+    selected_user = None
+    
+    for user in users:
+        if (user.id == int(user_id)):
+            selected_user = user
+            break
+
+    return render_template(
+        'layout.html', users=users, selected_user=selected_user)

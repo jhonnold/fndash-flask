@@ -1,8 +1,15 @@
 <div class="dashboard">
-  {% if selected_user %} {% else %}
-  <h3 class="text-center">Welcome to the Fortnite Dashboard!</h3>
-  <h4 class="text-center">Please select a user on the left</h4>
-  <canvas id="myChart" width="400" height="400"></canvas> {% endif %}
+  <h2 class="text-center">{{ selected_user.username }}</h2>
+  <ul class="stats-list">
+    <li>294 <span class="stats-list-label">Victories</span></li>
+    <li class="stats-list">
+      4,125 <span class="stats-list-label">Matches</span>
+    </li>
+    <li class="stats-list">
+      1.54 <span class="stats-list-label">K/D</span>
+    </li>
+  </ul>
+  <canvas id="myChart" width="400" height="400"></canvas>
 </div>
 <script>
   var ctx = document.getElementById('myChart').getContext('2d');
