@@ -15,6 +15,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN cd app/static && \
-    curl https://codeload.github.com/zurb/foundation-sites/tar.gz/v6.5.1 | tar xvz && \
-    cd ../..
+RUN /bin/sh util/download-foundation.sh
