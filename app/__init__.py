@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_assets import Environment, Bundle
 from celery import Celery
@@ -35,6 +35,7 @@ assets = Environment(app)
 assets.config['AUTOPREFIXER_BROWSERS'] = ['> 1%']
 
 js = Bundle(
+    # This file is downloaded in the docker container
     'foundation-sites-6.5.1/dist/js/foundation.min.js',
     'js/app.js',
     filters='jsmin',
@@ -43,7 +44,7 @@ assets.register('js_all', js)
 
 css = Bundle(
     'scss/main.scss',
-    filters=['libsass', 'autoprefixer6', 'cssmin'],
+    filters=['libsass', 'autoprefixer6'],
     output='dist/styles.css',
     depends='**/*.scss')
 assets.register('css_all', css)
@@ -88,9 +89,7 @@ class User(db.Model):
 @app.route('/')
 def home():
     users = User.query.all()
-    selected_user = users[0]
-    return render_template(
-        'layout.html', users=users, selected_user=selected_user)
+    return redirect(url_for('user_stats', user_id=users[0].id))
 
 
 @app.route('/users/<user_id>')

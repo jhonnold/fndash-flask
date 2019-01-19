@@ -1,0 +1,64 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  background-color: $dark-gray;
+
+  &__container {
+    max-width: 75rem;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  &__name-tabs {
+    display: flex;
+    flex-direction: row-reverse;
+
+    ul {
+      display: flex;
+      flex-direction: row;
+      list-style-type: none;
+      margin: 0;
+    }
+
+    li {
+      margin: 0.5rem;
+    }
+
+    a {
+      text-decoration: none;
+      color: $white;
+    }
+  }
+
+  &__bottom {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4rem;
+  }
+
+  &__name {
+    font-size: 4rem;
+    color: white;
+    margin: 0;
+  }
+
+  &__mode-tabs {
+    display: flex;
+    align-items: flex-end;
+
+    ul {
+      display: flex;
+      flex-direction: row;
+      list-style-type: none;
+      margin: 0;
+    }
+
+    li {
+      margin: 0 1rem;
+      font-size: 1.5rem;
+      color: $white;
+    }
+  }
+}

@@ -26,31 +26,7 @@
   </head>
 
   <body>
-    <div class="off-canvas-wrapper">
-      <div class="off-canvas-wrapper-inner" data-off-canvas-wrapper>
-        <div
-          class="off-canvas position-left reveal-for-medium"
-          id="side-nav"
-          data-off-canvas
-          data-position="left"
-        >
-          {% include "drawer.html" %}
-        </div>
-        <div class="off-canvas-content" data-off-canvas-content>
-          <div class="title-bar">
-            <div class="title-bar-left">
-              <button
-                class="menu-icon hide-for-medium"
-                type="button"
-                data-open="side-nav"
-              ></button>
-              <span class="title-bar-title">Fortnite Dashboard</span>
-            </div>
-          </div>
-          {% include "dashboard.html" %}
-        </div>
-      </div>
-    </div>
+    {% include "header.html" %}
     <script
       src="https://code.jquery.com/jquery-3.3.1.min.js"
       integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
