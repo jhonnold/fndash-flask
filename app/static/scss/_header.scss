@@ -3,7 +3,7 @@
   flex-direction: column;
   width: 100%;
   padding: 0.5rem 1rem;
-  background-color: $dark-gray;
+  background-color: $primary-color;
 
   &__container {
     max-width: 75rem;
@@ -40,7 +40,7 @@
 
   &__name {
     font-size: 4rem;
-    color: white;
+    color: $white;
     margin: 0;
   }
 

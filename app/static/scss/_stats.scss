@@ -1,0 +1,55 @@
+.stats {
+  flex: 1;
+  width: 100%;
+  padding: 1rem;
+  background-color: $white;
+
+  &__container {
+    @extend .grid-x;
+
+    max-width: 75rem;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  &__details {
+    @extend .small-12;
+    @extend .medium-6;
+    @extend .grid-y;
+  }
+
+  &__games {
+    @extend .small-12;
+    @extend .medium-6;
+    @extend .grid-y;
+  }
+
+  &__list {
+    ul {
+      display: flex;
+      margin: 0;
+      list-style-type: none;
+    }
+
+    li {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-right: 1px solid $secondary-color;
+      padding: 0 1rem;
+
+      &:last-of-type {
+        border: none;
+      }
+
+      span:first-of-type {
+        font-size: 1.5rem;
+        color: $primary-color;
+      }
+
+      span:last-of-type {
+        color: $secondary-color;
+      }
+    }
+  }
+}

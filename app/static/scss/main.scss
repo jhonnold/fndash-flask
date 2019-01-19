@@ -4,3 +4,13 @@
 @include foundation-everything;
 
 @import 'header';
+@import 'stats';
+
+html, body {
+  min-height: 100vh;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
