@@ -1,24 +1,25 @@
 .stats {
   flex: 1;
   width: 100%;
+  max-width: 75rem;
+  margin: 0 auto;
   padding: 2rem 1rem;
   background-color: $white;
 
   &__container {
     @extend .grid-x;
-
-    max-width: 75rem;
-    width: 100%;
-    margin: 0 auto;
+    @extend .grid-margin-x;
   }
 
   &__details {
+    @extend .cell;
     @extend .small-12;
     @extend .medium-6;
     @extend .grid-y;
   }
 
   &__games {
+    @extend .cell;
     @extend .small-12;
     @extend .medium-6;
     @extend .grid-y;
@@ -61,5 +62,11 @@
   &__placement-graph {
     width: 100%;
     margin: 2rem 0;
+  }
+
+  &__games-table {
+    th {
+      text-align: left;
+    }
   }
 }
