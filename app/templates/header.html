@@ -12,11 +12,19 @@
     <div class="header__bottom">
       <h2 class="header__name">{{ selected_user.username | safe }}</h2>
       <div class="header__mode-tabs">
-        <ul>
-          <li>All</li>
-          <li>Solo</li>
-          <li>Duo</li>
-          <li>Squad</li>
+        <ul class="tabs" data-tabs id="mode-tabs">
+          <li class="tabs-title is-active">
+            <a data-tabs-target="all_stats" href="#all">All</a>
+          </li>
+          <li class="tabs-title">
+            <a data-tabs-target="solo_stats" href="#solo">Solo</a>
+          </li>
+          <li class="tabs-title">
+            <a data-tabs-target="duo_stats" href="#duo">Duo</a>
+          </li>
+          <li class="tabs-title">
+            <a data-tabs-target="squad_stats" href="#squad">Squad</a>
+          </li>
         </ul>
       </div>
     </div>
