@@ -10,3 +10,4 @@ cssmin
 celery
 redis
 requests
+json
