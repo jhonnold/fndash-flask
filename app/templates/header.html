@@ -4,7 +4,7 @@
       <span class="header__title">Fortnite Dashboard</span>
       <ul class="header__name-menu" data-dropdown-menu>
         <li>
-          <a href="#">{{ selected_user.username }}</a>
+          <a href="#">{{ username }}</a>
           <ul class="menu">
             {% for user in users %}
             <li>
@@ -18,7 +18,7 @@
     <div class="header__break"></div>
     <div class="header__lower-menu">
       <span class="header__name">
-        <h2>{{ selected_user.username }}</h2>
+        <h2>{{ username }}</h2>
       </span>
       <ul class="header__mode-tabs" data-tabs id="mode-tabs">
         <li class="header__mode-tabs-title tabs-title is-active">

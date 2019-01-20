@@ -7,7 +7,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1"
     />
-    <title>{{ selected_user.username | safe }} Stats - FN Dashboard</title>
+    <title>{{ username }} Stats - FN Dashboard</title>
     <link
       rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
@@ -31,16 +31,20 @@
 
   <body>
     {% include "header.html" %}
-    {% include "details.html" %}
-    {% include "visuals.html" %}
-    <!-- <div class="tabs-content" data-tabs-content="mode-tabs">
+    <div class="tabs-content" data-tabs-content="mode-tabs">
       <div class="tabs-panel is-active" id="all_stats">
-        {% include "total_stats.html" %}
+        {% include "details_all.html" %} {% include "visuals.html" %}
       </div>
-      <div class="tabs-panel" id="solo_stats">Solo Stats</div>
-      <div class="tabs-panel" id="duo_stats">Duo Stats</div>
-      <div class="tabs-panel" id="squad_stats">Squad Stats</div>
-    </div> -->
+      <div class="tabs-panel" id="solo_stats">
+        {% include "details_solo.html" %} {% include "visuals.html" %}
+      </div>
+      <div class="tabs-panel" id="duo_stats">
+        {% include "details_duo.html" %} {% include "visuals.html" %}
+      </div>
+      <div class="tabs-panel" id="squad_stats">
+        {% include "details_squad.html" %} {% include "visuals.html" %}
+      </div>
+    </div>
     <script
       src="https://code.jquery.com/jquery-3.3.1.min.js"
       integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
