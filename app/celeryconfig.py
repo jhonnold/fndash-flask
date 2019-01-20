@@ -2,8 +2,8 @@ from celery.schedules import crontab
 
 
 class CeleryConfig(object):
-    CELERY_IMPORTS = ('app.tasks.hello')
-    CELERY_TASK_RESULT_EXPIRES = 30
+    CELERY_IMPORTS = ('app.tasks.worker')
+    CELERY_TASK_RESULT_EXPIRES = 60
     CELERY_TIMEZONE = 'UTC'
 
     CELERY_ACCEPT_CONTENT = ['json', 'msgpack', 'yaml']
@@ -11,8 +11,8 @@ class CeleryConfig(object):
     CELERY_RESULT_SERIALIZER = 'json'
 
     CELERYBEAT_SCHEDULE = {
-        'test-celery': {
-            'task': 'app.tasks.hello.print_hello',
+        'stats_update': {
+            'task': 'app.tasks.worker.update_stats',
             # Every minute
             'schedule': crontab(minute="*"),
         }
