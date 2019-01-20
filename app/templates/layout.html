@@ -31,14 +31,16 @@
 
   <body>
     {% include "header.html" %}
-    <div class="tabs-content" data-tabs-content="mode-tabs">
+    {% include "details.html" %}
+    {% include "visuals.html" %}
+    <!-- <div class="tabs-content" data-tabs-content="mode-tabs">
       <div class="tabs-panel is-active" id="all_stats">
         {% include "total_stats.html" %}
       </div>
       <div class="tabs-panel" id="solo_stats">Solo Stats</div>
       <div class="tabs-panel" id="duo_stats">Duo Stats</div>
       <div class="tabs-panel" id="squad_stats">Squad Stats</div>
-    </div>
+    </div> -->
     <script
       src="https://code.jquery.com/jquery-3.3.1.min.js"
       integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="

@@ -3,15 +3,22 @@
 // @import url('https://fonts.googleapis.com/css?family=Lato:300,400');
 @import url('https://fonts.googleapis.com/css?family=Exo+2:300,400');
 
+@import 'reset';
+
 // Foundation is loaded in the docker container so it's not committed up
 @import 'settings';
 @import '../foundation-sites-6.5.1/scss/foundation.scss';
 @include foundation-everything;
 
 @import 'header';
-@import 'stats';
+@import 'details';
+// @import 'stats';
+@import 'visuals';
+@import 'games';
+@import 'graphs';
 
-html, body {
+html,
+body {
   min-height: 100vh;
 }
 

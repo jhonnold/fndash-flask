@@ -1,32 +1,39 @@
 <div class="header">
   <div class="header__container">
-    <div class="header__name-tabs">
-      <ul>
-        {% for user in users %}
+    <nav class="header__top">
+      <span class="header__title">Fortnite Dashboard</span>
+      <ul class="header__name-menu" data-dropdown-menu>
         <li>
-          <a href="/users/{{ user.id }}">{{ user.username | safe }}</a>
+          <a href="#">{{ selected_user.username }}</a>
+          <ul class="menu">
+            {% for user in users %}
+            <li>
+              <a href="/users/{{ user.id }}">{{ user.username }}</a>
+            </li>
+            {% endfor %}
+          </ul>
         </li>
-        {% endfor %}
       </ul>
-    </div>
-    <div class="header__bottom">
-      <h2 class="header__name">{{ selected_user.username | safe }}</h2>
-      <div class="header__mode-tabs">
-        <ul class="tabs" data-tabs id="mode-tabs">
-          <li class="tabs-title is-active">
-            <a data-tabs-target="all_stats" href="#all">All</a>
-          </li>
-          <li class="tabs-title">
-            <a data-tabs-target="solo_stats" href="#solo">Solo</a>
-          </li>
-          <li class="tabs-title">
-            <a data-tabs-target="duo_stats" href="#duo">Duo</a>
-          </li>
-          <li class="tabs-title">
-            <a data-tabs-target="squad_stats" href="#squad">Squad</a>
-          </li>
-        </ul>
-      </div>
+    </nav>
+    <div class="header__break"></div>
+    <div class="header__lower-menu">
+      <span class="header__name">
+        <h2>{{ selected_user.username }}</h2>
+      </span>
+      <ul class="header__mode-tabs" data-tabs id="mode-tabs">
+        <li class="header__mode-tabs-title is-active">
+          <a href="#all_stats">All</a>
+        </li>
+        <li class="header__mode-tabs-title is-active">
+          <a href="#solo_stats">Solo</a>
+        </li>
+        <li class="header__mode-tabs-title is-active">
+          <a href="#duo_stats">Duo</a>
+        </li>
+        <li class="header__mode-tabs-title is-active">
+          <a href="#squad_stats">Squad</a>
+        </li>
+      </ul>
     </div>
   </div>
 </div>

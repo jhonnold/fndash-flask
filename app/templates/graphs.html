@@ -1,12 +1,9 @@
-<div class="stats" id="total_stats">
-  <div class="stats__container">
-    <div class="stats__details">
-      <div class="stats__kd-graph"><canvas id="kd-graph"></canvas></div>
-      <div class="stats__placement-graph">
-        <canvas id="placement-graph"></canvas>
-      </div>
-    </div>
-    </div>
+<div class="graphs">
+  <h3>K/D</h3>
+  <div class="graphs__kd-graph"><canvas id="kd-graph"></canvas></div>
+  <h3>Placements</h3>
+  <div class="graphs__placement-graph">
+    <canvas id="placement-graph"></canvas>
   </div>
 </div>
 <script>
@@ -30,6 +27,7 @@
       responsive: true,
       aspectRatio: 2,
       legend: {
+        display: false,
         position: 'bottom',
         labels: {
           fontColor: '#fafafa',
@@ -75,6 +73,7 @@
     options: {
       aspectRatio: 2,
       legend: {
+        display: false,
         position: 'right',
         labels: {
           fontColor: '#fafafa',

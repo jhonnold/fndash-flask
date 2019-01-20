@@ -1,85 +1,53 @@
 .header {
-  display: flex;
-  flex-direction: column;
   width: 100%;
-  padding: 0.5rem 1rem 0;
   background-color: $black;
 
   &__container {
     max-width: 75rem;
     width: 100%;
     margin: 0 auto;
+    padding: 0 0.5rem;
   }
 
-  &__name-tabs {
-    display: flex;
-    flex-direction: row-reverse;
-
-    ul {
-      display: flex;
-      flex-direction: row;
-      list-style-type: none;
-      margin: 0;
-    }
-
-    li {
-      margin: 0.5rem;
-    }
-
-    a {
-      text-decoration: none;
-      font-weight: $global-weight-bold;
-      color: $white;
-
-      &:hover {
-        color: $primary-color;
-      }
-    }
+  &__top {
+    @extend .top-bar;
   }
 
-  &__bottom {
+  &__title {
+    @extend .top-bar-title;
+  }
+
+  &__name-menu {
+    @extend .dropdown;
+    @extend .menu;
+  }
+
+  &__break {
+    width: calc(100% - 1rem);
+    margin: 0 0.5rem;
+    background-color: rgba($white, 0.125);
+    height: 1px;
+  }
+
+  &__lower-menu {
     @extend .grid-x;
-
-    justify-content: space-between;
-    flex-wrap: wrap;
-    margin-top: 4rem;
+    @extend .align-middle;
+    @extend .align-justify;
+    padding: 0.5rem;
   }
 
   &__name {
-    font-size: 4rem;
-    color: $white;
-    margin: 0;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    color: $primary-color;
   }
 
   &__mode-tabs {
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
-    flex: 1;
+    @extend .tabs;
+  }
 
-    @include breakpoint(small only) {
-      justify-content: center;
-    }
-
-    ul {
-      display: flex;
-      flex-direction: row;
-      list-style-type: none;
-      margin: 0;
-    }
-
-    li {
-      margin-right: 1.5rem;
-      font-size: 1.5rem;
-      color: $white;
-
-      &:last-of-type {
-        margin: 0;
-      }
-    }
-
-    a:hover {
-      color: $primary-color;
-    }
+  &__mode-tabs-title {
+    @extend .tabs-title;
   }
 }

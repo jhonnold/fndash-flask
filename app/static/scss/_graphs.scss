@@ -1,0 +1,17 @@
+.graphs {
+  @extend .grid-y;
+  @extend .cell;
+  @extend .small-12;
+  @extend .medium-6;
+
+  padding: 0.5rem;
+
+  &__kd-graph {
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+
+  &__placement-graph {
+    width: 100%;
+  }
+}
