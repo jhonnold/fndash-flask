@@ -3,6 +3,7 @@
 
   &__container {
     @extend .grid-x;
+    @extend .grid-margin-x;
 
     max-width: 75rem;
     width: 100%;
