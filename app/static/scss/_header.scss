@@ -3,7 +3,7 @@
   flex-direction: column;
   width: 100%;
   padding: 0.5rem 1rem 0;
-  background-color: $primary-color;
+  background-color: $black;
 
   &__container {
     max-width: 75rem;
@@ -30,12 +30,18 @@
       text-decoration: none;
       font-weight: $global-weight-bold;
       color: $white;
+
+      &:hover {
+        color: $primary-color;
+      }
     }
   }
 
   &__bottom {
-    display: flex;
+    @extend .grid-x;
+
     justify-content: space-between;
+    flex-wrap: wrap;
     margin-top: 4rem;
   }
 
@@ -47,7 +53,13 @@
 
   &__mode-tabs {
     display: flex;
+    justify-content: flex-end;
     align-items: flex-end;
+    flex: 1;
+
+    @include breakpoint(small only) {
+      justify-content: center;
+    }
 
     ul {
       display: flex;
@@ -57,9 +69,17 @@
     }
 
     li {
-      margin: 0 1rem;
+      margin-right: 1.5rem;
       font-size: 1.5rem;
       color: $white;
+
+      &:last-of-type {
+        margin: 0;
+      }
+    }
+
+    a:hover {
+      color: $primary-color;
     }
   }
 }

@@ -69,19 +69,19 @@ $global-font-size: 100%;
 $global-width: rem-calc(1200);
 $global-lineheight: 1.5;
 $foundation-palette: (
-  primary: #1779ba,
-  secondary: #767676,
+  primary: #ff8300,
+  secondary: #007CFF,
   success: #3adb76,
   warning: #ffae00,
   alert: #cc4b37,
 );
 $light-gray: #e6e6e6;
 $medium-gray: #cacaca;
-$dark-gray: #8a8a8a;
-$black: #0a0a0a;
+$dark-gray: #272727;
+$black: #131313;
 $white: #fafafa;
-$body-background: $white;
-$body-font-color: $black;
+$body-background: $black;
+$body-font-color: $white;
 $body-font-family: 'Exo 2', Helvetica, Roboto, Arial, sans-serif;
 $body-antialiased: true;
 $global-margin: 1rem;
@@ -771,21 +771,21 @@ $switch-paddle-transition: all 0.25s ease-out;
 // 50. Table
 // ---------
 
-$table-background: $white;
+$table-background: $dark-gray;
 $table-color-scale: 5%;
 $table-border: 1px solid smart-scale($table-background, $table-color-scale);
 $table-padding: rem-calc(8 10 10);
 $table-hover-scale: 2%;
-$table-row-hover: darken($table-background, $table-hover-scale);
-$table-row-stripe-hover: darken($table-background, $table-color-scale + $table-hover-scale);
+$table-row-hover: lighten($table-background, $table-hover-scale);
+$table-row-stripe-hover: lighten($table-background, $table-color-scale + $table-hover-scale);
 $table-is-striped: true;
 $table-striped-background: smart-scale($table-background, $table-color-scale);
 $table-stripe: even;
 $table-head-background: smart-scale($table-background, $table-color-scale / 2);
-$table-head-row-hover: darken($table-head-background, $table-hover-scale);
+$table-head-row-hover: lighten($table-head-background, $table-hover-scale);
 $table-foot-background: smart-scale($table-background, $table-color-scale);
-$table-foot-row-hover: darken($table-foot-background, $table-hover-scale);
-$table-head-font-color: $body-font-color;
+$table-foot-row-hover: lighten($table-foot-background, $table-hover-scale);
+$table-head-font-color: $primary-color;
 $table-foot-font-color: $body-font-color;
 $show-header-for-stacked: false;
 $table-stack-breakpoint: medium;
@@ -794,14 +794,14 @@ $table-stack-breakpoint: medium;
 // --------
 
 $tab-margin: 0;
-$tab-background: $primary-color;
+$tab-background: $black;
 $tab-color: $white;
-$tab-background-active: $white;
+$tab-background-active: $dark-gray;
 $tab-active-color: $primary-color;
 $tab-item-font-size: 1.5rem;
 $tab-item-background-hover: none;
 $tab-item-padding: 1.25rem 1.5rem;
-$tab-content-background: $white;
+$tab-content-background: $dark-gray;
 $tab-content-border: none;
 $tab-content-color: none;
 $tab-content-padding: none;

@@ -4,7 +4,6 @@
   max-width: 75rem;
   margin: 0 auto;
   padding: 2rem 1rem;
-  background-color: $white;
 
   &__container {
     @extend .grid-x;
@@ -36,7 +35,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      border-right: 1px solid $secondary-color;
+      border-right: 1px solid $white;
       padding: 0 1rem;
 
       &:last-of-type {
@@ -49,7 +48,7 @@
       }
 
       span:last-of-type {
-        color: $secondary-color;
+        color: $white;
       }
     }
   }
@@ -67,6 +66,7 @@
   &__games-table {
     th {
       text-align: left;
+      color: $primary-color;
     }
   }
 }
