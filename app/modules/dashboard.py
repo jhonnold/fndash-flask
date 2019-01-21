@@ -3,6 +3,7 @@ from app.models import User, Game
 
 dashboard = Blueprint('dashboard', __name__)
 
+
 @dashboard.route('/')
 def home():
     users = User.query.all()
@@ -38,5 +39,17 @@ def user_stats(user_id):
     kd_squad = selected_user.kills_squad / (
         selected_user.matchesplayed_squad - selected_user.placetop1_squad)
     selected_user_data['kd_squad'] = "{0:0.3f}".format(kd_squad)
+
+    selected_user_data['losses_solo'] = selected_user.matchesplayed_solo - (
+        selected_user.placetop1_solo + selected_user.placetop10_solo +
+        selected_user.placetop25_solo)
+
+    selected_user_data['losses_duo'] = selected_user.matchesplayed_duo - (
+        selected_user.placetop1_duo + selected_user.placetop5_duo +
+        selected_user.placetop12_duo)
+
+    selected_user_data['losses_squad'] = selected_user.matchesplayed_squad - (
+        selected_user.placetop1_squad + selected_user.placetop3_squad +
+        selected_user.placetop6_squad)
 
     return render_template('layout.html', users=users, **selected_user_data)
