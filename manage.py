@@ -2,10 +2,8 @@ from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 from app import create_app, db
 from app.models import Game, User
-from app.modules import dashboard
 
 app, _ = create_app()
-app.register_blueprint(dashboard)
 
 migrate = Migrate(app, db)
 

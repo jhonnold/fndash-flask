@@ -1,13 +1,12 @@
 import datetime
 
 from flask import Flask, render_template, redirect, url_for
-from flask_sqlalchemy import SQLAlchemy
 from flask_assets import Environment, Bundle
 from celery import Celery
+from app.database import db
 from app.config import DevConfig
 from app.celeryconfig import CeleryConfig
-
-db = SQLAlchemy()
+from app.modules import dashboard
 
 
 def create_app(name=__name__):
@@ -15,7 +14,7 @@ def create_app(name=__name__):
     app.config.from_object(DevConfig)
     db.init_app(app)
     register_assets(app)
-    # app.register_blueprint(dashboard)
+    app.register_blueprint(dashboard)
     celery = make_celery(app)
 
     return app, celery
