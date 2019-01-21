@@ -1,8 +1,10 @@
 # Fortnite Dashboard
 
-##### TODO Description 
+![screenshot](https://i.imgur.com/qbt6lbd.png)
 
-## First Time Setup
+This is a simple fortnite dashboard designed to allow a select group of people quick access to all their stats. We track all the standard statistics that are avaialable to us (kills/placements/matches), and also generate stats on a *game* to *game* basis.
+
+## First Time Setup (Development)
 ```
 $ docker-compose build
 $ docker-compose up -d 
@@ -23,7 +25,7 @@ $ docker-compose exec app bash
 ```
 Finally, we load into the app container and migrate the database
 
-Go to [0.0.0.0:5000](http://0.0.0.0:5000) to see the app
+Go to [localhost:5000](http://localhost:5000) to see the app
 
 ## Executing Migrations
 
@@ -41,14 +43,17 @@ Simply load into the app container and follow the [Flask-Migration Docs](https:/
 +-- _app (The flask application)
 |   +-- _static (Static files for app)
 |   +-- _templates (Template files for app)
-|   +-- _migations (Database migrations folder, managed by alembic)
+|   +-- _tasks (Celery tasks)
+|   +-- __init__.py (Main core of Flask app)
 |   +-- config.py
-|   +-- main.py (Main file for the application)
-|   +-- manage.py (Python script file for managing the app)
-|   +-- Dockerfile
-|   +-- requirements.txt
-+-- _worker (The worker app to update the DB)
+|   +-- celeryconfig.py
++-- _migrations (Database migrations folder, managed by alembic)
++-- _util (Bash scripts for Docker mostly)
++-- manage.py (Python script file for managing the app)
 +-- docker-compose.override.yml (Override for development purposes)
 +-- docker-compose.yml (Main docker-compose management file)
++-- Dockerfile (Builds the flask app)
++-- DockerfileCelery (Builds the celery app)
++-- requirements.txt
 +-- LICENSE
 +-- README.md
