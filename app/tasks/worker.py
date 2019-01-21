@@ -1,6 +1,7 @@
 import celery, requests
 
-from app import User, db
+from app import db
+from app.models import User
 
 @celery.task()
 def update_stats():

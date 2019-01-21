@@ -5,6 +5,6 @@ then
   rm /tmp/celerybeat.pid
 fi
 
-celery beat -A app.celery --schedule=/tmp/celerybeat-schedule --loglevel=INFO --pidfile=/tmp/celerybeat.pid &
-celery worker -A app.celery --loglevel=INFO &
+celery beat -A manage_celery.celery --schedule=/tmp/celerybeat-schedule --loglevel=INFO --pidfile=/tmp/celerybeat.pid &
+celery worker -A manage_celery.celery --loglevel=INFO &
 tail -f /dev/null
