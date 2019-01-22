@@ -1,0 +1,88 @@
+<div class="graphs">
+  <h3>K/D</h3>
+  <div class="graphs__kd-graph"><canvas id="kd-graph-all"></canvas></div>
+  <h3>Placements</h3>
+  <div class="graphs__placement-graph">
+    <canvas id="placement-graph-all"></canvas>
+  </div>
+</div>
+<script>
+  var kdGraph = document.getElementById('kd-graph-all');
+  var kdChartAll = new Chart(kdGraph.getContext('2d'), {
+    type: 'line',
+    data: {
+      labels: ['1/1', '1/2', '1/3', '1/4', '1/5'],
+      datasets: [
+        {
+          label: 'K/D',
+          data: [1, 1.3, 1.25, 1.3, 1.275],
+          borderColor: '#ff8300',
+          borderWidth: 2,
+          fill: true,
+          backgroundColor: 'rgba(255, 131, 0, 0.125)',
+          pointRadius: 4,
+        },
+        {
+          label: 'K/D',
+          data: [0.8, 1, 1.2, 1.4, 1.5],
+          borderColor: '#007cff',
+          borderWidth: 2,
+          fill: true,
+          backgroundColor: 'rgba(0, 124, 255, 0.125)',
+          pointRadius: 4,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      aspectRatio: 2,
+      legend: {
+        display: false,
+        position: 'bottom',
+        labels: {
+          fontColor: '#fafafa',
+        },
+      },
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              min: 0.75,
+              max: 1.5,
+              stepSize: 0.25,
+              fontColor: '#fafafa',
+            },
+            gridLines: {
+              color: 'rgba(255, 255, 255, 0.125)',
+            },
+          },
+        ],
+        xAxes: [
+          {
+            ticks: {
+              fontColor: '#fafafa',
+            },
+          },
+        ],
+      },
+    },
+  });
+
+  var placementAllData = {
+    datasets: [
+      {
+        data: [{{ placetop1_solo }}, {{ placetop10_solo }}, {{ placetop25_solo }}, {{ losses_solo }}],
+        backgroundColor: ['#ff8300', '#17bebb', '#ffc914', '#007cff'],
+      },
+      {
+        data: [{{ placetop1_duo }}, {{ placetop5_duo }}, {{ placetop12_duo }}, {{ losses_duo }}],
+        backgroundColor: ['#ff8300', '#17bebb', '#ffc914', '#007cff'],
+      },
+      {
+        data: [{{ placetop1_squad }}, {{ placetop3_squad }}, {{ placetop6_squad }}, {{ losses_squad }}],
+        backgroundColor: ['#ff8300', '#17bebb', '#ffc914', '#007cff'],
+      },
+    ],
+    labels: ['Victory', 'Silver', 'Bronze', 'Loss'],
+  };
+</script>

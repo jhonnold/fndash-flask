@@ -33,41 +33,37 @@
     {% include "header.html" %}
     <div class="tabs-content" data-tabs-content="mode-tabs">
       <div class="tabs-panel is-active" id="all_stats">
-        {% include "details_all.html" %}
+        {% include "details/all.html" %}
         <div class="visuals">
           <div class="visuals__container">
-            {% include "games.html" %}
-            {% include "graphs_all.html" %}
+            {% include "games.html" %} {% include "graphs/all.html" %}
           </div>
         </div>
       </div>
-      <!-- <div class="tabs-panel" id="solo_stats">
-        {% include "details_solo.html" %}
+      <div class="tabs-panel" id="solo_stats">
+        {% include "details/solo.html" %}
         <div class="visuals">
           <div class="visuals__container">
-            {% include "games.html" %}
-            {% include "graphs.html" %}
+            {% include "games.html" %} {% include "graphs/solo.html" %}
           </div>
         </div>
       </div>
       <div class="tabs-panel" id="duo_stats">
-        {% include "details_duo.html" %}
+        {% include "details/duo.html" %}
         <div class="visuals">
           <div class="visuals__container">
-            {% include "games.html" %}
-            {% include "graphs.html" %}
+            {% include "games.html" %} {% include "graphs/duo.html" %}
           </div>
         </div>
       </div>
       <div class="tabs-panel" id="squad_stats">
-        {% include "details_squad.html" %}
+        {% include "details/squad.html" %}
         <div class="visuals">
           <div class="visuals__container">
-            {% include "games.html" %}
-            {% include "graphs.html" %}
+            {% include "games.html" %} {% include "graphs/squad.html" %}
           </div>
         </div>
-      </div> -->
+      </div>
     </div>
     <script
       src="https://code.jquery.com/jquery-3.3.1.min.js"
