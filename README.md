@@ -9,7 +9,7 @@ This is a simple fortnite dashboard designed to allow a select group of people q
 $ docker-compose build
 $ docker-compose up -d 
 ```
-This will build the multiple applications (main app, postgres) and launch them. 
+This will build the multiple applications (main app, postgres, redis, celery) and launch them. 
 ```
 $ docker-compose exec postgres bash
   # psql -U [user]
@@ -41,19 +41,23 @@ Simply load into the app container and follow the [Flask-Migration Docs](https:/
 ```
 .
 +-- _app (The flask application)
+|   +-- _models (Database model files)
+|   +-- _modules (Blueprints for the application)
 |   +-- _static (Static files for app)
-|   +-- _templates (Template files for app)
 |   +-- _tasks (Celery tasks)
+|   +-- _templates (Template files for app)
 |   +-- __init__.py (Main core of Flask app)
-|   +-- config.py
 |   +-- celeryconfig.py
+|   +-- config.py
+|   +-- database.py
 +-- _migrations (Database migrations folder, managed by alembic)
 +-- _util (Bash scripts for Docker mostly)
-+-- manage.py (Python script file for managing the app)
 +-- docker-compose.override.yml (Override for development purposes)
 +-- docker-compose.yml (Main docker-compose management file)
 +-- Dockerfile (Builds the flask app)
 +-- DockerfileCelery (Builds the celery app)
-+-- requirements.txt
 +-- LICENSE
++-- manage_celery.py (Python script file to start celery)
++-- manage.py (Python script file for managing the app)
 +-- README.md
++-- requirements.txt
