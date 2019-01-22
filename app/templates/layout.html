@@ -17,16 +17,6 @@
     {% assets "css_all" %}
     <link rel="stylesheet" href="{{ ASSET_URL }}" />
     {% endassets %}
-    <!-- ChartJS in head because of how it is used directly in template files -->
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"
-      integrity="sha256-oSgtFCCmHWRPQ/JmR4OoZ3Xke1Pw4v50uh6pLcu+fIc="
-      crossorigin="anonymous"
-    ></script>
-    <script>
-      Chart.defaults.global.defaultFontFamily = 'Exo 2';
-      Chart.defaults.global.defaultColor = '#ff8300';
-    </script>
   </head>
 
   <body>
@@ -75,6 +65,15 @@
       integrity="sha256-bj9uUXCtgWia8MCh9s6lkvAbenPi2xgxdyH5qfPrAVk="
       crossorigin="anonymous"
     ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"
+      integrity="sha256-oSgtFCCmHWRPQ/JmR4OoZ3Xke1Pw4v50uh6pLcu+fIc="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      Chart.defaults.global.defaultFontFamily = 'Exo 2';
+      Chart.defaults.global.defaultColor = '#ff8300';
+    </script>
     {% assets "js_all" %}
     <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
