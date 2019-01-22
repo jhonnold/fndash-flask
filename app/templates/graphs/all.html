@@ -33,18 +33,9 @@
 
   var placementAllData = {
     datasets: [
-      {
-        data: [{{ placetop1_solo }}, {{ placetop10_solo }}, {{ placetop25_solo }}, {{ losses_solo }}],
-        backgroundColor: ['#ff8300', '#17bebb', '#ffc914', '#007cff'],
-      },
-      {
-        data: [{{ placetop1_duo }}, {{ placetop5_duo }}, {{ placetop12_duo }}, {{ losses_duo }}],
-        backgroundColor: ['#ff8300', '#17bebb', '#ffc914', '#007cff'],
-      },
-      {
-        data: [{{ placetop1_squad }}, {{ placetop3_squad }}, {{ placetop6_squad }}, {{ losses_squad }}],
-        backgroundColor: ['#ff8300', '#17bebb', '#ffc914', '#007cff'],
-      },
+      { data: {{ placements_solo }}, },
+      { data: {{ placements_duo }}, },
+      { data: {{ placements_squad }},},
     ],
     labels: ['Victory', 'Silver', 'Bronze', 'Loss'],
   };

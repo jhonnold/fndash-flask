@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for
 from app.models import User, Game
+from app.util import total_kd, solo_kd, duo_kd, squad_kd, placements_solo, placements_duo, placements_squad
 
 dashboard = Blueprint('dashboard', __name__)
 
@@ -24,32 +25,13 @@ def user_stats(user_id):
     if '_sa_instance_state' in selected_user_data:
         del selected_user_data['_sa_instance_state']
 
-    kd_total = selected_user.kills_total / (
-        selected_user.matchesplayed_total - selected_user.wins_total)
-    selected_user_data['kd_total'] = "{0:0.3f}".format(kd_total)
+    selected_user_data['kd_total'] = "{0:0.3f}".format(total_kd(selected_user))
+    selected_user_data['kd_solo'] = "{0:0.3f}".format(solo_kd(selected_user))
+    selected_user_data['kd_duo'] = "{0:0.3f}".format(duo_kd(selected_user))
+    selected_user_data['kd_squad'] = "{0:0.3f}".format(squad_kd(selected_user))
 
-    kd_solo = selected_user.kills_solo / (
-        selected_user.matchesplayed_solo - selected_user.placetop1_solo)
-    selected_user_data['kd_solo'] = "{0:0.3f}".format(kd_solo)
-
-    kd_duo = selected_user.kills_duo / (
-        selected_user.matchesplayed_duo - selected_user.placetop1_duo)
-    selected_user_data['kd_duo'] = "{0:0.3f}".format(kd_duo)
-
-    kd_squad = selected_user.kills_squad / (
-        selected_user.matchesplayed_squad - selected_user.placetop1_squad)
-    selected_user_data['kd_squad'] = "{0:0.3f}".format(kd_squad)
-
-    selected_user_data['losses_solo'] = selected_user.matchesplayed_solo - (
-        selected_user.placetop1_solo + selected_user.placetop10_solo +
-        selected_user.placetop25_solo)
-
-    selected_user_data['losses_duo'] = selected_user.matchesplayed_duo - (
-        selected_user.placetop1_duo + selected_user.placetop5_duo +
-        selected_user.placetop12_duo)
-
-    selected_user_data['losses_squad'] = selected_user.matchesplayed_squad - (
-        selected_user.placetop1_squad + selected_user.placetop3_squad +
-        selected_user.placetop6_squad)
+    selected_user_data['placements_solo'] = placements_solo(selected_user)
+    selected_user_data['placements_duo'] = placements_duo(selected_user)
+    selected_user_data['placements_squad'] = placements_squad(selected_user)
 
     return render_template('layout.html', users=users, **selected_user_data)
