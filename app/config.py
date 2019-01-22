@@ -9,6 +9,6 @@ class ProdConfig(Config):
 class DevConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = 'postgresql://postgres@postgres/fn-dash-development'
-    SQLALCHEMY_ECHO = True
+    SQLALCHEMY_ECHO = False
     CELERY_BROKER_URL = 'redis://redis:6379/0'
     CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
