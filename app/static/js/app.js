@@ -53,6 +53,9 @@ function appendPlacementColors(data) {
 }
 
 appendPlacementColors(placementAllData);
+appendPlacementColors(placementSoloData);
+appendPlacementColors(placementDuoData);
+appendPlacementColors(placementSquadData);
 
 $(document).foundation();
 
