@@ -7,66 +7,29 @@
   </div>
 </div>
 <script>
-  var kdGraph = document.getElementById('kd-graph-all');
-  var kdChartAll = new Chart(kdGraph.getContext('2d'), {
-    type: 'line',
-    data: {
-      labels: ['1/1', '1/2', '1/3', '1/4', '1/5'],
-      datasets: [
-        {
-          label: 'K/D',
-          data: [1, 1.3, 1.25, 1.3, 1.275],
-          borderColor: '#ff8300',
-          borderWidth: 2,
-          fill: true,
-          backgroundColor: 'rgba(255, 131, 0, 0.125)',
-          pointRadius: 4,
-        },
-        {
-          label: 'K/D',
-          data: [0.8, 1, 1.2, 1.4, 1.5],
-          borderColor: '#007cff',
-          borderWidth: 2,
-          fill: true,
-          backgroundColor: 'rgba(0, 124, 255, 0.125)',
-          pointRadius: 4,
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      aspectRatio: 2,
-      legend: {
-        display: false,
-        position: 'bottom',
-        labels: {
-          fontColor: '#fafafa',
-        },
+  var kdAllData = {
+    labels: ['1/1', '1/2', '1/3', '1/4', '1/5'],
+    datasets: [
+      {
+        label: 'K/D',
+        data: [1, 1.3, 1.25, 1.3, 1.275],
+        borderColor: '#ff8300',
+        borderWidth: 2,
+        fill: true,
+        backgroundColor: 'rgba(255, 131, 0, 0.125)',
+        pointRadius: 4,
       },
-      scales: {
-        yAxes: [
-          {
-            ticks: {
-              min: 0.75,
-              max: 1.5,
-              stepSize: 0.25,
-              fontColor: '#fafafa',
-            },
-            gridLines: {
-              color: 'rgba(255, 255, 255, 0.125)',
-            },
-          },
-        ],
-        xAxes: [
-          {
-            ticks: {
-              fontColor: '#fafafa',
-            },
-          },
-        ],
+      {
+        label: 'K/D',
+        data: [0.8, 1, 1.2, 1.4, 1.5],
+        borderColor: '#007cff',
+        borderWidth: 2,
+        fill: true,
+        backgroundColor: 'rgba(0, 124, 255, 0.125)',
+        pointRadius: 4,
       },
-    },
-  });
+    ],
+  };
 
   var placementAllData = {
     datasets: [
