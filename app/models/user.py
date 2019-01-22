@@ -32,6 +32,8 @@ class User(db.Model):
     minutesplayed_squad = db.Column(db.Integer())
     lastmodified_squad = db.Column(db.Integer())
 
+    games = db.relationship('Game', backref='user', lazy='dynamic')
+
     def __init__(self, uid, username):
         self.uid = uid
         self.username = username
