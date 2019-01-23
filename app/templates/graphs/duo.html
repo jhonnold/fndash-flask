@@ -18,13 +18,14 @@
         fill: true,
         backgroundColor: 'rgba(255, 131, 0, 0.125)',
         pointRadius: 4,
+        lineTension: 0,
       },
     ],
   };
 
   var placementDuoData = {
     datasets: [
-      { data: {{ placements_duo }}, }
+      { data: {{ placements_duo }}, label: 'Solo', labels: ['Duo Victory', 'Duo Top 5', 'Duo Top 12', 'Duo Loss']}
     ],
     labels: ['Victory', 'Silver', 'Bronze', 'Loss'],
   };

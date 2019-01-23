@@ -1,10 +1,19 @@
 const PLACEMENT_CHART_OPTIONS = {
   aspectRatio: 1.5,
   legend: {
-    display: false,
-    position: 'right',
+    display: true,
+    position: 'bottom',
     labels: {
       fontColor: '#fafafa',
+    },
+  },
+  tooltips: {
+    callbacks: {
+      label: function(tooltipItem, data) {
+        var dataset = data.datasets[tooltipItem.datasetIndex];
+        var index = tooltipItem.index;
+        return dataset.labels[index] + ': ' + dataset.data[index];
+      },
     },
   },
 };
@@ -45,6 +54,8 @@ const KD_CHART_OPTIONS = {
 function appendPlacementColors(data) {
   data.datasets = data.datasets.map(d => ({
     data: d.data,
+    label: d.label,
+    labels: d.labels,
     backgroundColor: PLACEMENT_CHART_COLORS,
   }));
 }
@@ -57,7 +68,6 @@ appendPlacementColors(placementSquadData);
 $(document).foundation();
 
 $(document).ready(() => {
-
   let kdSolo, kdDuo, kdSquad;
   let kdAll = new Chart($('#kd-graph-all'), {
     type: 'line',
