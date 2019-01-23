@@ -11,9 +11,7 @@ def update_stats():
     logger = update_stats.get_logger()
     users = User.query.all()
     for user in users:
-        logger.info('*' * 40)
         logger.info('Checking on user:' + str(user))
-        logger.info('*' * 40)
         r = requests.get(API_LINK.format(user.uid))
         data = r.json()
 
@@ -21,9 +19,7 @@ def update_stats():
         stats = data['stats']
 
         if totals['lastupdate'] != user.lastmodified_total:
-            logger.info('*' * 40)
             logger.info('There was a change in totals')
-            logger.info('*' * 40)
             user.kills_total = totals['kills']
             user.wins_total = totals['wins']
             user.matchesplayed_total = totals['matchesplayed']
@@ -31,9 +27,7 @@ def update_stats():
             user.lastmodified_total = totals['lastupdate']
 
         if stats['lastmodified_solo'] != user.lastmodified_solo:
-            logger.info('*' * 40)
             logger.info('There was a change in solos')
-            logger.info('*' * 40)
             placement = 'Loss'
             if user.placetop1_solo != stats['placetop1_solo']:
                 placement = 'Victory'
@@ -59,9 +53,7 @@ def update_stats():
             user.lastmodified_solo = stats['lastmodified_solo']
 
         if stats['lastmodified_duo'] != user.lastmodified_duo:
-            logger.info('*' * 40)
             logger.info('There was a change in duos')
-            logger.info('*' * 40)
             placement = 'Loss'
             if user.placetop1_duo != stats['placetop1_duo']:
                 placement = 'Victory'
@@ -87,9 +79,7 @@ def update_stats():
             user.lastmodified_duo = stats['lastmodified_duo']
 
         if stats['lastmodified_squad'] != user.lastmodified_squad:
-            logger.info('*' * 40)
             logger.info('There was a change in squads')
-            logger.info('*' * 40)
             placement = 'Loss'
             if user.placetop1_squad != stats['placetop1_squad']:
                 placement = 'Victory'
