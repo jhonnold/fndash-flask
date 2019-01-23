@@ -21,12 +21,21 @@ def user_stats(user_id):
             selected_user = user
             break
 
-    games = selected_user.games.order_by(
-        Game.time_played.desc()).limit(10).all()
-
     selected_user_data = dict(**selected_user.__dict__)
     if '_sa_instance_state' in selected_user_data:
         del selected_user_data['_sa_instance_state']
+
+    selected_user_data['games'] = selected_user.games.order_by(
+        Game.time_played.desc()).limit(10).all()
+
+    selected_user_data['solo_games'] = selected_user.games.filter_by(
+        game_type='Solo').order_by(Game.time_played.desc()).limit(10).all()
+
+    selected_user_data['duo_games'] = selected_user.games.filter_by(
+        game_type='Duo').order_by(Game.time_played.desc()).limit(10).all()
+
+    selected_user_data['squad_games'] = selected_user.games.filter_by(
+        game_type='Squad').order_by(Game.time_played.desc()).limit(10).all()
 
     selected_user_data['kd_total'] = "{0:0.3f}".format(total_kd(selected_user))
     selected_user_data['kd_solo'] = "{0:0.3f}".format(solo_kd(selected_user))
@@ -37,5 +46,4 @@ def user_stats(user_id):
     selected_user_data['placements_duo'] = placements_duo(selected_user)
     selected_user_data['placements_squad'] = placements_squad(selected_user)
 
-    return render_template(
-        'layout.html', users=users, **selected_user_data, games=games)
+    return render_template('layout.html', users=users, **selected_user_data)
