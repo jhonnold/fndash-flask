@@ -49,12 +49,12 @@ def user_stats(user_id):
     selected_user_data['placements_squad'] = selected_user.placements_squad()
 
     selected_user_data['labels_kd_total'], selected_user_data[
-        'kd_per_day_total'] = kd_per_day(selected_user)
+        'kd_per_day_total'] = kd_per_day(selected_user, adjust=-5)
     selected_user_data['labels_kd_solo'], selected_user_data[
-        'kd_per_day_solo'] = kd_per_day(selected_user, 'Solo')
+        'kd_per_day_solo'] = kd_per_day(selected_user, 'Solo', -5)
     selected_user_data['labels_kd_duo'], selected_user_data[
-        'kd_per_day_duo'] = kd_per_day(selected_user, 'Duo')
+        'kd_per_day_duo'] = kd_per_day(selected_user, 'Duo', -5)
     selected_user_data['labels_kd_squad'], selected_user_data[
-        'kd_per_day_squad'] = kd_per_day(selected_user, 'Squad')
+        'kd_per_day_squad'] = kd_per_day(selected_user, 'Squad', -5)
 
     return render_template('layout.html', users=users, **selected_user_data)

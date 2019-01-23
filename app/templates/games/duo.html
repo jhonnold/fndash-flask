@@ -5,7 +5,7 @@
     <div class="games__game">
       <div class="games__top">
         <h5>{{ game.game_type }} Match</h5>
-        <p>{{ game.time_played | strftime('%b %-d - %-I:%M')}}</p>
+        <p>{{ game.time_played | strftime('%b %-d - %-I:%M %P', -5)}}</p>
       </div>
       <div class="games__bottom">
         {% if game.kills != 1 %}
