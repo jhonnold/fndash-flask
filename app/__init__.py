@@ -7,6 +7,7 @@ from app.database import db
 from app.config import DevConfig
 from app.celeryconfig import CeleryConfig
 from app.modules import dashboard
+from . import filters
 
 
 def create_app(name=__name__):
@@ -15,6 +16,7 @@ def create_app(name=__name__):
     db.init_app(app)
     register_assets(app)
     app.register_blueprint(dashboard)
+    filters.init_app(app)
     celery = make_celery(app)
 
     return app, celery
