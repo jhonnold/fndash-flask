@@ -25,9 +25,6 @@ const KD_CHART_OPTIONS = {
     yAxes: [
       {
         ticks: {
-          min: 0.75,
-          max: 1.5,
-          stepSize: 0.25,
           fontColor: '#fafafa',
         },
         gridLines: {

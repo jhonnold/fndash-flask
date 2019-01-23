@@ -40,3 +40,44 @@ class User(db.Model):
 
     def __repr__(self):
         return "<User '{}'>".format(self.username)
+
+    def kd_total(self):
+        return self.kills_total / (self.matchesplayed_total - self.wins_total)
+
+    def kd_solo(self):
+        return self.kills_solo / (
+            self.matchesplayed_solo - self.placetop1_solo)
+
+    def kd_duo(self):
+        return self.kills_duo / (self.matchesplayed_duo - self.placetop1_duo)
+
+    def kd_squad(self):
+        return self.kills_squad / (
+            self.matchesplayed_squad - self.placetop1_squad)
+
+    def placements_solo(self):
+        losses_solo = self.matchesplayed_solo - (
+            self.placetop1_solo + self.placetop10_solo + self.placetop25_solo)
+
+        return [
+            self.placetop1_solo, self.placetop10_solo, self.placetop25_solo,
+            losses_solo
+        ]
+
+    def placements_duo(self):
+        losses_duo = self.matchesplayed_duo - (
+            self.placetop1_duo + self.placetop5_duo + self.placetop12_duo)
+
+        return [
+            self.placetop1_duo, self.placetop5_duo, self.placetop12_duo,
+            losses_duo
+        ]
+
+    def placements_squad(self):
+        losses_squad = self.matchesplayed_squad - (
+            self.placetop1_squad + self.placetop3_squad + self.placetop6_squad)
+
+        return [
+            self.placetop1_squad, self.placetop3_squad, self.placetop6_squad,
+            losses_squad
+        ]

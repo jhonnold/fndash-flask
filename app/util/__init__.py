@@ -1,2 +1,1 @@
-from .kd import total_kd, solo_kd, duo_kd, squad_kd
-from .placements import placements_solo, placements_duo, placements_squad
+from .kd_chart import kd_per_day

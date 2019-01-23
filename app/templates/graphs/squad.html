@@ -8,24 +8,15 @@
 </div>
 <script>
   var kdSquadData = {
-    labels: ['1/1', '1/2', '1/3', '1/4', '1/5'],
+    labels: {{ labels_kd_squad | safe }},
     datasets: [
       {
         label: 'K/D',
-        data: [1, 1.3, 1.25, 1.3, 1.275],
+        data: {{ kd_per_day_squad }},
         borderColor: '#ff8300',
         borderWidth: 2,
         fill: true,
         backgroundColor: 'rgba(255, 131, 0, 0.125)',
-        pointRadius: 4,
-      },
-      {
-        label: 'K/D',
-        data: [0.8, 1, 1.2, 1.4, 1.5],
-        borderColor: '#007cff',
-        borderWidth: 2,
-        fill: true,
-        backgroundColor: 'rgba(0, 124, 255, 0.125)',
         pointRadius: 4,
       },
     ],
