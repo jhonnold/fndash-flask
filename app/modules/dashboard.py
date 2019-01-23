@@ -20,8 +20,9 @@ def user_stats(user_id):
         if (user.id == int(user_id)):
             selected_user = user
             break
-    
-    games = selected_user.games.limit(10).all()
+
+    games = selected_user.games.order_by(
+        Game.time_played.desc()).limit(10).all()
 
     selected_user_data = dict(**selected_user.__dict__)
     if '_sa_instance_state' in selected_user_data:
@@ -36,4 +37,5 @@ def user_stats(user_id):
     selected_user_data['placements_duo'] = placements_duo(selected_user)
     selected_user_data['placements_squad'] = placements_squad(selected_user)
 
-    return render_template('layout.html', users=users, **selected_user_data, games=games)
+    return render_template(
+        'layout.html', users=users, **selected_user_data, games=games)
