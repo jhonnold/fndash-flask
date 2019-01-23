@@ -1,5 +1,5 @@
 const PLACEMENT_CHART_OPTIONS = {
-  aspectRatio: 2,
+  aspectRatio: 1.5,
   legend: {
     display: false,
     position: 'right',

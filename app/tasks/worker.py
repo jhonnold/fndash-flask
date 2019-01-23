@@ -18,7 +18,7 @@ def update_stats():
         totals = data['totals']
         stats = data['stats']
 
-        if totals['lastupdate'] != user.lastmodified_total:
+        if totals['matchesplayed'] != user.matchesplayed_total:
             logger.info('There was a change in totals')
             user.kills_total = totals['kills']
             user.wins_total = totals['wins']
@@ -26,7 +26,7 @@ def update_stats():
             user.hoursplayed_total = totals['hoursplayed']
             user.lastmodified_total = totals['lastupdate']
 
-        if stats['lastmodified_solo'] != user.lastmodified_solo:
+        if stats['matchesplayed_solo'] != user.matchesplayed_solo:
             logger.info('There was a change in solos')
             placement = 'Loss'
             if user.placetop1_solo != stats['placetop1_solo']:
@@ -52,7 +52,7 @@ def update_stats():
             user.minutesplayed_solo = stats['minutesplayed_solo']
             user.lastmodified_solo = stats['lastmodified_solo']
 
-        if stats['lastmodified_duo'] != user.lastmodified_duo:
+        if stats['matchesplayed_duo'] != user.matchesplayed_duo:
             logger.info('There was a change in duos')
             placement = 'Loss'
             if user.placetop1_duo != stats['placetop1_duo']:
@@ -78,7 +78,7 @@ def update_stats():
             user.minutesplayed_duo = stats['minutesplayed_duo']
             user.lastmodified_duo = stats['lastmodified_duo']
 
-        if stats['lastmodified_squad'] != user.lastmodified_squad:
+        if stats['matchesplayed_squad'] != user.matchesplayed_squad:
             logger.info('There was a change in squads')
             placement = 'Loss'
             if user.placetop1_squad != stats['placetop1_squad']:
