@@ -3,12 +3,21 @@
   @extend .cell;
   @extend .small-12;
   @extend .medium-6;
-  @extend .card;
-
-  padding: 0.5rem 1rem;
 
   @include breakpoint(small only) {
     order: 2;
+  }
+
+  &__records {
+    @extend .card;
+
+    padding: 0.5rem 1rem;
+  }
+
+  &__list {
+    @extend .card;
+
+    padding: 0.5rem 1rem;
   }
 
   &__game {
@@ -19,6 +28,10 @@
     &:hover {
       background-color: darken($dark-gray, 2%);
     }
+
+    // &:last-of-type {
+    //   border-bottom: none;
+    // }
 
     h5 {
       color: $primary-color;

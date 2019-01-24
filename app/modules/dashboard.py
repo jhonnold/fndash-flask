@@ -37,6 +37,17 @@ def user_stats(user_id):
     selected_user_data['squad_games'] = selected_user.games.filter_by(
         game_type='Squad').order_by(Game.time_played.desc()).limit(100).all()
 
+    selected_user_data['record_games'] = [
+        selected_user.games.filter_by(game_type='Solo').order_by(
+            Game.kills.desc()).first(),
+        selected_user.games.filter_by(game_type='Duo').order_by(
+            Game.kills.desc()).first(),
+        selected_user.games.filter_by(game_type='Squad').order_by(
+            Game.kills.desc()).first(),
+    ]
+
+    current_app.logger.info(selected_user_data['record_games'])
+
     selected_user_data['kd_total'] = "{0:0.3f}".format(
         selected_user.kd_total())
     selected_user_data['kd_solo'] = "{0:0.3f}".format(selected_user.kd_solo())
@@ -49,7 +60,8 @@ def user_stats(user_id):
     selected_user_data['placements_squad'] = selected_user.placements_squad()
 
     selected_user_data['labels_kd_total'], selected_user_data[
-        'kd_per_day_total'] = kd_per_day(selected_user, adjust=-5)
+        'kd_per_day_total'] = kd_per_day(
+            selected_user, adjust=-5)
     selected_user_data['labels_kd_solo'], selected_user_data[
         'kd_per_day_solo'] = kd_per_day(selected_user, 'Solo', -5)
     selected_user_data['labels_kd_duo'], selected_user_data[
@@ -58,7 +70,8 @@ def user_stats(user_id):
         'kd_per_day_squad'] = kd_per_day(selected_user, 'Squad', -5)
 
     selected_user_data['labels_games_total'], selected_user_data[
-        'games_per_day_total'] = games_per_day(selected_user, adjust=-5)
+        'games_per_day_total'] = games_per_day(
+            selected_user, adjust=-5)
     selected_user_data['labels_games_solo'], selected_user_data[
         'games_per_day_solo'] = games_per_day(selected_user, 'Solo', -5)
     selected_user_data['labels_games_duo'], selected_user_data[
