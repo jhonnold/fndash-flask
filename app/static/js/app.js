@@ -1,5 +1,5 @@
 const PLACEMENT_CHART_OPTIONS = {
-  aspectRatio: 1.5,
+  aspectRatio: 2,
   legend: {
     display: true,
     position: 'bottom',
@@ -18,11 +18,11 @@ const PLACEMENT_CHART_OPTIONS = {
   },
 };
 
-const PLACEMENT_CHART_COLORS = ['#ff8300', '#17bebb', '#ffc914', '#007cff'];
+const PLACEMENT_CHART_COLORS = ['#22d900', '#258913', '#2e5127', '#353f33'];
 
 const KD_CHART_OPTIONS = {
   responsive: true,
-  aspectRatio: 2,
+  aspectRatio: 2.5,
   legend: {
     display: false,
     position: 'bottom',

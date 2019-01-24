@@ -1,6 +1,7 @@
 .details {
   width: 100%;
   background-color: $black;
+  box-shadow: 0px 4px 2px -2px $black;
 
   &__container {
     @extend .grid-x;
