@@ -1,6 +1,6 @@
 from flask import current_app, Blueprint, render_template, redirect, url_for
 from app.models import User, Game
-from app.util import kd_per_day
+from app.util import kd_per_day, games_per_day
 
 dashboard = Blueprint('dashboard', __name__)
 
@@ -56,5 +56,14 @@ def user_stats(user_id):
         'kd_per_day_duo'] = kd_per_day(selected_user, 'Duo', -5)
     selected_user_data['labels_kd_squad'], selected_user_data[
         'kd_per_day_squad'] = kd_per_day(selected_user, 'Squad', -5)
+
+    selected_user_data['labels_games_total'], selected_user_data[
+        'games_per_day_total'] = games_per_day(selected_user, adjust=-5)
+    selected_user_data['labels_games_solo'], selected_user_data[
+        'games_per_day_solo'] = games_per_day(selected_user, 'Solo', -5)
+    selected_user_data['labels_games_duo'], selected_user_data[
+        'games_per_day_duo'] = games_per_day(selected_user, 'Duo', -5)
+    selected_user_data['labels_games_squad'], selected_user_data[
+        'games_per_day_squad'] = games_per_day(selected_user, 'Squad', -5)
 
     return render_template('layout.html', users=users, **selected_user_data)
