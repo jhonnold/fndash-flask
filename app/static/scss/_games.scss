@@ -2,12 +2,14 @@
   @extend .grid-y;
   @extend .cell;
   @extend .small-12;
-  @extend .medium-5;
+  @extend .medium-6;
 
   padding: 0.5rem;
+  max-height: 40rem;
+  overflow-y: auto;
 
-  &__scroller {
-    @extend .grid-y;
+  @include breakpoint(small only) {
+    order: 2;
   }
 
   &__game {

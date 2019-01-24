@@ -1,25 +1,23 @@
 <div class="games">
   <h3>Games</h3>
-  <div class="games__scroller">
-    {% for game in solo_games %}
-    <div class="games__game">
-      <div class="games__top">
-        <h5>{{ game.game_type }} Match</h5>
-        <p>{{ game.time_played | strftime('%b %-d - %-I:%M %P', -5)}}</p>
-      </div>
-      <div class="games__bottom">
-        {% if game.kills != 1 %}
-        <p>{{ game.kills }} Kills</p>
-        {% else %}
-        <p>{{ game.kills }} Kill</p>
-        {% endif %}
-        <p>
-          {{ game.placement }} {% if game.placement == 'Victory' %}
-          <i class="fas fa-trophy"></i> {% elif game.placement != 'Loss' %}
-          <i class="fas fa-medal"></i> {% endif %}
-        </p>
-      </div>
+  {% for game in solo_games %}
+  <div class="games__game">
+    <div class="games__top">
+      <h5>{{ game.game_type }} Match</h5>
+      <p>{{ game.time_played | strftime('%b %-d - %-I:%M %P', -5)}}</p>
     </div>
-    {% endfor %}
+    <div class="games__bottom">
+      {% if game.kills != 1 %}
+      <p>{{ game.kills }} Kills</p>
+      {% else %}
+      <p>{{ game.kills }} Kill</p>
+      {% endif %}
+      <p>
+        {{ game.placement }} {% if game.placement == 'Victory' %}
+        <i class="fas fa-trophy"></i> {% elif game.placement != 'Loss' %}
+        <i class="fas fa-medal"></i> {% endif %}
+      </p>
+    </div>
   </div>
+  {% endfor %}
 </div>

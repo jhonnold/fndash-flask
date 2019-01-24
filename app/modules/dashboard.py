@@ -26,16 +26,16 @@ def user_stats(user_id):
         del selected_user_data['_sa_instance_state']
 
     selected_user_data['games'] = selected_user.games.order_by(
-        Game.time_played.desc()).limit(10).all()
+        Game.time_played.desc()).limit(100).all()
 
     selected_user_data['solo_games'] = selected_user.games.filter_by(
-        game_type='Solo').order_by(Game.time_played.desc()).limit(10).all()
+        game_type='Solo').order_by(Game.time_played.desc()).limit(100).all()
 
     selected_user_data['duo_games'] = selected_user.games.filter_by(
-        game_type='Duo').order_by(Game.time_played.desc()).limit(10).all()
+        game_type='Duo').order_by(Game.time_played.desc()).limit(100).all()
 
     selected_user_data['squad_games'] = selected_user.games.filter_by(
-        game_type='Squad').order_by(Game.time_played.desc()).limit(10).all()
+        game_type='Squad').order_by(Game.time_played.desc()).limit(100).all()
 
     selected_user_data['kd_total'] = "{0:0.3f}".format(
         selected_user.kd_total())

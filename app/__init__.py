@@ -27,7 +27,7 @@ def register_assets(app):
     assets.config['AUTOPREFIXER_BROWSERS'] = ['> 1%']
 
     js = Bundle(
-        'foundation-sites-6.5.1/dist/js/foundation.min.js',
+        'foundation-sites-6.5.1/dist/js/foundation.js',
         'js/app.js',
         filters='jsmin',
         output='dist/main.bundle.js')
