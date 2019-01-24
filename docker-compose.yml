@@ -17,6 +17,7 @@ services:
     command: python manage.py runserver
     environment:
       - FLASK_APP=manage.py
+      - FLASK_ENV=production
     ports:
       - 5000:5000
     depends_on:

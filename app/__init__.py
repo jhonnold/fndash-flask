@@ -1,10 +1,10 @@
-import datetime
+import datetime, os
 
 from flask import Flask, render_template, redirect, url_for
 from flask_assets import Environment, Bundle
 from celery import Celery
 from app.database import db
-from app.config import DevConfig
+from app.config import DevConfig, ProdConfig
 from app.celeryconfig import CeleryConfig
 from app.modules import dashboard
 from . import filters
@@ -12,7 +12,12 @@ from . import filters
 
 def create_app(name=__name__):
     app = Flask(__name__)
-    app.config.from_object(DevConfig)
+
+    if os.environ.get('FLASK_ENV') == 'production':
+        app.config.from_object(ProdConfig)
+    else:
+        app.config.from_object(DevConfig)
+
     db.init_app(app)
     register_assets(app)
     app.register_blueprint(dashboard)

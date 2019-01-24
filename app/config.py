@@ -3,7 +3,11 @@ class Config(object):
 
 
 class ProdConfig(Config):
-    pass
+    DEBUG = False
+    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres@postgres/fn-dash-development'
+    SQLALCHEMY_ECHO = False
+    CELERY_BROKER_URL = 'redis://redis:6379/0'
+    CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
 
 
 class DevConfig(Config):
