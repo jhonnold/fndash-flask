@@ -5,6 +5,8 @@
   <div class="graphs__placement-graph">
     <canvas id="placement-graph-squad"></canvas>
   </div>
+  <h3>Games per Day</h3>
+  <div class="graphs__games-day"><canvas id="games-graph-squad"></canvas></div>
 </div>
 <script>
   var kdSquadData = {
@@ -28,5 +30,12 @@
       { data: {{ placements_squad }}, label: 'Solo', labels: ['Squad Victory', 'Squad Top 3', 'Squad Top 6', 'Squad Loss']},
     ],
     labels: ['Victory', 'Silver', 'Bronze', 'Loss'],
+  };
+
+  var gamesSquadData = {
+    datasets: [
+      { data: {{ games_per_day_squad }}, },
+    ],
+    labels: {{ labels_games_squad | safe }},
   };
 </script>

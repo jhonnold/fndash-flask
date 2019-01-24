@@ -16,7 +16,7 @@ const PLACEMENT_CHART_OPTIONS = {
       },
     },
   },
-}
+};
 
 const PLACEMENT_CHART_COLORS = ['#22d900', '#19a100', '#106b00', '#083500'];
 
@@ -71,7 +71,15 @@ const GAMES_PER_DAY_CHART_OPTIONS = {
   },
 };
 
-const GAMES_PER_DAY_COLORS = ['#083500', '#0c5000', '#106b00', '#158600', '#19a100', '#1dbb00', '#22d900'];
+const GAMES_PER_DAY_COLORS = [
+  '#083500',
+  '#0c5000',
+  '#106b00',
+  '#158600',
+  '#19a100',
+  '#1dbb00',
+  '#22d900',
+];
 
 function appendPlacementColors(data) {
   data.datasets = data.datasets.map(d => ({
@@ -95,6 +103,9 @@ appendPlacementColors(placementDuoData);
 appendPlacementColors(placementSquadData);
 
 appendGamesColors(gamesAllData);
+appendGamesColors(gamesSoloData);
+appendGamesColors(gamesDuoData);
+appendGamesColors(gamesSquadData);
 
 $(document).foundation();
 
@@ -140,6 +151,13 @@ $(document).ready(() => {
           data: placementAllData,
           options: PLACEMENT_CHART_OPTIONS,
         });
+
+        if (gamesPerDayAll) gamesPerDayAll.destroy();
+        gamesPerDayAll = new Chart($('#games-graph-all'), {
+          type: 'bar',
+          data: gamesAllData,
+          options: GAMES_PER_DAY_CHART_OPTIONS,
+        });
         break;
       case 'solo_stats':
         if (kdSolo) kdSolo.destroy();
@@ -154,6 +172,13 @@ $(document).ready(() => {
           type: 'pie',
           data: placementSoloData,
           options: PLACEMENT_CHART_OPTIONS,
+        });
+
+        if (gamesPerDaySolo) gamesPerDaySolo.destroy();
+        gamesPerDaySolo = new Chart($('#games-graph-solo'), {
+          type: 'bar',
+          data: gamesSoloData,
+          options: GAMES_PER_DAY_CHART_OPTIONS,
         });
         break;
       case 'duo_stats':
@@ -170,6 +195,13 @@ $(document).ready(() => {
           data: placementDuoData,
           options: PLACEMENT_CHART_OPTIONS,
         });
+
+        if (gamesPerDayDuo) gamesPerDayDuo.destroy();
+        gamesPerDayDuo = new Chart($('#games-graph-duo'), {
+          type: 'bar',
+          data: gamesDuoData,
+          options: GAMES_PER_DAY_CHART_OPTIONS,
+        });
         break;
       case 'squad_stats':
         if (kdSquad) kdSquad.destroy();
@@ -184,6 +216,13 @@ $(document).ready(() => {
           type: 'pie',
           data: placementSquadData,
           options: PLACEMENT_CHART_OPTIONS,
+        });
+
+        if (gamesPerDaySquad) gamesPerDaySquad.destroy();
+        gamesPerDaySquad = new Chart($('#games-graph-squad'), {
+          type: 'bar',
+          data: gamesSquadData,
+          options: GAMES_PER_DAY_CHART_OPTIONS,
         });
         break;
       default:

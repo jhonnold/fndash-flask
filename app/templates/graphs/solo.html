@@ -5,6 +5,8 @@
   <div class="graphs__placement-graph">
     <canvas id="placement-graph-solo"></canvas>
   </div>
+  <h3>Games per Day</h3>
+  <div class="graphs__games-day"><canvas id="games-graph-solo"></canvas></div>
 </div>
 <script>
   var kdSoloData = {
@@ -27,5 +29,12 @@
     datasets: [
       { data: {{ placements_solo }}, label: 'Solo', labels: ['Solo Victory', 'Solo Top 10', 'Solo Top 25', 'Solo Loss']}
     ],
+  };
+
+  var gamesSoloData = {
+    datasets: [
+      { data: {{ games_per_day_solo }}, },
+    ],
+    labels: {{ labels_games_solo | safe }},
   };
 </script>

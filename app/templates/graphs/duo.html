@@ -5,6 +5,8 @@
   <div class="graphs__placement-graph">
     <canvas id="placement-graph-duo"></canvas>
   </div>
+  <h3>Games per Day</h3>
+  <div class="graphs__games-day"><canvas id="games-graph-duo"></canvas></div>
 </div>
 <script>
   var kdDuoData = {
@@ -28,5 +30,12 @@
       { data: {{ placements_duo }}, label: 'Solo', labels: ['Duo Victory', 'Duo Top 5', 'Duo Top 12', 'Duo Loss']}
     ],
     labels: ['Victory', 'Silver', 'Bronze', 'Loss'],
+  };
+
+  var gamesDuoData = {
+    datasets: [
+      { data: {{ games_per_day_duo }}, },
+    ],
+    labels: {{ labels_games_duo | safe }},
   };
 </script>
