@@ -11,12 +11,14 @@
   &__records {
     @extend .card;
 
+    flex-grow: 0;
     padding: 0.5rem 1rem;
   }
 
   &__list {
     @extend .card;
 
+    flex-grow: 0;
     padding: 0.5rem 1rem;
   }
 
