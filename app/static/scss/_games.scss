@@ -3,15 +3,16 @@
   @extend .cell;
   @extend .small-12;
   @extend .medium-6;
+  @extend .card;
 
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
 
   @include breakpoint(small only) {
     order: 2;
   }
 
   &__game {
-    border: 1px solid rgba($white, 0.125);
+    border-bottom: 1px solid rgba($white, 0.125);
     padding: 0.5rem;
     margin-bottom: 1rem;
 
