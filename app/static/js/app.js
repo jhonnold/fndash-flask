@@ -16,9 +16,9 @@ const PLACEMENT_CHART_OPTIONS = {
       },
     },
   },
-};
+}
 
-const PLACEMENT_CHART_COLORS = ['#22d900', '#258913', '#2e5127', '#353f33'];
+const PLACEMENT_CHART_COLORS = ['#22d900', '#19a100', '#106b00', '#083500'];
 
 const KD_CHART_OPTIONS = {
   responsive: true,
@@ -51,6 +51,28 @@ const KD_CHART_OPTIONS = {
   },
 };
 
+const GAMES_PER_DAY_CHART_OPTIONS = {
+  responsive: true,
+  aspectRatio: 2.5,
+  legend: {
+    display: false,
+  },
+  scales: {
+    yAxes: [
+      {
+        gridLines: {
+          color: 'rgba(255, 255, 255, 0.125)',
+        },
+        ticks: {
+          fontColor: '#fafafa',
+        },
+      },
+    ],
+  },
+};
+
+const GAMES_PER_DAY_COLORS = ['#083500', '#0c5000', '#106b00', '#158600', '#19a100', '#1dbb00', '#22d900'];
+
 function appendPlacementColors(data) {
   data.datasets = data.datasets.map(d => ({
     data: d.data,
@@ -60,10 +82,19 @@ function appendPlacementColors(data) {
   }));
 }
 
+function appendGamesColors(data) {
+  data.datasets = data.datasets.map(d => ({
+    data: d.data,
+    backgroundColor: GAMES_PER_DAY_COLORS,
+  }));
+}
+
 appendPlacementColors(placementAllData);
 appendPlacementColors(placementSoloData);
 appendPlacementColors(placementDuoData);
 appendPlacementColors(placementSquadData);
+
+appendGamesColors(gamesAllData);
 
 $(document).foundation();
 
@@ -80,6 +111,13 @@ $(document).ready(() => {
     type: 'pie',
     data: placementAllData,
     options: PLACEMENT_CHART_OPTIONS,
+  });
+
+  let gamesPerDaySolo, gamesPerDayDuo, gamesPerDaySquad;
+  let gamesPerDayAll = new Chart($('#games-graph-all'), {
+    type: 'bar',
+    data: gamesAllData,
+    options: GAMES_PER_DAY_CHART_OPTIONS,
   });
 
   $('#mode-tabs').on('change.zf.tabs', function() {

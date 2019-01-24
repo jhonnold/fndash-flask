@@ -5,6 +5,8 @@
   <div class="graphs__placement-graph">
     <canvas id="placement-graph-all"></canvas>
   </div>
+  <h3>Games per Day</h3>
+  <div class="graphs__games-day"><canvas id="games-graph-all"></canvas></div>
 </div>
 <script>
   var kdAllData = {
@@ -30,5 +32,12 @@
       { data: {{ placements_squad }}, label: 'Solo', labels: ['Squad Victory', 'Squad Top 3', 'Squad Top 6', 'Squad Loss']},
     ],
     labels: ['Victory', 'Silver', 'Bronze', 'Loss'],
+  };
+
+  var gamesAllData = {
+    datasets: [
+      { data: {{ games_per_day_total }}, },
+    ],
+    labels: {{ labels_games_total | safe }},
   };
 </script>
