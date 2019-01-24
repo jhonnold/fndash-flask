@@ -2,6 +2,7 @@
     <div class="games__records">
       <h3>Record</h3>
       {% set record_game = record_games[2] %}
+      {% if record_game is not none %}
       <div class="games__game">
         <div class="games__top">
           <h5>{{ record_game.game_type }} Match</h5>
@@ -20,6 +21,7 @@
           </p>
         </div>
       </div>
+      {% endif %}
     </div>
     <div class="games__list">
       <h3>Games</h3>
