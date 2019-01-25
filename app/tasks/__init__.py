@@ -1,1 +1,0 @@
-from .worker import update_stats

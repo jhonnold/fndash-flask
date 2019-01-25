@@ -7,8 +7,8 @@ API_LINK = 'https://fortnite-public-api.theapinetwork.com/prod09/users/public/br
 
 
 @celery.task()
-def update_stats():
-    logger = update_stats.get_logger()
+def check_games():
+    logger = check_games.get_logger()
     users = User.query.all()
     for user in users:
         logger.info('Checking on user:' + str(user))

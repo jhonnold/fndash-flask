@@ -1,4 +1,4 @@
-from flask import current_app, Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template, redirect, url_for
 from app.models import User, Game
 from app.util import kd_per_day, games_per_day
 
@@ -7,8 +7,8 @@ dashboard = Blueprint('dashboard', __name__)
 
 @dashboard.route('/')
 def home():
-    users = User.query.all()
-    return redirect(url_for('dashboard.user_stats', user_id=users[0].id))
+    user = User.query.order_by(User.id.asc()).first()
+    return redirect(url_for('dashboard.user_stats', user_id=user.id))
 
 
 @dashboard.route('/users/<user_id>')
@@ -45,8 +45,6 @@ def user_stats(user_id):
         selected_user.games.filter_by(game_type='Squad').order_by(
             Game.kills.desc()).first(),
     ]
-
-    current_app.logger.info(selected_user_data['record_games'])
 
     selected_user_data['kd_total'] = "{0:0.3f}".format(
         selected_user.kd_total())
