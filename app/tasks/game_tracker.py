@@ -17,7 +17,6 @@ def check_games():
         stats = data['stats']
 
         if totals['matchesplayed'] != user.matchesplayed_total:
-            logger.info('There was a change in totals')
             user.kills_total = totals['kills']
             user.wins_total = totals['wins']
             user.matchesplayed_total = totals['matchesplayed']
@@ -25,7 +24,6 @@ def check_games():
             user.lastmodified_total = totals['lastupdate']
 
         if stats['matchesplayed_solo'] != user.matchesplayed_solo:
-            logger.info('There was a change in solos')
             placement = 'Loss'
             if user.placetop1_solo != stats['placetop1_solo']:
                 placement = 'Victory'
@@ -51,7 +49,6 @@ def check_games():
             user.lastmodified_solo = stats['lastmodified_solo']
 
         if stats['matchesplayed_duo'] != user.matchesplayed_duo:
-            logger.info('There was a change in duos')
             placement = 'Loss'
             if user.placetop1_duo != stats['placetop1_duo']:
                 placement = 'Victory'
@@ -77,7 +74,6 @@ def check_games():
             user.lastmodified_duo = stats['lastmodified_duo']
 
         if stats['matchesplayed_squad'] != user.matchesplayed_squad:
-            logger.info('There was a change in squads')
             placement = 'Loss'
             if user.placetop1_squad != stats['placetop1_squad']:
                 placement = 'Victory'
