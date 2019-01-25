@@ -19,6 +19,6 @@ class CeleryConfig(object):
         'kd_monitor': {
             'task': 'app.tasks.kd_monitor.record_stats',
             # Everyday store current stats
-            'schedule': crontab(hour="*/24"),
+            'schedule': crontab(hour="5", minute="0"),
         },
     }

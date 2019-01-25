@@ -8,10 +8,8 @@ API_LINK = 'https://fortnite-public-api.theapinetwork.com/prod09/users/public/br
 
 @celery.task()
 def check_games():
-    logger = check_games.get_logger()
     users = User.query.all()
     for user in users:
-        logger.info('Checking on user:' + str(user))
         r = requests.get(API_LINK.format(user.uid))
         data = r.json()
 
