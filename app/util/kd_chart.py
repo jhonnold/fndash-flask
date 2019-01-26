@@ -7,7 +7,7 @@ def kd_per_day(user, mode='All', adjust=0):
     today = datetime.date.today()
     start_date = datetime.datetime(
         year=today.year, month=today.month,
-        day=today.day) - datetime.timedelta(hours=24+adjust)
+        day=today.day) - datetime.timedelta(hours=adjust)
     end_date = start_date + datetime.timedelta(days=1)
 
     labels = []
