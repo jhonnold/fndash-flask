@@ -24,7 +24,7 @@ const KD_CHART_OPTIONS = {
   responsive: true,
   aspectRatio: 2.5,
   legend: {
-    display: false,
+    display: true,
     position: 'bottom',
     labels: {
       fontColor: '#fafafa',
@@ -56,6 +56,10 @@ const GAMES_PER_DAY_CHART_OPTIONS = {
   aspectRatio: 2.5,
   legend: {
     display: false,
+    position: 'bottom',
+    labels: {
+      fontColor: '#fafafa',
+    },
   },
   scales: {
     yAxes: [

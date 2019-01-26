@@ -17,12 +17,22 @@
     labels: {{ labels_kd_total | safe }},
     datasets: [
       {
-        label: 'K/D',
+        label: 'Daily K/D',
         data: {{ kd_per_day_total }},
         borderColor: '#22d900',
         borderWidth: 2,
         fill: true,
         backgroundColor: 'rgba(34, 217, 0, 0.125)',
+        pointRadius: 4,
+        lineTension: 0,
+      },
+      {
+        label: 'Alltime K/D',
+        data: {{ kd_tracker_total | safe }},
+        borderColor: '#106b00',
+        borderWidth: 2,
+        fill: true,
+        backgroundColor:'rgba(25, 161, 0, 0.125)',
         pointRadius: 4,
         lineTension: 0,
       },

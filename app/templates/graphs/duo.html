@@ -26,6 +26,16 @@
         pointRadius: 4,
         lineTension: 0,
       },
+      {
+        label: 'Alltime K/D',
+        data: {{ kd_tracker_duo | safe }},
+        borderColor: '#106b00',
+        borderWidth: 2,
+        fill: true,
+        backgroundColor:'rgba(25, 161, 0, 0.125)',
+        pointRadius: 4,
+        lineTension: 0,
+      },
     ],
   };
 
@@ -33,7 +43,6 @@
     datasets: [
       { data: {{ placements_duo }}, label: 'Solo', labels: ['Duo Victory', 'Duo Top 5', 'Duo Top 12', 'Duo Loss']}
     ],
-    labels: ['Victory', 'Silver', 'Bronze', 'Loss'],
   };
 
   var gamesDuoData = {

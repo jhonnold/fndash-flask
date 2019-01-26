@@ -31,14 +31,7 @@ def kd_per_day(user, mode='All', adjust=0):
         if count > 0:
             kds.insert(0, kills / games.count())
         else:
-            if mode == 'Solo':
-                kds.insert(0, user.kd_solo())
-            elif mode == 'Duo':
-                kds.insert(0, user.kd_duo())
-            elif mode == 'Squad':
-                kds.insert(0, user.kd_squad())
-            else:
-                kds.insert(0, user.kd_total())
+            kds.insert(0, 0)
 
         labels.insert(0, start_date.__format__('%b %-d'))
 
