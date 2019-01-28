@@ -10,7 +10,7 @@ class KD(db.Model):
     solo = db.Column(db.Float(), default=0)
     duo = db.Column(db.Float(), default=0)
     squad = db.Column(db.Float(), default=0)
-    date = db.Column(db.Date(), default=datetime.date.today())
+    date = db.Column(db.Date(), default=datetime.date.today)
 
     def __repr__(self):
         return "<KD for '{}' - '{}'>".format(self.user_id, self.date)
