@@ -1,4 +1,3 @@
-from app import create_app, db
+from app import celery, db, app
 
-app, celery = create_app()
 app.app_context().push()
