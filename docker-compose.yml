@@ -24,7 +24,6 @@ services:
       - postgres
     volumes:
       - .:/usr/share/fn-dash
-      - foundation-6.5.1:/usr/share/fn-dash/app/static/foundation-sites-6.5.1
 
   redis:
     restart: always
@@ -47,4 +46,3 @@ services:
 volumes:
   fn-dash-db:
   fn-dash-redis:
-  foundation-6.5.1:
