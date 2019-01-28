@@ -2,9 +2,10 @@ import datetime, os
 
 from flask import Flask, send_from_directory
 from celery import Celery
+from app.api import api
 from app.database import db
 from app.config import DevConfig, ProdConfig
-from app.celeryconfig import CeleryConfig
+from app.celery import CeleryConfig
 
 app = Flask(__name__, static_folder='web/build', static_url_path='')
 if os.environ.get('FLASK_ENV') == 'production':
@@ -13,6 +14,7 @@ else:
     app.config.from_object(DevConfig)
 
 db.init_app(app)
+app.register_blueprint(api)
 
 celery = Celery(app.import_name, broker=app.config['CELERY_BROKER_URL'])
 celery.conf.update(app.config)
