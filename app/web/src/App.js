@@ -6,7 +6,7 @@ import { ConnectedRouter } from 'connected-react-router';
 import createHistory from 'history/createBrowserHistory';
 import { hot } from 'react-hot-loader';
 import configureStore from './store';
-import HomePage from './containers/HomePage';
+import Base from './containers/Base';
 
 const history = createHistory();
 const store = configureStore(history);
@@ -19,7 +19,7 @@ const App = () => (
   <Provider store={store}>
     <PersistGate loading={null} onBeforeLift={beforeReload} persistor={persistor}>
       <ConnectedRouter history={history}>
-        <HomePage />
+        <Base />
       </ConnectedRouter>
     </PersistGate>
   </Provider>
