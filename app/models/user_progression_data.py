@@ -1,10 +1,11 @@
+import datetime
+
 from app.database import db
 
 
-class User(db.Model):
+class UserProgressionData(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
-    uid = db.Column(db.String(32), nullable=False, unique=True)
-    username = db.Column(db.String(255))
+    user_id = db.Column(db.Integer(), db.ForeignKey('user.id'))
     kills_total = db.Column(db.Integer(), default=0)
     wins_total = db.Column(db.Integer(), default=0)
     matchesplayed_total = db.Column(db.Integer(), default=0)
@@ -31,10 +32,7 @@ class User(db.Model):
     matchesplayed_squad = db.Column(db.Integer(), default=0)
     minutesplayed_squad = db.Column(db.Integer(), default=0)
     lastmodified_squad = db.Column(db.Integer(), default=0)
-
-    games = db.relationship('Game', backref='user', lazy='dynamic')
-    kds = db.relationship('KD', backref='user', lazy='dynamic')
-    progressions = db.relationship('UserProgressionData', backref='user', lazy='dynamic')
+    date = db.Column(db.Date(), default=datetime.date.today)
 
     def __init__(self, uid, username):
         self.uid = uid
