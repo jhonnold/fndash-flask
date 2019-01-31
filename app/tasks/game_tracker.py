@@ -33,12 +33,13 @@ def check_games():
                 placement = 'Top 25'
 
             kills = stats['kills_solo'] - user.kills_solo
-            game = Game(
-                user_id=user.id,
-                game_type='Solo',
-                kills=kills,
-                placement=placement)
-            db.session.add(game)
+            if kills >= 0 or kills <= 99:
+                game = Game(
+                    user_id=user.id,
+                    game_type='Solo',
+                    kills=kills,
+                    placement=placement)
+                db.session.add(game)
 
             user.kills_solo = stats['kills_solo']
             user.placetop1_solo = stats['placetop1_solo']
@@ -58,12 +59,13 @@ def check_games():
                 placement = 'Top 12'
 
             kills = stats['kills_duo'] - user.kills_duo
-            game = Game(
-                user_id=user.id,
-                game_type='Duo',
-                kills=kills,
-                placement=placement)
-            db.session.add(game)
+            if kills >= 0 or kills <= 99:
+                game = Game(
+                    user_id=user.id,
+                    game_type='Duo',
+                    kills=kills,
+                    placement=placement)
+                db.session.add(game)
 
             user.kills_duo = stats['kills_duo']
             user.placetop1_duo = stats['placetop1_duo']
@@ -83,12 +85,13 @@ def check_games():
                 placement = 'Top 6'
 
             kills = stats['kills_squad'] - user.kills_squad
-            game = Game(
-                user_id=user.id,
-                game_type='Squad',
-                kills=kills,
-                placement=placement)
-            db.session.add(game)
+            if kills >= 0 or kills <= 99:
+                game = Game(
+                    user_id=user.id,
+                    game_type='Squad',
+                    kills=kills,
+                    placement=placement)
+                db.session.add(game)
 
             user.kills_squad = stats['kills_squad']
             user.placetop1_squad = stats['placetop1_squad']
