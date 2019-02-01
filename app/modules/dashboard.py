@@ -11,6 +11,16 @@ def home():
     return redirect(url_for('dashboard.user_stats', user_id=user.id))
 
 
+@dashboard.route('/users/<user_id>/obs')
+def obs_overlay(user_id):
+    user = User.query.filter_by(id=user_id).first()
+    user_data = dict(**user.__dict__)
+    if '_sa_instance_state' in user_data:
+        del user_data['_sa_instance_state']
+
+    return render_template('obs.html', **user_data)
+
+
 @dashboard.route('/users/<user_id>')
 def user_stats(user_id):
     users = User.query.all()
