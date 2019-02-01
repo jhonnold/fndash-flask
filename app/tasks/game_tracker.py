@@ -33,7 +33,7 @@ def check_games():
                 placement = 'Top 25'
 
             kills = stats['kills_solo'] - user.kills_solo
-            if kills >= 0 or kills <= 99:
+            if kills >= 0 and kills <= 99:
                 game = Game(
                     user_id=user.id,
                     game_type='Solo',
@@ -59,7 +59,7 @@ def check_games():
                 placement = 'Top 12'
 
             kills = stats['kills_duo'] - user.kills_duo
-            if kills >= 0 or kills <= 99:
+            if kills >= 0 and kills <= 99:
                 game = Game(
                     user_id=user.id,
                     game_type='Duo',
@@ -85,7 +85,7 @@ def check_games():
                 placement = 'Top 6'
 
             kills = stats['kills_squad'] - user.kills_squad
-            if kills >= 0 or kills <= 99:
+            if kills >= 0 and kills <= 99:
                 game = Game(
                     user_id=user.id,
                     game_type='Squad',
