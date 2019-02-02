@@ -4,9 +4,11 @@ from app.models import Game
 
 
 def kd_per_day(user, mode='All', adjust=0):
-    current_time_adjust = datetime.datetime.today() + datetime.timedelta(hours=adjust)
+    current_time_adjust = datetime.datetime.today() + datetime.timedelta(
+        hours=adjust)
     start_date = datetime.datetime(
-        year=current_time_adjust.year, month=current_time_adjust.month,
+        year=current_time_adjust.year,
+        month=current_time_adjust.month,
         day=current_time_adjust.day) - datetime.timedelta(hours=adjust)
     end_date = start_date + datetime.timedelta(days=1)
 
@@ -24,14 +26,19 @@ def kd_per_day(user, mode='All', adjust=0):
                     Game.time_played < end_date)
 
         kills = 0
+        wins = 0
         for game in games:
             kills += game.kills
+            if game.placement == 'Victory':
+                wins += 1
 
         count = games.count()
-        if count > 0:
-            kds.insert(0, kills / games.count())
-        else:
+        if count == 0:
             kds.insert(0, 0)
+        elif count - wins == 0:
+            kds.insert(0, kills)
+        else:
+            kds.insert(0, kills / (count - wins))
 
         labels.insert(0, start_date.__format__('%b %-d'))
 
