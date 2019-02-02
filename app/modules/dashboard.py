@@ -11,7 +11,7 @@ def home():
     return redirect(url_for('dashboard.user_stats', user_id=user.id))
 
 
-@dashboard.route('/users/<user_id>/obs')
+@dashboard.route('/users/<user_id>/obs.html')
 def obs_overlay(user_id):
     user = User.query.filter_by(id=user_id).first()
     user_data = dict(**user.__dict__)
