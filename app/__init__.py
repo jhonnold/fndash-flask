@@ -14,7 +14,7 @@ else:
     app.config.from_object(DevConfig)
 
 db.init_app(app)
-# app.register_blueprint(api)
+app.register_blueprint(api)
 
 celery = Celery(app.import_name, broker=app.config['CELERY_BROKER_URL'])
 celery.conf.update(app.config)
