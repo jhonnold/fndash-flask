@@ -4,10 +4,10 @@ from app.models import Game
 
 
 def kd_per_day(user, mode='All', adjust=0):
-    today = datetime.date.today()
+    current_time_adjust = datetime.datetime.today() + datetime.timedelta(hours=adjust)
     start_date = datetime.datetime(
-        year=today.year, month=today.month,
-        day=today.day) - datetime.timedelta(hours=adjust)
+        year=current_time_adjust.year, month=current_time_adjust.month,
+        day=current_time_adjust.day) - datetime.timedelta(hours=adjust)
     end_date = start_date + datetime.timedelta(days=1)
 
     labels = []
