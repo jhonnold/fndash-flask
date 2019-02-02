@@ -18,6 +18,11 @@ def obs_overlay(user_id):
     if '_sa_instance_state' in user_data:
         del user_data['_sa_instance_state']
 
+    user_data['kd_total'] = "{0:0.3f}".format(user.kd_total())
+
+    _, kds = kd_per_day(user, adjust=-5)
+    user_data['kd_today'] = "{0:0.3f}".format(kds[6])
+
     return render_template('obs.html', **user_data)
 
 

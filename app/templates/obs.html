@@ -20,6 +20,28 @@
   </head>
 
   <body>
+    <div class="obs">
+      <div class="obs__stat">
+        <h3><i class="fas fa-trophy"></i></h3>
+        <h3>{{ wins_total }}</h3>
+        <h4>Victories</h4>
+      </div>
+      <div class="obs__stat">
+        <h3><i class="fas fa-skull"></i></h3>
+        <h3>{{ kills_total }}</h3>
+        <h4>Kills</h4>
+      </div>
+      <div class="obs__stat">
+        <h3><i class="fas fa-star-half-alt"></i></h3>
+        <h3>{{ kd_total }}</h3>
+        <h4>K/D</h4>
+      </div>
+      <div class="obs__stat">
+        <h3><i class="fas fa-crosshairs"></i></h3>
+        <h3>{{ kd_today }}</h3>
+        <h4>Today</h4>
+      </div>
+    </div>
     <script
       src="https://code.jquery.com/jquery-3.3.1.min.js"
       integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
