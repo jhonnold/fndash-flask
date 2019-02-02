@@ -38,6 +38,13 @@ def register_assets(app):
         output='dist/main.bundle.js')
     assets.register('js_all', js)
 
+    obs_js = Bundle(
+        'foundation-sites-6.5.1/dist/js/foundation.js',
+        'js/obs.js',
+        filters='jsmin',
+        output='dist/obs.bundle.js')
+    assets.register('js_obs', obs_js)
+
     css = Bundle(
         'scss/main.scss',
         filters=['libsass', 'autoprefixer6'],
