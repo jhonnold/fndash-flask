@@ -19,27 +19,53 @@
     {% endassets %}
   </head>
 
-  <body>
+  <body style="background-color: #fafafa;">
     <div class="obs">
-      <div class="obs__stat">
-        <h3><i class="fas fa-trophy"></i></h3>
-        <h3>{{ wins_total }}</h3>
-        <h4>Victories</h4>
+      <div class="obs__column">
+        <h3>Lifetime Stats</h3>
+        <div class="obs__stat">
+          <h4><i class="fas fa-trophy"></i></h4>
+          <h4>{{ wins_total }}</h4>
+          <h5>Victories</h5>
+        </div>
+        <div class="obs__stat">
+          <h4><i class="fas fa-gamepad"></i></h4>
+          <h4>{{ matchesplayed_total }}</h4>
+          <h5>Matches</h5>
+        </div>
+        <div class="obs__stat">
+          <h4><i class="fas fa-skull"></i></h4>
+          <h4>{{ kills_total }}</h4>
+          <h5>Kills</h5>
+        </div>
+        <div class="obs__stat">
+          <h4><i class="fas fa-crosshairs"></i></h4>
+          <h4>{{ kd_total }}</h4>
+          <h5>K/D</h5>
+        </div>
       </div>
-      <div class="obs__stat">
-        <h3><i class="fas fa-skull"></i></h3>
-        <h3>{{ kills_total }}</h3>
-        <h4>Kills</h4>
-      </div>
-      <div class="obs__stat">
-        <h3><i class="fas fa-star-half-alt"></i></h3>
-        <h3>{{ kd_total }}</h3>
-        <h4>K/D</h4>
-      </div>
-      <div class="obs__stat">
-        <h3><i class="fas fa-crosshairs"></i></h3>
-        <h3>{{ kd_today }}</h3>
-        <h4>Today</h4>
+      <div class="obs__column">
+        <h3>Today's Stats</h3>
+        <div class="obs__stat">
+          <h4><i class="fas fa-trophy"></i></h4>
+          <h4>{{ todays_wins }}</h4>
+          <h5>Victories</h5>
+        </div>
+        <div class="obs__stat">
+          <h4><i class="fas fa-gamepad"></i></h4>
+          <h4>{{ todays_matches }}</h4>
+          <h5>Matches</h5>
+        </div>
+        <div class="obs__stat">
+          <h4><i class="fas fa-skull"></i></h4>
+          <h4>{{ todays_kills }}</h4>
+          <h5>Kills</h5>
+        </div>
+        <div class="obs__stat">
+          <h4><i class="fas fa-crosshairs"></i></h4>
+          <h4>{{ todays_kd }}</h4>
+          <h5>K/D</h5>
+        </div>
       </div>
     </div>
     <script

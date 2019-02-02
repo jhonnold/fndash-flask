@@ -1,24 +1,58 @@
-$purple: #6441a5;
+$purple: #451e7b;
 
 .obs {
   display: flex;
-  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.5);
 
-  &__stat {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
+  &__column {
+    @extend .grid-y;
 
-    text-align: center;
+    padding: 1rem;
     border-right: 1px solid rgba($white, 0.125);
 
     &:last-of-type {
       border: none;
     }
-
-    h3:last-of-type {
-      color: $purple;
-    }
   }
 
+  &__stat {
+    @extend .grid-x;
+    align-items: center;
+
+    > * {
+      @extend .cell;
+
+      margin: none;
+    }
+
+    h4:first-of-type {
+      @extend .small-2;
+    }
+
+    h4:last-of-type {
+      @extend .small-5;
+      color: $purple;
+      text-align: center;
+    }
+
+    h5 {
+      @extend .auto;
+      text-align: left;
+    }
+
+    // display: flex;
+    // flex-direction: column;
+    // flex: 1;
+
+    // text-align: center;
+    // border-right: 1px solid rgba($white, 0.125);
+
+    // &:last-of-type {
+    //   border: none;
+    // }
+
+    // h3:last-of-type {
+    //   color: $purple;
+    // }
+  }
 }

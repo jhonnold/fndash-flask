@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for
 from app.models import User, Game
-from app.util import kd_per_day, games_per_day, kd_progression
+from app.util import kd_per_day, games_per_day, kd_progression, todays_kd, todays_kills, todays_wins, todays_matches
 
 dashboard = Blueprint('dashboard', __name__)
 
@@ -20,8 +20,10 @@ def obs_overlay(user_id):
 
     user_data['kd_total'] = "{0:0.3f}".format(user.kd_total())
 
-    _, kds = kd_per_day(user, adjust=-5)
-    user_data['kd_today'] = "{0:0.3f}".format(kds[6])
+    user_data['todays_kd'] = "{0:0.3f}".format(todays_kd(user))
+    user_data['todays_matches'] = todays_matches(user)
+    user_data['todays_kills'] = todays_kills(user)
+    user_data['todays_wins'] = todays_wins(user)
 
     return render_template('obs.html', **user_data)
 
