@@ -7,6 +7,5 @@ export const apiBase = axios.create({
 });
 
 export default {
-  // Added api calls here
-  // getSomething: () => apiBase.get(url),
+  getUsers: () => apiBase.get('/users'),
 };

@@ -1,9 +1,16 @@
 import React from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import $ from 'jquery';
+import * as usersActions from '../ducks/users';
 
 class Header extends React.PureComponent {
   componentDidMount() {
     $(document).foundation();
+
+    const { requestUserList } = this.props;
+
+    requestUserList();
   }
 
   render() {
@@ -58,4 +65,15 @@ class Header extends React.PureComponent {
   }
 }
 
-export default Header;
+const mapStateToProps = ({ users }) => ({
+  users,
+});
+
+const mapDispatchToProps = dispatch => ({
+  ...bindActionCreators(usersActions, dispatch),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Header);
