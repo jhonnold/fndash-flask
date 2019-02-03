@@ -8,4 +8,5 @@ export const apiBase = axios.create({
 
 export default {
   getUsers: () => apiBase.get('/users'),
+  getUser: id => apiBase.get(`/users/${id}`),
 };

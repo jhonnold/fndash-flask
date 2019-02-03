@@ -1,11 +1,11 @@
 import React from 'react';
 import Header from '../components/Header';
-import Stats from '../components/Stats';
+import UserInfo from './UserInfo';
 
 const UserHome = () => (
   <React.Fragment>
     <Header />
-    <Stats />
+    <UserInfo />
   </React.Fragment>
 );
 
