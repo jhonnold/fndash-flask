@@ -1,6 +1,7 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import $ from 'jquery';
 import { actions as usersActions } from '../ducks/users';
 
@@ -14,6 +15,9 @@ class Header extends React.PureComponent {
   }
 
   render() {
+    const { users } = this.props;
+    const { data } = users;
+
     return (
       <div className="header">
         <div className="header__container">
@@ -24,16 +28,11 @@ class Header extends React.PureComponent {
                 {/* TODO - SHOW PROPER USERNAME FROM PROPS */}
                 <a href="/users/1">Zomby</a>
                 <ul className="menu">
-                  {/* TODO - MAP USERS TO LI */}
-                  <li>
-                    <a href="/users/1">Zomby</a>
-                  </li>
-                  <li>
-                    <a href="/users/1">Zomby</a>
-                  </li>
-                  <li>
-                    <a href="/users/1">Zomby</a>
-                  </li>
+                  {Object.values(data).map(u => (
+                    <li key={u.id}>
+                      <Link to={`/users/${u.id}`}>{u.username}</Link>
+                    </li>
+                  ))}
                 </ul>
               </li>
             </ul>
