@@ -1,13 +1,12 @@
 import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
-import UserHome from './UserHome';
+import { Route } from 'react-router-dom';
+import Header from '../components/Header';
+import UserInfo from './UserInfo';
 
 const Routes = () => (
   <React.Fragment>
-    <Switch>
-      <Route path="/users/:userId" component={UserHome} />
-      <Route render={() => <Redirect to="/users/1" />} />
-    </Switch>
+    <Route path="/users/:userId" component={Header} />
+    <Route path="/users/:userId" component={UserInfo} />
   </React.Fragment>
 );
 

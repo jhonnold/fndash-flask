@@ -15,4 +15,15 @@ export function* requestUsersSaga() {
   yield takeEvery(types.USER_LIST_REQUESTED, requestUsers);
 }
 
-export default {};
+function* requestUser({ payload }) {
+  try {
+    const response = yield call(api.getUser, payload);
+    yield put(usersActions.receivedUser(response.data));
+  } catch (err) {
+    yield put(usersActions.rejectedUser(err));
+  }
+}
+
+export function* requestUserSaga() {
+  yield takeEvery(types.USER_REQUESTED, requestUser);
+}

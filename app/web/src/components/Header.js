@@ -1,7 +1,7 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Link, withRouter, Redirect } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import $ from 'jquery';
 import { actions as usersActions } from '../ducks/users';
 import { actions as uiActions } from '../ducks/ui';
@@ -11,9 +11,7 @@ class Header extends React.PureComponent {
     const { requestUserList } = this.props;
 
     requestUserList();
-  }
 
-  componentDidUpdate() {
     $(document).foundation();
   }
 
@@ -23,9 +21,7 @@ class Header extends React.PureComponent {
     } = this.props;
     const { data } = users;
 
-    const user = users.data[match.params.userId];
-
-    if (!user) return <Redirect to="/users/1" />;
+    const user = users.data[match.params.userId] || {};
 
     const { username, id } = user;
 
