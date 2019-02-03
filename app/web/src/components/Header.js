@@ -1,7 +1,7 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import $ from 'jquery';
 import { actions as usersActions } from '../ducks/users';
 
@@ -15,8 +15,12 @@ class Header extends React.PureComponent {
   }
 
   render() {
-    const { users } = this.props;
+    const { users, match } = this.props;
     const { data } = users;
+
+    const user = users.data[match.params.userId];
+
+    const { username, id } = user;
 
     return (
       <div className="header">
@@ -25,8 +29,7 @@ class Header extends React.PureComponent {
             <span className="header__title">Fortnite Dashboard</span>
             <ul className="header__name-menu" data-dropdown-menu>
               <li>
-                {/* TODO - SHOW PROPER USERNAME FROM PROPS */}
-                <a href="/users/1">Zomby</a>
+                <a href={`/users/${id}`}>{username}</a>
                 <ul className="menu">
                   {Object.values(data).map(u => (
                     <li key={u.id}>
@@ -40,8 +43,7 @@ class Header extends React.PureComponent {
           <div className="header__break" />
           <div className="header__lower-menu">
             <span className="header__name">
-              {/* TODO - DISPLAY REAL NAME */}
-              <h2>Zomby</h2>
+              <h2>{username}</h2>
             </span>
             <ul className="header__mode-tabs" data-tabs id="mode-tabs">
               <li className="header__mode-tabs-title tabs-title is-active">
@@ -72,7 +74,9 @@ const mapDispatchToProps = dispatch => ({
   ...bindActionCreators(usersActions, dispatch),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Header);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  )(Header),
+);
