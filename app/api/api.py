@@ -46,5 +46,9 @@ def user(user_id):
     kills=user.kills_squad,
     kd=user.kd_squad(),
   )
+
+  user_data['id'] = user.id
+  user_data['username'] = user.username
+  user_data['uid'] = user.uid
   
   return jsonify(user_data)
