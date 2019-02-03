@@ -1,5 +1,7 @@
 from flask import Blueprint, jsonify
-from app.models import User
+from app.models import User, Game
+import datetime
+
 
 api = Blueprint('api', __name__, url_prefix='/api')
 
@@ -22,3 +24,11 @@ def user(user_id):
     del user_data['_sa_instance_state']
 
   return jsonify(user_data)
+
+@api.route("/users/<user_id>/kd")
+def kd(user_id, mode='All', adjust=0):
+
+
+#kd_progression
+#game_count
+#placements
