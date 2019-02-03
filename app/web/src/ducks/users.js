@@ -2,10 +2,16 @@ const USER_LIST_REQUESTED = 'fn-dash/users/USER_LIST_REQUESTED';
 const USER_LIST_RECEIVED = 'fn-dash/users/USER_LIST_RECEIVED';
 const USER_LIST_REJECTED = 'fn-dash/users/USER_LIST_REJECTED';
 
+export const types = {
+  USER_LIST_REQUESTED,
+  USER_LIST_RECEIVED,
+  USER_LIST_REJECTED,
+};
+
 const initialState = {
   error: null,
   loading: false,
-  data: [],
+  data: {},
 };
 
 export default (state = initialState, action) => {
@@ -20,8 +26,12 @@ export default (state = initialState, action) => {
       };
     }
     case USER_LIST_RECEIVED: {
+      const users = {};
+      payload.forEach((u) => {
+        users[u.id] = u;
+      });
       return {
-        data: payload,
+        data: users,
         error: null,
         loading: false,
       };
@@ -39,16 +49,22 @@ export default (state = initialState, action) => {
   }
 };
 
-export const requestUserList = () => ({
+const requestUserList = () => ({
   type: USER_LIST_REQUESTED,
 });
 
-export const receivedUserList = users => ({
+const receivedUserList = users => ({
   type: USER_LIST_RECEIVED,
   payload: users,
 });
 
-export const rejectedUserList = err => ({
+const rejectedUserList = err => ({
   type: USER_LIST_REJECTED,
   payload: err.message,
 });
+
+export const actions = {
+  requestUserList,
+  receivedUserList,
+  rejectedUserList,
+};

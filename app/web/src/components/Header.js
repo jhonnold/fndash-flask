@@ -2,7 +2,7 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import $ from 'jquery';
-import * as usersActions from '../ducks/users';
+import { actions as usersActions } from '../ducks/users';
 
 class Header extends React.PureComponent {
   componentDidMount() {
