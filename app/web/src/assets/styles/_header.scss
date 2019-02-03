@@ -49,5 +49,17 @@
 
   &__mode-tabs-title {
     @extend .tabs-title;
+
+    > button {
+      padding: $tab-item-padding;
+      color: $white;
+      text-transform: capitalize;
+      font-weight: $global-weight-normal;
+      cursor: pointer;
+    }
+
+    &.is-active button {
+      color: $primary-color;
+    }
   }
 }

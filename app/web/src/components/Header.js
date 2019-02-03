@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import $ from 'jquery';
 import { actions as usersActions } from '../ducks/users';
+import { actions as uiActions } from '../ducks/ui';
 
 class Header extends React.PureComponent {
   componentDidMount() {
@@ -15,7 +16,9 @@ class Header extends React.PureComponent {
   }
 
   render() {
-    const { users, match } = this.props;
+    const {
+      users, match, ui, setGameMode,
+    } = this.props;
     const { data } = users;
 
     const user = users.data[match.params.userId];
@@ -45,19 +48,17 @@ class Header extends React.PureComponent {
             <span className="header__name">
               <h2>{username}</h2>
             </span>
-            <ul className="header__mode-tabs" data-tabs id="mode-tabs">
-              <li className="header__mode-tabs-title tabs-title is-active">
-                <a href="#all_stats">All</a>
-              </li>
-              <li className="header__mode-tabs-title tabs-title">
-                <a href="#solo_stats">Solo</a>
-              </li>
-              <li className="header__mode-tabs-title tabs-title">
-                <a href="#duo_stats">Duo</a>
-              </li>
-              <li className="header__mode-tabs-title tabs-title">
-                <a href="#squad_stats">Squad</a>
-              </li>
+            <ul className="header__mode-tabs">
+              {['all', 'solo', 'duo', 'squad'].map(v => (
+                <li
+                  key={v}
+                  className={`header__mode-tabs-title ${ui.mode === v ? 'is-active' : ''}`}
+                >
+                  <button type="button" onClick={() => setGameMode(v)}>
+                    {v}
+                  </button>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -66,12 +67,14 @@ class Header extends React.PureComponent {
   }
 }
 
-const mapStateToProps = ({ users }) => ({
+const mapStateToProps = ({ users, ui }) => ({
   users,
+  ui,
 });
 
 const mapDispatchToProps = dispatch => ({
   ...bindActionCreators(usersActions, dispatch),
+  ...bindActionCreators(uiActions, dispatch),
 });
 
 export default withRouter(

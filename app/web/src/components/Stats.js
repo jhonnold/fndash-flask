@@ -30,7 +30,7 @@ function Stats() {
         </div>
         <div className="stats__number-stat">
           <h2>
-            <i className="fas fa-star-half-alt" />
+            <i className="fas fa-crosshairs" />
           </h2>
           {/* TODO - SHOW PROPER KD */}
           <h2>1.2</h2>
