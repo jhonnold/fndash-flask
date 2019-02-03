@@ -17,8 +17,34 @@ def users():
 @api.route("/users/<user_id>")
 def user(user_id):
   user = User.query.filter_by(id=user_id).first()
-  user_data = dict(**user.__dict__)
-  if '_sa_instance_state' in user_data:
-    del user_data['_sa_instance_state']
 
+  user_data = dict()
+  user_data['all'] = dict(
+    wins=user.wins_total,
+    matches=user.matchesplayed_total,
+    kills=user.kills_total,
+    kd=user.kd_total(),
+  )
+
+  user_data['solo'] = dict(
+    wins=user.placetop1_solo,
+    matches=user.matchesplayed_solo,
+    kills=user.kills_solo,
+    kd=user.kd_solo(),
+  )
+
+  user_data['duo'] = dict(
+    wins=user.placetop1_duo,
+    matches=user.matchesplayed_duo,
+    kills=user.kills_duo,
+    kd=user.kd_duo(),
+  )
+
+  user_data['squad'] = dict(
+    wins=user.placetop1_squad,
+    matches=user.matchesplayed_squad,
+    kills=user.kills_squad,
+    kd=user.kd_squad(),
+  )
+  
   return jsonify(user_data)
