@@ -13,3 +13,6 @@ class Game(db.Model):
 
     def __repr__(self):
         return "<Game '{}' - '{}'>".format(self.game_type, self.time_played)
+
+    def serialize(self):
+        return dict(kills=self.kills, placement=self.placement, time_played=self.time_played, game_type=self.game_type, id=self.id, user_id=self.user_id)

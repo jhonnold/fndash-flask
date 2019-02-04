@@ -99,3 +99,27 @@ def kds(user_id):
 
 
 #kd_progression
+
+@api.route("/users/<user_id>/games")
+def games(user_id):
+    user = get_user(user_id)
+    games = user.games.order_by(Game.time_played.desc()).limit(100).all()
+    serialized_games = list(map(lambda g: g.serialize(), games))
+
+    return jsonify(serialized_games)
+
+
+@api.route("/users/<user_id>/game_records")
+def records(user_id):
+    user = get_user(user_id)
+    solo_record = user.games.filter_by(game_type='Solo').order_by(
+        Game.kills.desc()).first()
+    duo_record = user.games.filter_by(game_type='Duo').order_by(
+        Game.kills.desc()).first()
+    squad_record = user.games.filter_by(game_type='Squad').order_by(
+        Game.kills.desc()).first()
+
+    return jsonify(
+        solo=solo_record.serialize() if solo_record is not None else None,
+        duo=duo_record.serialize() if duo_record is not None else None,
+        squad=squad_record.serialize() if squad_record is not None else None)
