@@ -15,6 +15,7 @@ const chartOptions = {
     yAxes: [
       {
         ticks: {
+          beginAtZero: true,
           fontColor: '#fafafa',
         },
         gridLines: {

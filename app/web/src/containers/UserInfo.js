@@ -6,6 +6,8 @@ import { actions as gamesActions } from '../ducks/games';
 import Stats from '../components/Stats';
 import GameList from '../components/GamesList';
 import KDChart from '../components/KDChart';
+import PlacementPieChart from '../components/PlacementPieChart';
+import GamesBarChart from '../components/GamesBarChart';
 
 class UserInfo extends React.PureComponent {
   componentDidMount() {
@@ -42,6 +44,8 @@ class UserInfo extends React.PureComponent {
             </div>
             <div className="charts">
               <KDChart />
+              <PlacementPieChart />
+              <GamesBarChart />
             </div>
           </div>
         </div>
