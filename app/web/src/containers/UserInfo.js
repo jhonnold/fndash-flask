@@ -5,6 +5,7 @@ import { actions as userActions } from '../ducks/users';
 import { actions as gamesActions } from '../ducks/games';
 import Stats from '../components/Stats';
 import GameList from '../components/GamesList';
+import KDChart from '../components/KDChart';
 
 class UserInfo extends React.PureComponent {
   componentDidMount() {
@@ -38,6 +39,9 @@ class UserInfo extends React.PureComponent {
             <div className="games">
               <GameList title="Records" />
               <GameList />
+            </div>
+            <div className="charts">
+              <KDChart />
             </div>
           </div>
         </div>

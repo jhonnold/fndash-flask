@@ -1,0 +1,12 @@
+.charts {
+  @extend .grid-y;
+  @extend .cell;
+  @extend .small-12;
+  @extend .medium-6;
+
+  &__chart {
+    @extend .card;
+    padding: 0.5rem 1rem;
+    flex-grow: 0;
+  }
+}
