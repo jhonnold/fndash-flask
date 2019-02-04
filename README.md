@@ -1,6 +1,6 @@
 # Fortnite Dashboard
 
-![screenshot](https://i.imgur.com/qbt6lbd.png)
+![screenshot](https://i.imgur.com/PSKbu7t.png)
 
 This is a simple fortnite dashboard designed to allow a select group of people quick access to all their stats. We track all the standard statistics that are avaialable to us (kills/placements/matches), and also generate stats on a *game* to *game* basis.
 
