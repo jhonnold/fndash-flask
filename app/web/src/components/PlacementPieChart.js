@@ -14,7 +14,7 @@ const chartOptions = {
     callbacks: {
       label(tooltipItem, data) {
         const dataset = data.datasets[tooltipItem.datasetIndex];
-        const index = tooltipItem.index;
+        const { index } = tooltipItem;
         return `${dataset.labels[index]}: ${dataset.data[index]}`;
       },
     },

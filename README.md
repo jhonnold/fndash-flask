@@ -1,10 +1,11 @@
 # Fortnite Dashboard
 
-![screenshot](https://i.imgur.com/qbt6lbd.png)
+![screenshot](https://i.imgur.com/PSKbu7t.png)
 
 This is a simple fortnite dashboard designed to allow a select group of people quick access to all their stats. We track all the standard statistics that are avaialable to us (kills/placements/matches), and also generate stats on a *game* to *game* basis.
 
 ## First Time Setup (Development)
+### Server
 ```
 $ docker-compose build
 $ docker-compose up -d 
@@ -25,7 +26,21 @@ $ docker-compose exec app bash
 ```
 Finally, we load into the app container and migrate the database
 
-Go to [localhost:5000](http://localhost:5000) to see the app
+Go to [localhost:5000](http://localhost:5000) to see the app (using the built react app)
+
+### Web
+```
+$ cd app/web
+$ yarn install
+$ yarn start
+```
+This will install the necessary npm components and start the react app.
+
+If you wish to serve the react app from the server, build it with
+```
+$ yarn build
+```
+This is just to serve on production
 
 ## Executing Migrations
 
@@ -41,13 +56,12 @@ Simply load into the app container and follow the [Flask-Migration Docs](https:/
 ```
 .
 +-- _app (The flask application)
+|   +-- _api (The main server endpoints)
 |   +-- _models (Database model files)
-|   +-- _modules (Blueprints for the application)
-|   +-- _static (Static files for app)
 |   +-- _tasks (Celery tasks)
-|   +-- _templates (Template files for app)
+|   +-- _util (A set of helpful function for manipulating data)
 |   +-- __init__.py (Main core of Flask app)
-|   +-- celeryconfig.py
+|   +-- celery.py
 |   +-- config.py
 |   +-- database.py
 +-- _migrations (Database migrations folder, managed by alembic)
