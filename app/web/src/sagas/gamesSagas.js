@@ -2,9 +2,9 @@ import { takeEvery, put, call } from 'redux-saga/effects';
 import api from '../util/api';
 import { types, actions } from '../ducks/games';
 
-function* requestUserGames({ payload }) {
+function* requestUserGames({ payload: { id, mode } }) {
   try {
-    const response = yield call(api.getUserGames, payload);
+    const response = yield call(api.getUserGames, id, mode);
     yield put(actions.receivedUserGames(response.data));
   } catch (err) {
     yield put(actions.rejectedUserGames(err));

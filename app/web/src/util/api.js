@@ -9,5 +9,5 @@ export const apiBase = axios.create({
 export default {
   getUsers: () => apiBase.get('/users'),
   getUser: id => apiBase.get(`/users/${id}`),
-  getUserGames: id => apiBase.get(`/users/${id}/games`),
+  getUserGames: (id, mode) => apiBase.get(`/users/${id}/games?m=${mode}`),
 };

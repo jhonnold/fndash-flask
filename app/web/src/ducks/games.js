@@ -52,9 +52,12 @@ export default (state = initialState, action) => {
   }
 };
 
-const requestUserGames = id => ({
+const requestUserGames = (id, mode) => ({
   type: USER_GAMES_REQUESTED,
-  payload: id,
+  payload: {
+    id,
+    mode,
+  },
 });
 
 const receivedUserGames = games => ({
