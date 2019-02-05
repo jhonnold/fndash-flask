@@ -11,6 +11,9 @@ const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 
+// ENV var to disable eslint if wanting to bypass
+const eslintWarn = process.env.ESLINT_BYPASS === 'bypass'
+
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
 const publicPath = paths.servedPath;
@@ -118,7 +121,7 @@ module.exports = {
             options: {
               formatter: eslintFormatter,
               eslintPath: require.resolve('eslint'),
-
+              emitWarning: eslintWarn,
             },
             loader: require.resolve('eslint-loader'),
           },
