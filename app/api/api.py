@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from app.models import User, Game
 from app.util import get_user
 from functools import reduce
@@ -23,39 +23,7 @@ def users():
 @api.route("/users/<user_id>")
 def user(user_id):
     user = get_user(user_id)
-
-    user_data = dict()
-    user_data['all'] = dict(
-        wins=user.wins_total,
-        matches=user.matchesplayed_total,
-        kills=user.kills_total,
-        kd=user.kd_total(),
-    )
-
-    user_data['solo'] = dict(
-        wins=user.placetop1_solo,
-        matches=user.matchesplayed_solo,
-        kills=user.kills_solo,
-        kd=user.kd_solo(),
-    )
-
-    user_data['duo'] = dict(
-        wins=user.placetop1_duo,
-        matches=user.matchesplayed_duo,
-        kills=user.kills_duo,
-        kd=user.kd_duo(),
-    )
-
-    user_data['squad'] = dict(
-        wins=user.placetop1_squad,
-        matches=user.matchesplayed_squad,
-        kills=user.kills_squad,
-        kd=user.kd_squad(),
-    )
-
-    user_data['id'] = user.id
-    user_data['username'] = user.username
-    user_data['uid'] = user.uid
+    user_data = user.serialize()
 
     return jsonify(user_data)
 
@@ -99,3 +67,35 @@ def kds(user_id):
 
 
 #kd_progression
+
+
+@api.route("/users/<user_id>/games")
+def games(user_id):
+    user = get_user(user_id)
+    mode = request.args.get('m')
+
+    if mode != 'all' and mode is not None:
+        games = user.games.filter_by(game_type=mode.capitalize()).order_by(
+            Game.time_played.desc()).limit(100).all()
+    else:
+        games = user.games.order_by(Game.time_played.desc()).limit(100).all()
+
+    serialized_games = list(map(lambda g: g.serialize(), games))
+
+    return jsonify(serialized_games)
+
+
+@api.route("/users/<user_id>/game_records")
+def records(user_id):
+    user = get_user(user_id)
+    solo_record = user.games.filter_by(game_type='Solo').order_by(
+        Game.kills.desc()).first()
+    duo_record = user.games.filter_by(game_type='Duo').order_by(
+        Game.kills.desc()).first()
+    squad_record = user.games.filter_by(game_type='Squad').order_by(
+        Game.kills.desc()).first()
+
+    return jsonify(
+        solo=solo_record.serialize() if solo_record is not None else None,
+        duo=duo_record.serialize() if duo_record is not None else None,
+        squad=squad_record.serialize() if squad_record is not None else None)
