@@ -15,4 +15,15 @@ export function* requestUserGamesSaga() {
   yield takeEvery(types.USER_GAMES_REQUESTED, requestUserGames);
 }
 
-export default {};
+function* requestUserRecords({ payload }) {
+  try {
+    const response = yield call(api.getUserRecords, payload);
+    yield put(actions.receivedUserRecords(response.data));
+  } catch (err) {
+    yield put(actions.rejectedUserRecords(err));
+  }
+}
+
+export function* requestUserRecordsSaga() {
+  yield takeEvery(types.USER_RECORDS_REQUESTED, requestUserRecords);
+}

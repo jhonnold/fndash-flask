@@ -12,22 +12,24 @@ import GamesBarChart from '../components/GamesBarChart';
 class UserInfo extends React.PureComponent {
   componentDidMount() {
     const {
-      requestUser, match, requestUserGames, ui,
+      match, ui, requestUser, requestUserGames, requestUserRecords,
     } = this.props;
 
     requestUser(match.params.userId);
     requestUserGames(match.params.userId, ui.mode);
+    requestUserRecords(match.params.userId);
   }
 
   componentDidUpdate(prevProps) {
     const { match: prevMatch, ui: prevUi } = prevProps;
     const {
-      match, requestUser, requestUserGames, ui,
+      match, ui, requestUser, requestUserGames, requestUserRecords,
     } = this.props;
 
     if (match.params.userId !== prevMatch.params.userId) {
       requestUser(match.params.userId);
       requestUserGames(match.params.userId, ui.mode);
+      requestUserRecords(match.params.userId);
     } else if (ui.mode !== prevUi.mode) {
       requestUserGames(match.params.userId, ui.mode);
     }

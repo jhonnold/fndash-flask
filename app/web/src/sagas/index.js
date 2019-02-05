@@ -1,7 +1,12 @@
 import { fork } from 'redux-saga/effects';
 import { requestUsersSaga, requestUserSaga } from './usersSagas';
-import { requestUserGamesSaga } from './gamesSagas';
+import { requestUserGamesSaga, requestUserRecordsSaga } from './gamesSagas';
 
 export default function* () {
-  yield [fork(requestUsersSaga), fork(requestUserSaga), fork(requestUserGamesSaga)];
+  yield [
+    fork(requestUsersSaga),
+    fork(requestUserSaga),
+    fork(requestUserGamesSaga),
+    fork(requestUserRecordsSaga),
+  ];
 }
