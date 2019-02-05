@@ -1,8 +1,9 @@
+import datetime
+
+from functools import reduce
 from flask import Blueprint, jsonify, request
 from app.models import User, Game
-from app.util import get_user
-from functools import reduce
-import datetime
+from app.util import get_user, kd_per_day
 
 api = Blueprint('api', __name__, url_prefix='/api')
 
@@ -15,8 +16,8 @@ def home():
 @api.route('/users')
 def users():
     users = User.query.all()
-    serialize_user = lambda user: dict(id=user.id, username=user.username)
-    serialized_users = list(map(serialize_user, users))
+    serialized_users = list(
+        map(lambda user: dict(id=user.id, username=user.username), users))
     return jsonify(serialized_users)
 
 
@@ -31,50 +32,26 @@ def user(user_id):
 @api.route("/users/<user_id>/kd")
 def kds(user_id):
     user = get_user(user_id)
-    current_time_adjust = datetime.datetime.today() + datetime.timedelta(
-        hours=-5)
-    start_date = datetime.datetime(
-        year=current_time_adjust.year,
-        month=current_time_adjust.month,
-        day=current_time_adjust.day) - datetime.timedelta(hours=-5)
-    end_date = start_date + datetime.timedelta(days=1)
+    mode = request.args.get('m')
+    mode = 'all' if mode is None else mode
 
-    labels = []
-    kds = []
+    labels, datasets = kd_per_day(user, mode)
 
-    for i in range(7):
-        games = user.games.filter(Game.time_played >= start_date).filter(
-            Game.time_played < end_date)
-
-        kills = reduce(lambda t, g: t + g.kills, games, 0)
-        wins = reduce(lambda t, g: t + 1 if g.placement == 'Victory' else t,
-                      games, 0)
-
-        count = games.count()
-        if count == 0:
-            kds.insert(0, 0)
-        elif count - wins == 0:
-            kds.insert(0, kills)
-        else:
-            kds.insert(0, kills / (count - wins))
-
-        labels.insert(0, start_date.__format__('%b %-d'))
-
-        start_date -= datetime.timedelta(days=1)
-        end_date -= datetime.timedelta(days=1)
-
-    return jsonify(dict(xAxis=labels, yAxis=kds))
+    return jsonify(dict(labels=labels, datasets=datasets))
 
 
-#kd_progression
+#kd_progression (We now return this as a datasets in kds so don't do me)!
+#placements
+#games per day
 
 
 @api.route("/users/<user_id>/games")
 def games(user_id):
     user = get_user(user_id)
     mode = request.args.get('m')
+    mode = 'all' if mode is None else mode
 
-    if mode != 'all' and mode is not None:
+    if mode != 'all':
         games = user.games.filter_by(game_type=mode.capitalize()).order_by(
             Game.time_played.desc()).limit(100).all()
     else:
