@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from app.models import User, Game
 from app.util import get_user
 from functools import reduce
@@ -100,10 +100,18 @@ def kds(user_id):
 
 #kd_progression
 
+
 @api.route("/users/<user_id>/games")
 def games(user_id):
     user = get_user(user_id)
-    games = user.games.order_by(Game.time_played.desc()).limit(100).all()
+    mode = request.args.get('m')
+
+    if mode != 'all' and mode is not None:
+        games = user.games.filter_by(game_type=mode.capitalize()).order_by(
+            Game.time_played.desc()).limit(100).all()
+    else:
+        games = user.games.order_by(Game.time_played.desc()).limit(100).all()
+
     serialized_games = list(map(lambda g: g.serialize(), games))
 
     return jsonify(serialized_games)
