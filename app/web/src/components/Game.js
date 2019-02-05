@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment-timezone';
 
 function Game({
   data: {
@@ -9,7 +10,7 @@ function Game({
     <div className="games__game">
       <div className="games__top">
         <h5>{gameType} Match</h5>
-        <p>{timePlayed}</p>
+        <p>{moment(timePlayed).format('MMM Do - h:mm a')}</p>
       </div>
       <div className="games__bottom">
         <p>

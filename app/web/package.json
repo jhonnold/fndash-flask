@@ -55,6 +55,7 @@
     "foundation-sites": "^6.5.3",
     "history": "^4.7.2",
     "jquery": "^3.3.1",
+    "moment-timezone": "^0.5.23",
     "raf": "^3.4.1",
     "react": "^16.4.1",
     "react-chartjs-2": "^2.7.4",

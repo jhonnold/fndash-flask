@@ -15,6 +15,7 @@ const configureStore = (history, initialState = {}) => {
   const persistConfig = {
     key: 'root',
     storage,
+    blacklist: ['ui'],
   };
 
   const reducer = combineReducers({
