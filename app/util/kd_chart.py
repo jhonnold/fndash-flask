@@ -1,41 +1,56 @@
-import datetime
+from functools import reduce
+from app.models import Game, KD
+from .time import ONE_DAY, get_today_range
 
-from app.models import Game
 
-
-def kd_per_day(user, mode='All', adjust=0):
-    today = datetime.date.today()
-    start_date = datetime.datetime(
-        year=today.year, month=today.month,
-        day=today.day) - datetime.timedelta(hours=adjust)
-    end_date = start_date + datetime.timedelta(days=1)
+def kd_per_day(user):
+    start_date, end_date = get_today_range()
 
     labels = []
-    kds = []
+    daily_kds = []
+    kd_progression = []
+
+    kds = user.kds.order_by(KD.id.desc()).limit(6)
+    kd_progression = [user.kd_total()]
 
     for i in range(7):
-        games = []
-        if mode == 'All':
-            games = user.games.filter(Game.time_played >= start_date).filter(
-                Game.time_played < end_date)
-        else:
-            games = user.games.filter_by(game_type=mode).filter(
-                Game.time_played >= start_date).filter(
-                    Game.time_played < end_date)
-
-        kills = 0
-        for game in games:
-            kills += game.kills
-
-        count = games.count()
-        if count > 0:
-            kds.insert(0, kills / games.count())
-        else:
-            kds.insert(0, 0)
-
         labels.insert(0, start_date.__format__('%b %-d'))
 
-        start_date -= datetime.timedelta(days=1)
-        end_date -= datetime.timedelta(days=1)
+        #######################################
+        # This is all logic for kd_progression#
+        #######################################
+        if i > 0:
+            try:
+                # Try to insert an existing KD from our DB,
+                # if one doesn't exist catch that and just insert 0
+                # ATM there is no date verification for kd progression,
+                # that should be added
+                kd = kds[i - 1]
+                kd_progression.insert(0, kd.total)
+            except:
+                kd_progression.insert(0, 0)
 
-    return labels, kds
+
+        ##############################################
+        # This is all logic for calculating daily_kds#
+        ##############################################
+        games = user.games.filter(Game.time_played >= start_date).filter(
+            Game.time_played < end_date)
+
+        kills = reduce(lambda t, g: t + g.kills, games, 0)
+        wins = reduce(lambda t, g: t + 1 if g.placement == 'Victory' else t,
+                      games, 0)
+
+        if games.count() == 0:
+            kd = 0
+        elif games.count() - wins == 0:
+            kd = kills
+        else:
+            kd = kills / (games.count() - wins)
+        
+        daily_kds.insert(0, kd)
+
+        start_date -= ONE_DAY
+        end_date -= ONE_DAY
+
+    return labels, [daily_kds, kd_progression]
