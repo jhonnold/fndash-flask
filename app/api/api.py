@@ -32,20 +32,26 @@ def user(user_id):
 @api.route("/users/<user_id>/kd")
 def kds(user_id):
     user = get_user(user_id)
-    labels, datasets = kd_per_day(user)
+    mode = request.args.get('m')
+    mode = 'all' if mode is None else mode
+
+    labels, datasets = kd_per_day(user, mode)
 
     return jsonify(dict(labels=labels, datasets=datasets))
 
 
-#kd_progression
+#kd_progression (We now return this as a datasets in kds so don't do me)!
+#placements
+#games per day
 
 
 @api.route("/users/<user_id>/games")
 def games(user_id):
     user = get_user(user_id)
     mode = request.args.get('m')
+    mode = 'all' if mode is None else mode
 
-    if mode != 'all' and mode is not None:
+    if mode != 'all':
         games = user.games.filter_by(game_type=mode.capitalize()).order_by(
             Game.time_played.desc()).limit(100).all()
     else:

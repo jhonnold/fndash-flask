@@ -75,8 +75,18 @@ class User(db.Model):
         user_data['id'] = self.id
         user_data['username'] = self.username
         user_data['uid'] = self.uid
-        
+
         return user_data
+
+    def kd(self, mode):
+        if mode == 'solo':
+            return self.kd_solo()
+        elif mode == 'duo':
+            return self.kd_duo()
+        elif mode == 'squad':
+            return self.kd_squad()
+        else:
+            return self.kd_total()
 
     def kd_total(self):
         return self.kills_total / (self.matchesplayed_total - self.wins_total)
