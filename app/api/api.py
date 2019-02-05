@@ -23,39 +23,7 @@ def users():
 @api.route("/users/<user_id>")
 def user(user_id):
     user = get_user(user_id)
-
-    user_data = dict()
-    user_data['all'] = dict(
-        wins=user.wins_total,
-        matches=user.matchesplayed_total,
-        kills=user.kills_total,
-        kd=user.kd_total(),
-    )
-
-    user_data['solo'] = dict(
-        wins=user.placetop1_solo,
-        matches=user.matchesplayed_solo,
-        kills=user.kills_solo,
-        kd=user.kd_solo(),
-    )
-
-    user_data['duo'] = dict(
-        wins=user.placetop1_duo,
-        matches=user.matchesplayed_duo,
-        kills=user.kills_duo,
-        kd=user.kd_duo(),
-    )
-
-    user_data['squad'] = dict(
-        wins=user.placetop1_squad,
-        matches=user.matchesplayed_squad,
-        kills=user.kills_squad,
-        kd=user.kd_squad(),
-    )
-
-    user_data['id'] = user.id
-    user_data['username'] = user.username
-    user_data['uid'] = user.uid
+    user_data = user.serialize()
 
     return jsonify(user_data)
 

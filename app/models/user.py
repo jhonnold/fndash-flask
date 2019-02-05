@@ -42,6 +42,42 @@ class User(db.Model):
     def __repr__(self):
         return "<User '{}'>".format(self.username)
 
+    def serialize(self):
+        user_data = dict()
+        user_data['all'] = dict(
+            wins=self.wins_total,
+            matches=self.matchesplayed_total,
+            kills=self.kills_total,
+            kd=self.kd_total(),
+        )
+
+        user_data['solo'] = dict(
+            wins=self.placetop1_solo,
+            matches=self.matchesplayed_solo,
+            kills=self.kills_solo,
+            kd=self.kd_solo(),
+        )
+
+        user_data['duo'] = dict(
+            wins=self.placetop1_duo,
+            matches=self.matchesplayed_duo,
+            kills=self.kills_duo,
+            kd=self.kd_duo(),
+        )
+
+        user_data['squad'] = dict(
+            wins=self.placetop1_squad,
+            matches=self.matchesplayed_squad,
+            kills=self.kills_squad,
+            kd=self.kd_squad(),
+        )
+
+        user_data['id'] = self.id
+        user_data['username'] = self.username
+        user_data['uid'] = self.uid
+        
+        return user_data
+
     def kd_total(self):
         return self.kills_total / (self.matchesplayed_total - self.wins_total)
 
