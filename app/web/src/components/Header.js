@@ -29,7 +29,7 @@ class Header extends React.PureComponent {
     return (
       <React.Fragment>
         <Helmet>
-          <title>{username} Stats - FN Dashboard</title>
+          <title>{`${username} Stats - FN Dashboard`}</title>
         </Helmet>
         <div className="header">
           <div className="header__container">

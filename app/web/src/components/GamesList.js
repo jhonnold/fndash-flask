@@ -6,7 +6,7 @@ function GamesList({ title = 'Games', games = [] }) {
     <div className="games__list">
       <h3>{title}</h3>
       {games.map(g => (
-        <Game key={g.time_played} data={g} />
+        <Game key={`${g.time_played} - ${g.game_type}`} data={g} />
       ))}
     </div>
   );

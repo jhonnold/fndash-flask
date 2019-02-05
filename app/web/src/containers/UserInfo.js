@@ -48,7 +48,7 @@ class UserInfo extends React.PureComponent {
           <div className="minute-data__container">
             <div className="games">
               <GameList title="Records" />
-              <GameList />
+              <GameList games={games.data.games} />
             </div>
             <div className="charts">
               <KDChart />
