@@ -7,6 +7,9 @@ import { createLogger } from 'redux-logger';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import createSagaMiddleware from 'redux-saga';
+import usersReducer from './ducks/users';
+import uiReducer from './ducks/ui';
+import gamesReducer from './ducks/games';
 
 const configureStore = (history, initialState = {}) => {
   const persistConfig = {
@@ -15,8 +18,9 @@ const configureStore = (history, initialState = {}) => {
   };
 
   const reducer = combineReducers({
-    // Add reducers here...
-    theme: (state = {}) => state,
+    users: usersReducer,
+    ui: uiReducer,
+    games: gamesReducer,
   });
 
   const routedReducer = connectRouter(history)(reducer);

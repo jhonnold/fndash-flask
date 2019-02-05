@@ -1,35 +1,44 @@
 import React from 'react';
+import AnimatedNumber from './AnimatedNumber';
 
-function Stats(props) {
+function Stats({
+  data: {
+    wins, matches, kd, kills,
+  },
+}) {
   return (
-    <div class="stats">
-    <div class="stats__container">
-      <div class="stats__number-stat">
-        <h2><i class="fas fa-trophy"></i></h2>
-        {/* TODO - SHOW PROPER VICTORIES */}
-        <h2>100</h2>
-        <h3>Victories</h3>
-      </div>
-      <div class="stats__number-stat">
-        <h2><i class="fas fa-gamepad"></i></h2>
-        {/* TODO - SHOW PROPER MATCHES */}
-        <h2>100</h2>
-        <h3>Matches</h3>
-      </div>
-      <div class="stats__number-stat">
-        <h2><i class="fas fa-skull"></i></h2>
-        {/* TODO - SHOW PROPER KILLS */}
-        <h2>1200</h2>
-        <h3>Kills</h3>
-      </div>
-      <div class="stats__number-stat">
-        <h2><i class="fas fa-star-half-alt"></i></h2>
-        {/* TODO - SHOW PROPER KD */}
-        <h2>1.2</h2>
-        <h3>K/D</h3>
+    <div className="stats">
+      <div className="stats__container">
+        <div className="stats__number-stat">
+          <h2>
+            <i className="fas fa-trophy" />
+          </h2>
+          <AnimatedNumber number={wins} noDecimal />
+          <h3>Victories</h3>
+        </div>
+        <div className="stats__number-stat">
+          <h2>
+            <i className="fas fa-gamepad" />
+          </h2>
+          <AnimatedNumber number={matches} noDecimal />
+          <h3>Matches</h3>
+        </div>
+        <div className="stats__number-stat">
+          <h2>
+            <i className="fas fa-skull" />
+          </h2>
+          <AnimatedNumber number={kills} noDecimal />
+          <h3>Kills</h3>
+        </div>
+        <div className="stats__number-stat">
+          <h2>
+            <i className="fas fa-crosshairs" />
+          </h2>
+          <AnimatedNumber number={kd} format={v => v.toFixed(3)} />
+          <h3>K/D</h3>
+        </div>
       </div>
     </div>
-  </div>
   );
 }
 
