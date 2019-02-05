@@ -10,6 +10,7 @@ import createSagaMiddleware from 'redux-saga';
 import usersReducer from './ducks/users';
 import uiReducer from './ducks/ui';
 import gamesReducer from './ducks/games';
+import chartsReducer from './ducks/charts';
 
 const configureStore = (history, initialState = {}) => {
   const persistConfig = {
@@ -22,6 +23,7 @@ const configureStore = (history, initialState = {}) => {
     users: usersReducer,
     ui: uiReducer,
     games: gamesReducer,
+    charts: chartsReducer,
   });
 
   const routedReducer = connectRouter(history)(reducer);
