@@ -43,13 +43,15 @@ class UserInfo extends React.PureComponent {
     const user = users.data[match.params.userId] || {};
     const data = user[ui.mode] || {};
 
+    const recordGames = ui.mode === 'all' ? Object.values(games.data.records) : [games.data.records[ui.mode]];
+
     return (
       <React.Fragment>
         <Stats data={data} />
         <div className="minute-data">
           <div className="minute-data__container">
             <div className="games">
-              <GameList title="Records" />
+              <GameList games={recordGames} title="Records" />
               <GameList games={games.data.games} />
             </div>
             <div className="charts">
