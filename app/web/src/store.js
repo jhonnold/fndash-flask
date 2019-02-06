@@ -4,8 +4,6 @@ import {
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 // eslint-disable-next-line
 import { createLogger } from 'redux-logger';
-import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
 import createSagaMiddleware from 'redux-saga';
 import usersReducer from './ducks/users';
 import uiReducer from './ducks/ui';
@@ -13,12 +11,6 @@ import gamesReducer from './ducks/games';
 import chartsReducer from './ducks/charts';
 
 const configureStore = (history, initialState = {}) => {
-  const persistConfig = {
-    key: 'root',
-    storage,
-    blacklist: ['ui'],
-  };
-
   const reducer = combineReducers({
     users: usersReducer,
     ui: uiReducer,
@@ -27,7 +19,6 @@ const configureStore = (history, initialState = {}) => {
   });
 
   const routedReducer = connectRouter(history)(reducer);
-  const persistedReducer = persistReducer(persistConfig, routedReducer);
 
   const sagaMiddleware = createSagaMiddleware();
   const logger = createLogger({ collapsed: () => true });
@@ -40,7 +31,7 @@ const configureStore = (history, initialState = {}) => {
 
   return {
     ...createStore(
-      persistedReducer,
+      routedReducer,
       initialState,
       composeEnhancers(applyMiddleware(...middleware)),
     ),

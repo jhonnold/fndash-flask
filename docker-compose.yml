@@ -24,6 +24,8 @@ services:
       - postgres
     volumes:
       - .:/usr/share/fn-dash
+      - /usr/share/fn-dash/app/web/build
+      - /usr/share/fn-dash/app/web/node_modules
 
   redis:
     restart: always
@@ -39,6 +41,7 @@ services:
       dockerfile: DockerfileCelery
     volumes:
       - .:/usr/share/fn-dash
+      - /usr/share/fn-dash/app/web
     depends_on:
       - postgres
       - redis

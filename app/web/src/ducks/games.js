@@ -20,9 +20,24 @@ const initialState = {
   data: {
     games: [],
     records: {
-      solo: {},
-      duo: {},
-      squad: {},
+      solo: {
+        time_played: 0,
+        game_type: 'solo',
+        kills: 0,
+        placement: 'Loss',
+      },
+      duo: {
+        time_played: 0,
+        game_type: 'duo',
+        kills: 0,
+        placement: 'Loss',
+      },
+      squad: {
+        time_played: 0,
+        game_type: 'squad',
+        kills: 0,
+        placement: 'Loss',
+      },
     },
   },
 };
