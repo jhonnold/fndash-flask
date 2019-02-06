@@ -19,6 +19,7 @@ class UserInfo extends React.PureComponent {
       requestUserGames,
       requestUserRecords,
       requestKdChart,
+      requestPlacementChart,
     } = this.props;
 
     const { userId: id } = match.params;
@@ -27,6 +28,7 @@ class UserInfo extends React.PureComponent {
     requestUserGames(id, ui.mode);
     requestUserRecords(id);
     requestKdChart(id, ui.mode);
+    requestPlacementChart(id);
   }
 
   componentDidUpdate(prevProps) {
@@ -38,6 +40,7 @@ class UserInfo extends React.PureComponent {
       requestUserGames,
       requestUserRecords,
       requestKdChart,
+      requestPlacementChart,
     } = this.props;
 
     const { userId: id } = match.params;
@@ -47,6 +50,7 @@ class UserInfo extends React.PureComponent {
       requestUserGames(id, ui.mode);
       requestUserRecords(id);
       requestKdChart(id, ui.mode);
+      requestPlacementChart(id);
     } else if (ui.mode !== prevUi.mode) {
       requestUserGames(id, ui.mode);
       requestKdChart(id, ui.mode);
@@ -63,7 +67,7 @@ class UserInfo extends React.PureComponent {
 
     const recordGames = ui.mode === 'all' ? Object.values(games.data.records) : [games.data.records[ui.mode]];
 
-    const { kdChart } = charts;
+    const { kdChart, placementChart } = charts;
 
     return (
       <React.Fragment>
@@ -76,8 +80,8 @@ class UserInfo extends React.PureComponent {
             </div>
             <div className="charts">
               <KDChart {...kdChart.data} />
-              <PlacementPieChart />
               <GamesBarChart />
+              <PlacementPieChart mode={ui.mode} data={placementChart.data} />
             </div>
           </div>
         </div>
@@ -86,7 +90,9 @@ class UserInfo extends React.PureComponent {
   }
 }
 
-const mapStateToProps = ({ users, ui, games, charts }) => ({
+const mapStateToProps = ({
+  users, ui, games, charts,
+}) => ({
   users,
   ui,
   games,

@@ -23,17 +23,36 @@ const chartOptions = {
 
 const colors = ['#22d900', '#19a100', '#106b00', '#083500'];
 
-const chartData = {
-  datasets: [
-    {
-      data: [1, 2, 3],
-      labels: ['Duo Victory', 'Duo Top 5', 'Duo Top 12', 'Duo Loss'],
-      backgroundColor: colors,
-    },
-  ],
+const datasetLabels = {
+  solo: ['Solo Victory', 'Solo Top 10', 'Solo Top 25', 'Solo Loss'],
+  duo: ['Duo Victory', 'Duo Top 5', 'Duo Top 12', 'Duo Loss'],
+  squad: ['Squad Victory', 'Squad Top 3', 'Squad Top 6', 'Squad Loss'],
 };
 
-function PlacementPieChart({ data }) {
+function PlacementPieChart({ data, mode }) {
+  let chartData;
+
+  if (mode !== 'all') {
+    chartData = {
+      datasets: [
+        {
+          data: data[mode],
+          labels: datasetLabels[mode],
+          backgroundColor: colors,
+        },
+      ],
+    };
+  } else {
+    chartData = {
+      datasets: ['solo', 'duo', 'squad'].map(k => ({
+        data: data[k],
+        labels: datasetLabels[k],
+        backgroundColor: colors,
+        label: k,
+      })),
+    };
+  }
+
   return (
     <div className="charts__chart">
       <h3>Placements</h3>

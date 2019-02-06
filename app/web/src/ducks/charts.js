@@ -128,17 +128,17 @@ const rejectedKdChart = err => ({
 });
 
 const requestPlacementChart = id => ({
-  type: KD_CHART_REQUESTED,
+  type: PLACEMENT_CHART_REQUESTED,
   payload: id,
 });
 
 const receivedPlacementChart = data => ({
-  type: KD_CHART_RECEIVED,
+  type: PLACEMENT_CHART_RECEIVED,
   payload: data,
 });
 
 const rejectedPlacementChart = err => ({
-  type: KD_CHART_REJECTED,
+  type: PLACEMENT_CHART_REJECTED,
   payload: err.message,
 });
 
