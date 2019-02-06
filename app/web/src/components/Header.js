@@ -24,7 +24,7 @@ class Header extends React.PureComponent {
 
     const user = users.data[match.params.userId] || {};
 
-    const { username, id } = user;
+    const { username } = user;
 
     return (
       <React.Fragment>
@@ -37,7 +37,8 @@ class Header extends React.PureComponent {
               <span className="header__title">Fortnite Dashboard</span>
               <ul className="header__name-menu" data-dropdown-menu>
                 <li>
-                  <a href={`/users/${id}`}>{username}</a>
+                  {/* eslint-disable-next-line */}
+                  <a href="#">{username}</a>
                   <ul className="menu">
                     {Object.values(data).map(u => (
                       <li key={u.id}>
