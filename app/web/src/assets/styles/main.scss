@@ -1,0 +1,24 @@
+@charset 'utf-8';
+
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400');
+
+@import 'settings';
+@import 'foundation-sites/scss/foundation.scss';
+@include foundation-everything;
+
+@import './header';
+@import './stats';
+@import './minuteData';
+@import './games';
+@import './charts';
+
+html,
+body {
+  min-height: 100vh;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  background-color: $dark-gray;
+}

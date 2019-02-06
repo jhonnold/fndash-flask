@@ -1,32 +1,27 @@
-import datetime
-
 from app.models import Game
+from .time import ONE_DAY, get_today_range
 
 
-def games_per_day(user, mode='All', adjust=0):
-    today = datetime.date.today()
-    start_date = datetime.datetime(
-        year=today.year, month=today.month,
-        day=today.day) - datetime.timedelta(hours=adjust)
-    end_date = start_date + datetime.timedelta(days=1)
+def games_per_day(user, mode='all'):
+    start_date, end_date = get_today_range()
 
     labels = []
     counts = []
 
     for i in range(7):
-        games = []
-        if mode == 'All':
-            games = user.games.filter(Game.time_played >= start_date).filter(
-                Game.time_played < end_date)
-        else:
-            games = user.games.filter_by(game_type=mode).filter(
+        labels.insert(0, start_date.__format__('%b %-d'))
+
+        if mode != 'all':
+            games = user.games.filter_by(game_type=mode.capitalize()).filter(
                 Game.time_played >= start_date).filter(
                     Game.time_played < end_date)
+        else:
+            games = user.games.filter(Game.time_played >= start_date).filter(
+                Game.time_played < end_date)
 
-        labels.insert(0, start_date.__format__('%b %-d'))
         counts.insert(0, games.count())
 
-        start_date -= datetime.timedelta(days=1)
-        end_date -= datetime.timedelta(days=1)
+        start_date -= ONE_DAY
+        end_date -= ONE_DAY
 
-    return labels, counts
+    return labels, [counts]

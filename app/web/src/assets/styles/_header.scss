@@ -1,0 +1,65 @@
+.header {
+  width: 100%;
+  background-color: $black;
+
+  &__container {
+    max-width: 75rem;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  &__top {
+    @extend .top-bar;
+  }
+
+  &__title {
+    @extend .top-bar-title;
+  }
+
+  &__name-menu {
+    @extend .dropdown;
+    @extend .menu;
+  }
+
+  &__break {
+    width: calc(100% - 1rem);
+    margin: 0 0.5rem;
+    background-color: rgba($white, 0.125);
+    height: 1px;
+  }
+
+  &__lower-menu {
+    @extend .grid-x;
+    @extend .align-middle;
+    @extend .align-justify;
+    padding: 0.5rem;
+  }
+
+  &__name {
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    color: $primary-color;
+  }
+
+  &__mode-tabs {
+    @extend .tabs;
+  }
+
+  &__mode-tabs-title {
+    @extend .tabs-title;
+
+    > button {
+      padding: $tab-item-padding;
+      color: $white;
+      text-transform: capitalize;
+      font-weight: $global-weight-normal;
+      cursor: pointer;
+    }
+
+    &.is-active button {
+      color: $primary-color;
+    }
+  }
+}
