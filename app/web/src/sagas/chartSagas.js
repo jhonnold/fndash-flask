@@ -14,3 +14,16 @@ function* requestKdChart({ payload: { id, mode }}) {
 export function* requestKdChartSaga() {
   yield takeEvery(types.KD_CHART_REQUESTED, requestKdChart);
 }
+
+function* requestPlacementChart({ payload }) {
+  try {
+    const response = yield call(api.getPlacementChart, payload);
+    yield put(actions.receivedPlacementChart(response.data));
+  } catch (err) {
+    yield put(actions.rejectedPlacementChart(err));
+  }
+}
+
+export function* requestPlacementChartSaga() {
+  yield takeEvery(types.PLACEMENT_CHART_REQUESTED, requestPlacementChart);
+}

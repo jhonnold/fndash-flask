@@ -1,11 +1,17 @@
 const KD_CHART_REQUESTED = 'fn-dash/charts/KD_CHART_REQUESTED';
 const KD_CHART_RECEIVED = 'fn-dash/charts/KD_CHART_RECEIVED';
 const KD_CHART_REJECTED = 'fn-dash/charts/KD_CHART_REJECTED';
+const PLACEMENT_CHART_REQUESTED = 'fn-dash/chart/PLACEMENT_CHART_REQUESTED';
+const PLACEMENT_CHART_RECEIVED = 'fn-dash/chart/PLACEMENT_CHART_RECEIVED';
+const PLACEMENT_CHART_REJECTED = 'fn-dash/chart/PLACEMENT_CHART_REJECTED';
 
 export const types = {
   KD_CHART_REQUESTED,
   KD_CHART_RECEIVED,
   KD_CHART_REJECTED,
+  PLACEMENT_CHART_REQUESTED,
+  PLACEMENT_CHART_RECEIVED,
+  PLACEMENT_CHART_REJECTED,
 };
 
 const initialState = {
@@ -15,6 +21,15 @@ const initialState = {
     data: {
       labels: [],
       datasets: [],
+    },
+  },
+  placementChart: {
+    error: null,
+    loading: false,
+    data: {
+      solo: {},
+      duo: {},
+      squad: {},
     },
   },
 };
@@ -57,6 +72,37 @@ export default (state = initialState, action) => {
         },
       };
     }
+    case PLACEMENT_CHART_REQUESTED: {
+      return {
+        ...state,
+        placementChart: {
+          ...state.placementChart,
+          loading: true,
+          error: null,
+        },
+      };
+    }
+    case PLACEMENT_CHART_RECEIVED: {
+      return {
+        ...state,
+        placementChart: {
+          ...state.placementChart,
+          loading: false,
+          error: null,
+          data: payload,
+        },
+      };
+    }
+    case PLACEMENT_CHART_REJECTED: {
+      return {
+        ...state,
+        placementChart: {
+          ...state.placementChart,
+          loading: false,
+          error: payload,
+        },
+      };
+    }
     default: {
       return state;
     }
@@ -81,8 +127,26 @@ const rejectedKdChart = err => ({
   payload: err.message,
 });
 
+const requestPlacementChart = id => ({
+  type: KD_CHART_REQUESTED,
+  payload: id,
+});
+
+const receivedPlacementChart = data => ({
+  type: KD_CHART_RECEIVED,
+  payload: data,
+});
+
+const rejectedPlacementChart = err => ({
+  type: KD_CHART_REJECTED,
+  payload: err.message,
+});
+
 export const actions = {
   requestKdChart,
   receivedKdChart,
   rejectedKdChart,
+  requestPlacementChart,
+  receivedPlacementChart,
+  rejectedPlacementChart,
 };
