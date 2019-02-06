@@ -3,7 +3,7 @@ import datetime
 from functools import reduce
 from flask import Blueprint, jsonify, request
 from app.models import User, Game
-from app.util import get_user, kd_per_day
+from app.util import get_user, kd_per_day, games_per_day
 
 api = Blueprint('api', __name__, url_prefix='/api')
 
@@ -21,7 +21,7 @@ def users():
     return jsonify(serialized_users)
 
 
-@api.route("/users/<user_id>")
+@api.route('/users/<user_id>')
 def user(user_id):
     user = get_user(user_id)
     user_data = user.serialize()
@@ -29,7 +29,7 @@ def user(user_id):
     return jsonify(user_data)
 
 
-@api.route("/users/<user_id>/kd")
+@api.route('/users/<user_id>/kd')
 def kds(user_id):
     user = get_user(user_id)
     mode = request.args.get('m')
@@ -40,9 +40,27 @@ def kds(user_id):
     return jsonify(dict(labels=labels, datasets=datasets))
 
 
-#kd_progression (We now return this as a datasets in kds so don't do me)!
-#placements
-#games per day
+@api.route('/users/<user_id>/placements')
+def placements(user_id):
+    user = get_user(user_id)
+
+    return jsonify(
+        dict(
+            solo=user.placements_solo(),
+            duo=user.placements_duo(),
+            squad=user.placements_squad(),
+        ))
+
+
+@api.route('/users/<user_id>/game_counts')
+def game_counts(user_id):
+    user = get_user(user_id)
+    mode = request.args.get('m')
+    mode = 'all' if mode is None else mode
+
+    labels, datasets = games_per_day(user, mode)
+
+    return jsonify(dict(labels=labels, datasets=datasets))
 
 
 @api.route("/users/<user_id>/games")
