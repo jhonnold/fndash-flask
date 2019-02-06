@@ -21,7 +21,7 @@ def users():
     return jsonify(serialized_users)
 
 
-@api.route("/users/<user_id>")
+@api.route('/users/<user_id>')
 def user(user_id):
     user = get_user(user_id)
     user_data = user.serialize()
@@ -29,7 +29,7 @@ def user(user_id):
     return jsonify(user_data)
 
 
-@api.route("/users/<user_id>/kd")
+@api.route('/users/<user_id>/kd')
 def kds(user_id):
     user = get_user(user_id)
     mode = request.args.get('m')
@@ -40,8 +40,18 @@ def kds(user_id):
     return jsonify(dict(labels=labels, datasets=datasets))
 
 
-#kd_progression (We now return this as a datasets in kds so don't do me)!
-#placements
+@api.route('/users/<user_id>/placements')
+def placements(user_id):
+    user = get_user(user_id)
+
+    return jsonify(
+        dict(
+            solo=user.placements_solo(),
+            duo=user.placements_duo(),
+            squad=user.placements_squad(),
+        ))
+
+
 #games per day
 
 
