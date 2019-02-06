@@ -20,6 +20,7 @@ class UserInfo extends React.PureComponent {
       requestUserRecords,
       requestKdChart,
       requestPlacementChart,
+      requestGamesChart,
     } = this.props;
 
     const { userId: id } = match.params;
@@ -29,6 +30,7 @@ class UserInfo extends React.PureComponent {
     requestUserRecords(id);
     requestKdChart(id, ui.mode);
     requestPlacementChart(id);
+    requestGamesChart(id, ui.mode);
   }
 
   componentDidUpdate(prevProps) {
@@ -41,6 +43,7 @@ class UserInfo extends React.PureComponent {
       requestUserRecords,
       requestKdChart,
       requestPlacementChart,
+      requestGamesChart,
     } = this.props;
 
     const { userId: id } = match.params;
@@ -51,9 +54,11 @@ class UserInfo extends React.PureComponent {
       requestUserRecords(id);
       requestKdChart(id, ui.mode);
       requestPlacementChart(id);
+    requestGamesChart(id, ui.mode);
     } else if (ui.mode !== prevUi.mode) {
       requestUserGames(id, ui.mode);
       requestKdChart(id, ui.mode);
+    requestGamesChart(id, ui.mode);
     }
   }
 

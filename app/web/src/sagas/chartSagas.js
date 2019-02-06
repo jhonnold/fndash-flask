@@ -15,6 +15,19 @@ export function* requestKdChartSaga() {
   yield takeEvery(types.KD_CHART_REQUESTED, requestKdChart);
 }
 
+function* requestGamesChart({ payload: { id, mode } }) {
+  try {
+    const response = yield call(api.getGamesPerDayChart, id, mode);
+    yield put(actions.receivedGamesChart(response.data));
+  } catch (err) {
+    yield put(actions.rejectedGamesChart(err));
+  }
+}
+
+export function* requestGamesChartSaga() {
+  yield takeEvery(types.GAMES_CHART_REQUESTED, requestGamesChart);
+}
+
 function* requestPlacementChart({ payload }) {
   try {
     const response = yield call(api.getPlacementChart, payload);

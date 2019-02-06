@@ -1,7 +1,7 @@
 import { fork } from 'redux-saga/effects';
 import { requestUsersSaga, requestUserSaga } from './usersSagas';
 import { requestUserGamesSaga, requestUserRecordsSaga } from './gamesSagas';
-import { requestKdChartSaga, requestPlacementChartSaga } from './chartSagas';
+import { requestKdChartSaga, requestPlacementChartSaga, requestGamesChartSaga } from './chartSagas';
 
 export default function* () {
   yield [
@@ -11,5 +11,6 @@ export default function* () {
     fork(requestUserRecordsSaga),
     fork(requestKdChartSaga),
     fork(requestPlacementChartSaga),
+    fork(requestGamesChartSaga),
   ];
 }

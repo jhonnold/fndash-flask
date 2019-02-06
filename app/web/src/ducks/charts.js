@@ -1,9 +1,12 @@
 const KD_CHART_REQUESTED = 'fn-dash/charts/KD_CHART_REQUESTED';
 const KD_CHART_RECEIVED = 'fn-dash/charts/KD_CHART_RECEIVED';
 const KD_CHART_REJECTED = 'fn-dash/charts/KD_CHART_REJECTED';
-const PLACEMENT_CHART_REQUESTED = 'fn-dash/chart/PLACEMENT_CHART_REQUESTED';
-const PLACEMENT_CHART_RECEIVED = 'fn-dash/chart/PLACEMENT_CHART_RECEIVED';
-const PLACEMENT_CHART_REJECTED = 'fn-dash/chart/PLACEMENT_CHART_REJECTED';
+const PLACEMENT_CHART_REQUESTED = 'fn-dash/charts/PLACEMENT_CHART_REQUESTED';
+const PLACEMENT_CHART_RECEIVED = 'fn-dash/charts/PLACEMENT_CHART_RECEIVED';
+const PLACEMENT_CHART_REJECTED = 'fn-dash/charts/PLACEMENT_CHART_REJECTED';
+const GAMES_CHART_REQUESTED = 'fn-dash/charts/GAMES_CHART_REQUESTED';
+const GAMES_CHART_RECEIVED = 'fn-dash/charts/GAMES_CHART_RECEIVED';
+const GAMES_CHART_REJECTED = 'fn-dash/charts/GAMES_CHART_REJECTED';
 
 export const types = {
   KD_CHART_REQUESTED,
@@ -12,6 +15,9 @@ export const types = {
   PLACEMENT_CHART_REQUESTED,
   PLACEMENT_CHART_RECEIVED,
   PLACEMENT_CHART_REJECTED,
+  GAMES_CHART_REQUESTED,
+  GAMES_CHART_RECEIVED,
+  GAMES_CHART_REJECTED,
 };
 
 const initialState = {
@@ -30,6 +36,14 @@ const initialState = {
       solo: {},
       duo: {},
       squad: {},
+    },
+  },
+  gamesChart: {
+    error: null,
+    loading: false,
+    data: {
+      labels: [],
+      datasets: [],
     },
   },
 };
@@ -67,6 +81,40 @@ export default (state = initialState, action) => {
         ...state,
         kdChart: {
           ...state.kdChart,
+          loading: false,
+          error: payload,
+        },
+      };
+    }
+    case GAMES_CHART_REQUESTED: {
+      return {
+        ...state,
+        gamesChart: {
+          ...state.gamesChart,
+          loading: true,
+          error: null,
+        },
+      };
+    }
+    case GAMES_CHART_RECEIVED: {
+      return {
+        ...state,
+        gamesChart: {
+          ...state.gamesChart,
+          loading: false,
+          error: null,
+          data: {
+            labels: payload.labels,
+            datasets: payload.datasets,
+          },
+        },
+      };
+    }
+    case GAMES_CHART_REJECTED: {
+      return {
+        ...state,
+        gamesChart: {
+          ...state.gamesChart,
           loading: false,
           error: payload,
         },
@@ -127,6 +175,24 @@ const rejectedKdChart = err => ({
   payload: err.message,
 });
 
+const requestGamesChart = (id, mode) => ({
+  type: GAMES_CHART_REQUESTED,
+  payload: {
+    id,
+    mode,
+  },
+});
+
+const receivedGamesChart = axes => ({
+  type: GAMES_CHART_RECEIVED,
+  payload: axes,
+});
+
+const rejectedGamesChart = err => ({
+  type: GAMES_CHART_REJECTED,
+  payload: err.message,
+});
+
 const requestPlacementChart = id => ({
   type: PLACEMENT_CHART_REQUESTED,
   payload: id,
@@ -149,4 +215,7 @@ export const actions = {
   requestPlacementChart,
   receivedPlacementChart,
   rejectedPlacementChart,
+  requestGamesChart,
+  receivedGamesChart,
+  rejectedGamesChart,
 };
