@@ -1,6 +1,6 @@
 flask
 flask-sqlalchemy
-psycopg2
+psycopg2-binary
 flask-migrate
 flask-script
 flask-assets
@@ -11,3 +11,4 @@ cssmin
 celery
 redis
 requests
+gunicorn
