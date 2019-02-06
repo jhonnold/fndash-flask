@@ -26,19 +26,20 @@ const chartOptions = {
   },
 };
 
+const datasetNames = ['Games'];
+
 const colors = ['#083500', '#0c5000', '#106b00', '#158600', '#19a100', '#1dbb00', '#22d900'];
 
-const chartData = {
-  labels: [1, 2, 3],
-  datasets: [
-    {
-      data: [1, 2, 3],
+function GamesBarChart({ labels, datasets }) {
+  const chartData = {
+    labels,
+    datasets: datasets.map((d, i) => ({
+      data: d,
+      label: datasetNames[i],
       backgroundColor: colors,
-    },
-  ],
-};
+    })),
+  };
 
-function GamesBarChart({ data }) {
   return (
     <div className="charts__chart">
       <h3>Games per Day</h3>

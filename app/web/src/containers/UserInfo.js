@@ -54,11 +54,11 @@ class UserInfo extends React.PureComponent {
       requestUserRecords(id);
       requestKdChart(id, ui.mode);
       requestPlacementChart(id);
-    requestGamesChart(id, ui.mode);
+      requestGamesChart(id, ui.mode);
     } else if (ui.mode !== prevUi.mode) {
       requestUserGames(id, ui.mode);
       requestKdChart(id, ui.mode);
-    requestGamesChart(id, ui.mode);
+      requestGamesChart(id, ui.mode);
     }
   }
 
@@ -72,7 +72,7 @@ class UserInfo extends React.PureComponent {
 
     const recordGames = ui.mode === 'all' ? Object.values(games.data.records) : [games.data.records[ui.mode]];
 
-    const { kdChart, placementChart } = charts;
+    const { kdChart, placementChart, gamesChart } = charts;
 
     return (
       <React.Fragment>
@@ -85,7 +85,7 @@ class UserInfo extends React.PureComponent {
             </div>
             <div className="charts">
               <KDChart {...kdChart.data} />
-              <GamesBarChart />
+              <GamesBarChart {...gamesChart.data} />
               <PlacementPieChart mode={ui.mode} data={placementChart.data} />
             </div>
           </div>
