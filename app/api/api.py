@@ -3,7 +3,7 @@ import datetime
 from functools import reduce
 from flask import Blueprint, jsonify, request
 from app.models import User, Game
-from app.util import get_user, kd_per_day
+from app.util import get_user, kd_per_day, games_per_day
 
 api = Blueprint('api', __name__, url_prefix='/api')
 
@@ -52,7 +52,15 @@ def placements(user_id):
         ))
 
 
-#games per day
+@api.route('/users/<user_id>/game_counts')
+def game_counts(user_id):
+    user = get_user(user_id)
+    mode = request.args.get('m')
+    mode = 'all' if mode is None else mode
+
+    labels, datasets = games_per_day(user, mode)
+
+    return jsonify(dict(labels=labels, datasets=datasets))
 
 
 @api.route("/users/<user_id>/games")
