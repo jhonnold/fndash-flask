@@ -11,4 +11,5 @@ export default {
   getUser: id => apiBase.get(`/users/${id}`),
   getUserGames: (id, mode) => apiBase.get(`/users/${id}/games?m=${mode}`),
   getUserRecords: id => apiBase.get(`/users/${id}/game_records`),
+  getKdChart: (id, mode) => apiBase.get(`/users/${id}/kd?m=${mode}`),
 };

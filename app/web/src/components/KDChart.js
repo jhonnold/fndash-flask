@@ -42,18 +42,21 @@ const datasetOptions = {
   lineTension: 0,
 };
 
-const chartData = {
-  labels: ['1', '2', '3'],
-  datasets: [
-    {
-      label: 'Daily K/D',
-      data: [1, 2, 3],
-      ...datasetOptions,
-    },
-  ],
-};
+const datasetNames = [
+  'Daily K/D',
+  'Lifetime K/D',
+];
 
-function KDChart({ data }) {
+function KDChart({ labels, datasets }) {
+  const chartData = {
+    labels,
+    datasets: datasets.map((d, i) => ({
+      data: d,
+      label: datasetNames[i],
+      ...datasetOptions,
+    })),
+  };
+
   return (
     <div className="charts__chart">
       <h3>K/D per Day</h3>
