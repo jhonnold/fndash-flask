@@ -60,6 +60,7 @@ Simply load into the app container and follow the [Flask-Migration Docs](https:/
 |   +-- _models (Database model files)
 |   +-- _tasks (Celery tasks)
 |   +-- _util (A set of helpful function for manipulating data)
+|   +-- _web (React front end)
 |   +-- __init__.py (Main core of Flask app)
 |   +-- celery.py
 |   +-- config.py
