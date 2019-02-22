@@ -94,3 +94,15 @@ def records(user_id):
         solo=solo_record.serialize() if solo_record is not None else None,
         duo=duo_record.serialize() if duo_record is not None else None,
         squad=squad_record.serialize() if squad_record is not None else None)
+
+
+@api.route("/users/<user_id>/time_played")
+def time_played(user_id):
+    user = get_user(user_id)
+    total = user.hoursplayed_total
+    hours_solo = timdelta(minutes=user.minutesplayed_solo)
+    hours_duo = timedelta(minutes=user.minutesplayed_duo)
+    hours_squad = timedelta(minutes=user.minutesplayed_squad)
+
+    return jsonify(
+        dict(total=total, solo=hours_solo, duo=hours_duo, squad=hours_squad))
