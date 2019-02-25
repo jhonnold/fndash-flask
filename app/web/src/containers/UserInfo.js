@@ -77,7 +77,7 @@ class UserInfo extends React.PureComponent {
 
     const recordGames = ui.mode === 'all' ? Object.values(games.data.records) : [games.data.records[ui.mode]];
 
-    const { 
+    const {
       kdChart, placementChart, gamesChart, timePlayedChart,
     } = charts;
 
@@ -94,7 +94,7 @@ class UserInfo extends React.PureComponent {
               <KDChart {...kdChart.data} />
               <GamesBarChart {...gamesChart.data} />
               <PlacementPieChart mode={ui.mode} data={placementChart.data} />
-              <TimePlayedChart data={timePlayedChart.data} />
+              <TimePlayedChart {...timePlayedChart.data} />
             </div>
           </div>
         </div>

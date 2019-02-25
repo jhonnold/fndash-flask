@@ -41,9 +41,9 @@ export function* requestPlacementChartSaga() {
   yield takeEvery(types.PLACEMENT_CHART_REQUESTED, requestPlacementChart);
 }
 
-function* requestTimePlayedChart({ payload }) {
+function* requestTimePlayedChart({ payload: { id, mode } }) {
   try {
-    const response = yield call(api.getTimePlayedChart, payload);
+    const response = yield call(api.getTimePlayedChart, id, mode);
     yield put(actions.receivedTimePlayedChart(response.data));
   } catch (err) {
     yield put(actions.rejectedTimePayedChart(err));
