@@ -14,4 +14,5 @@ export default {
   getKdChart: (id, mode) => apiBase.get(`/users/${id}/kd?m=${mode}`),
   getPlacementChart: id => apiBase.get(`/users/${id}/placements`),
   getGamesPerDayChart: (id, mode) => apiBase.get(`/users/${id}/game_counts?m=${mode}`),
+  getTimePlayedChart: id => apiBase.get(`/users/${id}/time_played`),
 };
