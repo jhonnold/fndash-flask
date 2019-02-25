@@ -7,6 +7,9 @@ const PLACEMENT_CHART_REJECTED = 'fn-dash/charts/PLACEMENT_CHART_REJECTED';
 const GAMES_CHART_REQUESTED = 'fn-dash/charts/GAMES_CHART_REQUESTED';
 const GAMES_CHART_RECEIVED = 'fn-dash/charts/GAMES_CHART_RECEIVED';
 const GAMES_CHART_REJECTED = 'fn-dash/charts/GAMES_CHART_REJECTED';
+const TIME_PLAYED_CHART_REQUESTED = 'fn-dash/charts/TIME_PLAYED_CHART_REQUESTED';
+const TIME_PLAYED_CHART_RECEIVED = 'fn-dash/charts/TIME_PLAYED_CHART_RECEIVED';
+const TIME_PLAYED_CHART_REJECTED = 'fn-dash/charts/TIME_PLAYED_CHART_REJECTED';
 
 export const types = {
   KD_CHART_REQUESTED,
@@ -18,6 +21,9 @@ export const types = {
   GAMES_CHART_REQUESTED,
   GAMES_CHART_RECEIVED,
   GAMES_CHART_REJECTED,
+  TIME_PLAYED_CHART_REQUESTED,
+  TIME_PLAYED_CHART_RECEIVED,
+  TIME_PLAYED_CHART_REJECTED,
 };
 
 const initialState = {
@@ -39,6 +45,14 @@ const initialState = {
     },
   },
   gamesChart: {
+    error: null,
+    loading: false,
+    data: {
+      labels: [],
+      datasets: [],
+    },
+  },
+  timePlayedChart: {
     error: null,
     loading: false,
     data: {
@@ -146,6 +160,37 @@ export default (state = initialState, action) => {
         ...state,
         placementChart: {
           ...state.placementChart,
+          loading: false,
+          error: payload,
+        },
+      };
+    }
+    case TIME_PLAYED_CHART_REQUESTED: {
+      return {
+        ...state,
+        timePlayedChart: {
+          ...state.timePlayedChart,
+          loading: false,
+          error: null,
+        },
+      };
+    }
+    case TIME_PLAYED_CHART_RECEIVED: {
+      return {
+        ...state,
+        timePlayedChart: {
+          ...state.timePlayedChart,
+          loading: false,
+          error: null,
+          data: payload,
+        },
+      };
+    }
+    case TIME_PLAYED_CHART_REJECTED: {
+      return {
+        ...state,
+        timePlayedChart: {
+          ...state.timePlayedChart,
           loading: false,
           error: payload,
         },

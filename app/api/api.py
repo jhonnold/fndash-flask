@@ -100,9 +100,9 @@ def records(user_id):
 def time_played(user_id):
     user = get_user(user_id)
     total = user.hoursplayed_total
-    hours_solo = timdelta(minutes=user.minutesplayed_solo)
-    hours_duo = timedelta(minutes=user.minutesplayed_duo)
-    hours_squad = timedelta(minutes=user.minutesplayed_squad)
+    hours_solo = user.minutesplayed_solo // 60
+    hours_duo = user.minutesplayed_duo // 60
+    hours_squad = user.minutesplayed_squad // 60
 
     return jsonify(
         dict(total=total, solo=hours_solo, duo=hours_duo, squad=hours_squad))
