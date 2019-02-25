@@ -253,6 +253,24 @@ const rejectedPlacementChart = err => ({
   payload: err.message,
 });
 
+const requestTimePlayedChart = (id, mode) => ({
+  type: TIME_PLAYED_CHART_REQUESTED,
+  payload: {
+    id,
+    mode,
+  },
+});
+
+const receivedTimePlayedChart = axes => ({
+  type: TIME_PLAYED_CHART_RECEIVED,
+  payload: axes,
+});
+
+const rejectedTimePayedChart = err => ({
+  type: TIME_PLAYED_CHART_REJECTED,
+  payload: err,
+});
+
 export const actions = {
   requestKdChart,
   receivedKdChart,
@@ -263,4 +281,7 @@ export const actions = {
   requestGamesChart,
   receivedGamesChart,
   rejectedGamesChart,
+  requestTimePlayedChart,
+  receivedTimePlayedChart,
+  rejectedTimePayedChart,
 };
