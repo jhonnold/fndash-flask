@@ -17,7 +17,9 @@ function TimePlayed({ data, mode }) {
   return (
     <div className="charts__time">
       <h3>Time Played</h3>
-      <h4>{getHoursPlayed(data.datasets[0], mode)} <span>Hours</span></h4>
+      <h4>
+        {getHoursPlayed(data.datasets[0], mode)} <span>Hours</span>
+      </h4>
     </div>
   );
 }
