@@ -10,6 +10,7 @@ import KDChart from '../components/KDChart';
 import PlacementPieChart from '../components/PlacementPieChart';
 import GamesBarChart from '../components/GamesBarChart';
 import TimePlayedChart from '../components/TimePlayedChart';
+import TimePlayed from '../components/TimePlayed';
 
 class UserInfo extends React.PureComponent {
   componentDidMount() {
@@ -94,7 +95,11 @@ class UserInfo extends React.PureComponent {
               <KDChart {...kdChart.data} />
               <GamesBarChart {...gamesChart.data} />
               <PlacementPieChart mode={ui.mode} data={placementChart.data} />
-              <TimePlayedChart {...timePlayedChart.data} />
+              {ui.mode === 'all' ? (
+                <TimePlayedChart {...timePlayedChart.data} />
+              ) : (
+                <TimePlayed data={timePlayedChart.data} mode={ui.mode} />
+              )}
             </div>
           </div>
         </div>
@@ -103,6 +108,7 @@ class UserInfo extends React.PureComponent {
   }
 }
 
+// eslint-disable-next-line object-curly-newline
 const mapStateToProps = ({
   users, ui, games, charts,
 }) => ({
