@@ -1,6 +1,7 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 import { actions as userActions } from '../ducks/users';
 import { actions as gamesActions } from '../ducks/games';
 import { actions as chartActions } from '../ducks/charts';
@@ -12,6 +13,16 @@ import GamesBarChart from '../components/GamesBarChart';
 import TimePlayedChart from '../components/TimePlayedChart';
 import TimePlayed from '../components/TimePlayed';
 import Column from '../components/Column';
+import Container from '../components/Container';
+
+const ReversedContainer = styled(Container)`
+  flex-direction: row-reverse;
+`;
+
+const MinuteData = styled.div`
+  margin-top: 1rem;
+  width: 100%;
+`;
 
 class UserInfo extends React.PureComponent {
   componentDidMount() {
@@ -86,8 +97,8 @@ class UserInfo extends React.PureComponent {
     return (
       <React.Fragment>
         <Stats data={data} />
-        <div className="minute-data">
-          <div className="minute-data__container">
+        <MinuteData>
+          <ReversedContainer>
             <Column>
               <KDChart {...kdChart.data} />
               <GamesBarChart {...gamesChart.data} />
@@ -102,8 +113,8 @@ class UserInfo extends React.PureComponent {
               <GameList games={recordGames} title="Records" />
               <GameList games={games.data.games} />
             </Column>
-          </div>
-        </div>
+          </ReversedContainer>
+        </MinuteData>
       </React.Fragment>
     );
   }

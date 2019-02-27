@@ -1,5 +1,14 @@
 import React from 'react';
+import styled from 'styled-components';
 import AnimatedNumber from './AnimatedNumber';
+import Container from './Container';
+import { colors } from '../assets/constants/colors';
+
+const StatsDiv = styled.div`
+  width: 100%;
+  background-color: ${colors.black};
+  box-shadow: 0px 4px 2px -2px ${colors.black};
+`;
 
 function Stats({
   data: {
@@ -7,8 +16,8 @@ function Stats({
   },
 }) {
   return (
-    <div className="stats">
-      <div className="stats__container">
+    <StatsDiv>
+      <Container>
         <div className="stats__number-stat">
           <h2>
             <i className="fas fa-trophy" />
@@ -37,8 +46,8 @@ function Stats({
           <AnimatedNumber number={kd} format={v => v.toFixed(3)} />
           <h3>K/D</h3>
         </div>
-      </div>
-    </div>
+      </Container>
+    </StatsDiv>
   );
 }
 
