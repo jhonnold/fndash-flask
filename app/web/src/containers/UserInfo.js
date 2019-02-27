@@ -11,6 +11,7 @@ import PlacementPieChart from '../components/PlacementPieChart';
 import GamesBarChart from '../components/GamesBarChart';
 import TimePlayedChart from '../components/TimePlayedChart';
 import TimePlayed from '../components/TimePlayed';
+import Column from '../components/Column';
 
 class UserInfo extends React.PureComponent {
   componentDidMount() {
@@ -87,11 +88,7 @@ class UserInfo extends React.PureComponent {
         <Stats data={data} />
         <div className="minute-data">
           <div className="minute-data__container">
-            <div className="games">
-              <GameList games={recordGames} title="Records" />
-              <GameList games={games.data.games} />
-            </div>
-            <div className="charts">
+            <Column>
               <KDChart {...kdChart.data} />
               <GamesBarChart {...gamesChart.data} />
               <PlacementPieChart mode={ui.mode} data={placementChart.data} />
@@ -100,7 +97,11 @@ class UserInfo extends React.PureComponent {
               ) : (
                 <TimePlayed data={timePlayedChart.data} mode={ui.mode} />
               )}
-            </div>
+            </Column>
+            <Column>
+              <GameList games={recordGames} title="Records" />
+              <GameList games={games.data.games} />
+            </Column>
           </div>
         </div>
       </React.Fragment>
