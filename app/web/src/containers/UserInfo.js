@@ -9,6 +9,8 @@ import GameList from '../components/GamesList';
 import KDChart from '../components/KDChart';
 import PlacementPieChart from '../components/PlacementPieChart';
 import GamesBarChart from '../components/GamesBarChart';
+import TimePlayedChart from '../components/TimePlayedChart';
+import TimePlayed from '../components/TimePlayed';
 
 class UserInfo extends React.PureComponent {
   componentDidMount() {
@@ -21,6 +23,7 @@ class UserInfo extends React.PureComponent {
       requestKdChart,
       requestPlacementChart,
       requestGamesChart,
+      requestTimePlayedChart,
     } = this.props;
 
     const { userId: id } = match.params;
@@ -31,6 +34,7 @@ class UserInfo extends React.PureComponent {
     requestKdChart(id, ui.mode);
     requestPlacementChart(id);
     requestGamesChart(id, ui.mode);
+    requestTimePlayedChart(id);
   }
 
   componentDidUpdate(prevProps) {
@@ -44,6 +48,7 @@ class UserInfo extends React.PureComponent {
       requestKdChart,
       requestPlacementChart,
       requestGamesChart,
+      requestTimePlayedChart,
     } = this.props;
 
     const { userId: id } = match.params;
@@ -55,6 +60,7 @@ class UserInfo extends React.PureComponent {
       requestKdChart(id, ui.mode);
       requestPlacementChart(id);
       requestGamesChart(id, ui.mode);
+      requestTimePlayedChart(id);
     } else if (ui.mode !== prevUi.mode) {
       requestUserGames(id, ui.mode);
       requestKdChart(id, ui.mode);
@@ -72,7 +78,9 @@ class UserInfo extends React.PureComponent {
 
     const recordGames = ui.mode === 'all' ? Object.values(games.data.records) : [games.data.records[ui.mode]];
 
-    const { kdChart, placementChart, gamesChart } = charts;
+    const {
+      kdChart, placementChart, gamesChart, timePlayedChart,
+    } = charts;
 
     return (
       <React.Fragment>
@@ -87,6 +95,11 @@ class UserInfo extends React.PureComponent {
               <KDChart {...kdChart.data} />
               <GamesBarChart {...gamesChart.data} />
               <PlacementPieChart mode={ui.mode} data={placementChart.data} />
+              {ui.mode === 'all' ? (
+                <TimePlayedChart {...timePlayedChart.data} />
+              ) : (
+                <TimePlayed data={timePlayedChart.data} mode={ui.mode} />
+              )}
             </div>
           </div>
         </div>
@@ -95,6 +108,7 @@ class UserInfo extends React.PureComponent {
   }
 }
 
+// eslint-disable-next-line object-curly-newline
 const mapStateToProps = ({
   users, ui, games, charts,
 }) => ({

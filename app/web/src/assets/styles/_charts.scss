@@ -4,9 +4,15 @@
   @extend .small-12;
   @extend .medium-6;
 
-  &__chart {
+  &__chart, &__time {
     @extend .card;
     padding: 0.5rem 1rem;
     flex-grow: 0;
+  }
+  &__time h4 {
+    color: $primary-color;
+    span {
+      color: #fff;
+    }
   }
 }
