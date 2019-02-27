@@ -1,14 +1,15 @@
 import React from 'react';
 import Game from './Game';
+import Card from './Card';
 
 function GamesList({ title = 'Games', games = [] }) {
   return (
-    <div className="games__list">
+    <Card>
       <h3>{title}</h3>
       {games.map(g => g && (
         <Game key={`${g.time_played} - ${g.game_type}`} data={g} />
       ))}
-    </div>
+    </Card>
   );
 }
 

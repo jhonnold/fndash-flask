@@ -1,5 +1,6 @@
 import React from 'react';
 import { Line as LineChart } from 'react-chartjs-2';
+import Card from './Card';
 
 const chartOptions = {
   responsive: true,
@@ -58,10 +59,10 @@ function KDChart({ labels, datasets }) {
   };
 
   return (
-    <div className="charts__chart">
+    <Card>
       <h3>K/D per Day</h3>
       <LineChart data={chartData} options={chartOptions} />
-    </div>
+    </Card>
   );
 }
 

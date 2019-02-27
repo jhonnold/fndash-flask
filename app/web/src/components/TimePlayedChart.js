@@ -1,5 +1,6 @@
 import React from 'react';
 import { Pie as PieChart } from 'react-chartjs-2';
+import Card from './Card';
 
 const chartOptions = {
   aspectRatio: 2,
@@ -25,10 +26,10 @@ function TimePlayedChart({ datasets, labels }) {
   };
 
   return (
-    <div className="charts__chart">
+    <Card>
       <h3>Time Played</h3>
       <PieChart data={chartData} options={chartOptions} />
-    </div>
+    </Card>
   );
 }
 
