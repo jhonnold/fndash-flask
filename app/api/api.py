@@ -99,10 +99,10 @@ def records(user_id):
 @api.route("/users/<user_id>/time_played")
 def time_played(user_id):
     user = get_user(user_id)
-    total = user.hoursplayed_total
-    hours_solo = user.minutesplayed_solo / 60
-    hours_duo = user.minutesplayed_duo / 60
-    hours_squad = user.minutesplayed_squad / 60
+    total = round(user.hoursplayed_total, 2)
+    hours_solo = round(user.minutesplayed_solo / 60, 2)
+    hours_duo = round(user.minutesplayed_duo / 60, 2)
+    hours_squad = round(user.minutesplayed_squad / 60, 2)
 
     return jsonify(dict(
         labels=['Solo Hours', 'Duo Hours', 'Squad Hours'], 

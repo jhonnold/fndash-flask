@@ -14,11 +14,15 @@ function getHoursPlayed(data, mode) {
 }
 
 function TimePlayed({ data, mode }) {
+  let hours = getHoursPlayed(data.datasets[0], mode);
+  if (hours < 1) {
+    hours = '< 1';
+  }
   return (
     <div className="charts__time">
       <h3>Time Played</h3>
       <h4>
-        {getHoursPlayed(data.datasets[0], mode)} <span>Hours</span>
+        {hours} <span>Hours</span>
       </h4>
     </div>
   );

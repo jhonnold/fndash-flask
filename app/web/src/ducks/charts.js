@@ -253,12 +253,9 @@ const rejectedPlacementChart = err => ({
   payload: err.message,
 });
 
-const requestTimePlayedChart = (id, mode) => ({
+const requestTimePlayedChart = id => ({
   type: TIME_PLAYED_CHART_REQUESTED,
-  payload: {
-    id,
-    mode,
-  },
+  payload: id,
 });
 
 const receivedTimePlayedChart = data => ({
