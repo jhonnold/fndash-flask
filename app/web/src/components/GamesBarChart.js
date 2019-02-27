@@ -1,5 +1,6 @@
 import React from 'react';
 import { Bar as BarChart } from 'react-chartjs-2';
+import Card from './Card';
 
 const chartOptions = {
   responsive: true,
@@ -41,10 +42,10 @@ function GamesBarChart({ labels, datasets }) {
   };
 
   return (
-    <div className="charts__chart">
+    <Card>
       <h3>Games per Day</h3>
       <BarChart data={chartData} options={chartOptions} />
-    </div>
+    </Card>
   );
 }
 
