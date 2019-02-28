@@ -22,6 +22,10 @@ const GameDiv = styled.div`
     margin-left: 0.5rem;
     color: ${({ theme }) => theme.primary};
   }
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
 `;
 
 function Game({
