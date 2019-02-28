@@ -6,12 +6,6 @@
 @import 'foundation-sites/scss/foundation.scss';
 @include foundation-everything;
 
-@import './header';
-@import './stats';
-@import './minuteData';
-@import './games';
-@import './charts';
-
 html,
 body {
   min-height: 100vh;

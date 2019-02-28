@@ -10,6 +10,10 @@ const StatsDiv = styled.div`
   box-shadow: 0px 4px 2px -2px ${colors.black};
 `;
 
+const StatsContainer = styled(Container)`
+  padding: 0.5rem;
+`;
+
 const Stat = styled.div`
   display: flex;
   flex-direction: column;
@@ -44,7 +48,7 @@ function Stats({
 }) {
   return (
     <StatsDiv>
-      <Container>
+      <StatsContainer>
         <Stat>
           <h2>
             <i className="fas fa-trophy" />
@@ -73,7 +77,7 @@ function Stats({
           <AnimatedNumber number={kd} format={v => v.toFixed(3)} />
           <h3>K/D</h3>
         </Stat>
-      </Container>
+      </StatsContainer>
     </StatsDiv>
   );
 }

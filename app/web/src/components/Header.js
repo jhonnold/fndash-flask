@@ -1,19 +1,70 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import $ from 'jquery';
 import { Helmet } from 'react-helmet';
+import styled from 'styled-components';
 import { actions as usersActions } from '../ducks/users';
 import { actions as uiActions } from '../ducks/ui';
+import Container from './Container';
+import { colors, toRGB } from '../assets/constants/colors';
+
+const HeaderDiv = styled.div`
+  width: 100%;
+  background-color: ${colors.black};
+`;
+
+const HeaderContainer = styled(Container)`
+  padding: 0 1rem;
+`;
+
+const Row = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  width: 100%;
+`;
+
+const SiteTitle = styled.span`
+  margin: 0.5rem 1rem 0.5rem 0;
+`;
+
+const HeaderBreak = styled.div`
+  width: calc(100% - 1rem);
+  margin: 0 0.5rem;
+  background-color: ${toRGB(colors.white, 0.125)};
+  height: 1px;
+`;
+
+const Name = styled.h2`
+  text-transform: uppercase;
+  color: ${colors.primary};
+  margin: 0;
+`;
+
+const TabList = styled.ul`
+  list-style-type: none;
+  line-height: 1.6;
+  margin: 0;
+  display: flex;
+  align-items: center;
+`;
+
+const Tab = styled.li`
+  > button {
+    color: ${({ isActive }) => isActive ? colors.primary : colors.white};
+    padding: 1rem;
+    text-transform: capitalize;
+    cursor: pointer;
+    font-weight: 300;
+  }
+`;
 
 class Header extends React.PureComponent {
   componentDidMount() {
     const { requestUserList } = this.props;
 
     requestUserList();
-
-    $(document).foundation();
   }
 
   render() {
@@ -31,13 +82,12 @@ class Header extends React.PureComponent {
         <Helmet>
           <title>{`${username} Stats - FN Dashboard`}</title>
         </Helmet>
-        <div className="header">
-          <div className="header__container">
-            <nav className="header__top">
-              <span className="header__title">Fortnite Dashboard</span>
-              <ul className="header__name-menu" data-dropdown-menu>
+        <HeaderDiv>
+          <HeaderContainer>
+            <Row>
+              <SiteTitle>Fortnite Dashboard</SiteTitle>
+              {/* <ul className="header__name-menu" data-dropdown-menu>
                 <li>
-                  {/* eslint-disable-next-line */}
                   <a href="#">{username}</a>
                   <ul className="menu">
                     {Object.values(data).map(u => (
@@ -47,28 +97,23 @@ class Header extends React.PureComponent {
                     ))}
                   </ul>
                 </li>
-              </ul>
-            </nav>
-            <div className="header__break" />
-            <div className="header__lower-menu">
-              <span className="header__name">
-                <h2>{username}</h2>
-              </span>
-              <ul className="header__mode-tabs">
+              </ul> */}
+            </Row>
+            <HeaderBreak />
+            <Row>
+              <Name>{username}</Name>
+              <TabList>
                 {['all', 'solo', 'duo', 'squad'].map(v => (
-                  <li
-                    key={v}
-                    className={`header__mode-tabs-title ${ui.mode === v ? 'is-active' : ''}`}
-                  >
+                  <Tab isActive={v === ui.mode}>
                     <button type="button" onClick={() => setGameMode(v)}>
                       {v}
                     </button>
-                  </li>
+                  </Tab>
                 ))}
-              </ul>
-            </div>
-          </div>
-        </div>
+              </TabList>
+            </Row>
+          </HeaderContainer>
+        </HeaderDiv>
       </React.Fragment>
     );
   }
