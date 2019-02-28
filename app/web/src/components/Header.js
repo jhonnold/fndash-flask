@@ -104,7 +104,7 @@ class Header extends React.PureComponent {
               <Name>{username}</Name>
               <TabList>
                 {['all', 'solo', 'duo', 'squad'].map(v => (
-                  <Tab isActive={v === ui.mode}>
+                  <Tab key={v} isActive={v === ui.mode}>
                     <button type="button" onClick={() => setGameMode(v)}>
                       {v}
                     </button>
