@@ -2,12 +2,13 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import Header from '../components/Header';
 import UserInfo from './UserInfo';
+import Homepage from './Homepage';
 
 const Routes = () => (
   <React.Fragment>
+    <Route exact path="/" component={Homepage} />
     <Route path="/users/:userId" component={Header} />
     <Route path="/users/:userId" component={UserInfo} />
-    <Route exact path="/" render={() => <Redirect to="/users/1" />} />
   </React.Fragment>
 );
 
