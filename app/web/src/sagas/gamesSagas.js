@@ -28,15 +28,15 @@ export function* requestUserRecordsSaga() {
   yield takeEvery(types.USER_RECORDS_REQUESTED, requestUserRecords);
 }
 
-function* requestAllGames() {
+function* requestRecentGames() {
   try {
-    const response = yield call(api.getGames);
+    const response = yield call(api.getRecentGames);
     yield put(actions.receivedAllGames(response.data));
   } catch (err) {
     yield put(actions.rejectedAllGames(err));
   }
 }
 
-export function* requestGamesSaga() {
-  yield takeEvery(types.ALL_GAMES_REQUESTED, requestAllGames);
+export function* requestRecentGamesSaga() {
+  yield takeEvery(types.ALL_GAMES_REQUESTED, requestRecentGames);
 }

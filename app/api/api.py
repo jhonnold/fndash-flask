@@ -13,11 +13,21 @@ def home():
     return jsonify(foo='bar')
 
 
-@api.route('/games')
-def all_games(): 
-    games = Game.query.all()
-    serialized_games_all =  list(map(lambda game: g.serialize(), games))))
-    return jsonify(serialized_games_all)
+@api.route('/recent_games')
+def recent_games():
+    users = User.query.all()
+    games = Game.query.order_by(Game.id.asc()).limit(20)
+
+    serialized_users = list(
+        map(lambda user: dict(id=user.id, username=user.username), users))
+    serialized_recent_games = list(map(lambda g: g.serialize(), games))
+
+    for game in serialized_recent_games:
+        for user in serialized_users:
+            if user["id"] == game["user_id"]:
+                game.update(username=user["username"])
+
+    return jsonify(serialized_recent_games)
 
 @api.route('/users')
 def users():
