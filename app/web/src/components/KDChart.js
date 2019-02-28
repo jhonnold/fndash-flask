@@ -1,6 +1,7 @@
 import React from 'react';
 import { Line as LineChart } from 'react-chartjs-2';
 import Card from './Card';
+import { theme, pSBC } from '../assets/constants/colors';
 
 const chartOptions = {
   responsive: true,
@@ -9,36 +10,35 @@ const chartOptions = {
     display: true,
     position: 'bottom',
     labels: {
-      fontColor: '#fafafa',
+      fontColor: theme.fontColor,
     },
   },
   scales: {
     yAxes: [
       {
         ticks: {
-          beginAtZero: true,
-          fontColor: '#fafafa',
+          fontColor: theme.fontColor,
         },
         gridLines: {
-          color: 'rgba(255, 255, 255, 0.125)',
+          color: theme.border,
         },
       },
     ],
     xAxes: [
       {
         ticks: {
-          fontColor: '#fafafa',
+          fontColor: theme.fontColor,
         },
       },
     ],
   },
 };
 
+const colors = [theme.primary, pSBC(-0.25, theme.primary, false, true)];
+
 const datasetOptions = {
-  borderColor: '#22d900',
   borderWidth: 2,
   fill: true,
-  backgroundColor: 'rgba(34, 217, 0, 0.125)',
   pointRadius: 4,
   lineTension: 0,
 };
@@ -54,6 +54,8 @@ function KDChart({ labels, datasets }) {
     datasets: datasets.map((d, i) => ({
       data: d,
       label: datasetNames[i],
+      borderColor: colors[i],
+      backgroundColor: pSBC(-0.2, colors[i], false, true) + '40',
       ...datasetOptions,
     })),
   };

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Bar as BarChart } from 'react-chartjs-2';
 import Card from './Card';
+import { theme, pSBC } from '../assets/constants/colors';
 
 const chartOptions = {
   responsive: true,
@@ -9,17 +10,17 @@ const chartOptions = {
     display: false,
     position: 'bottom',
     labels: {
-      fontColor: '#fafafa',
+      fontColor: theme.fontColor,
     },
   },
   scales: {
     yAxes: [
       {
         gridLines: {
-          color: 'rgba(255, 255, 255, 0.125)',
+          color: theme.border,
         },
         ticks: {
-          fontColor: '#fafafa',
+          fontColor: theme.fontColor,
           beginAtZero: true,
         },
       },
@@ -29,7 +30,15 @@ const chartOptions = {
 
 const datasetNames = ['Games'];
 
-const colors = ['#083500', '#0c5000', '#106b00', '#158600', '#19a100', '#1dbb00', '#22d900'];
+const colors = [
+  pSBC(-0.6, theme.primary, false, true),
+  pSBC(-0.5, theme.primary, false, true),
+  pSBC(-0.4, theme.primary, false, true),
+  pSBC(-0.3, theme.primary, false, true),
+  pSBC(-0.2, theme.primary, false, true),
+  pSBC(-0.1, theme.primary, false, true),
+  theme.primary,
+]
 
 function GamesBarChart({ labels, datasets }) {
   const chartData = {
