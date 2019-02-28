@@ -4,7 +4,8 @@
 
 @import 'settings';
 @import 'foundation-sites/scss/foundation.scss';
-@include foundation-everything;
+@include foundation-global-styles;
+@include foundation-typography; 
 
 html,
 body {
@@ -15,4 +16,5 @@ body {
   display: flex;
   flex-direction: column;
   background-color: $dark-gray;
+  overflow-x: hidden;
 }
