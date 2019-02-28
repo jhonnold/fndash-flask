@@ -43,10 +43,7 @@ const datasetOptions = {
   lineTension: 0,
 };
 
-const datasetNames = [
-  'Daily K/D',
-  'Lifetime K/D',
-];
+const datasetNames = ['Daily K/D', 'Lifetime K/D'];
 
 function KDChart({ labels, datasets }) {
   const chartData = {
@@ -55,7 +52,7 @@ function KDChart({ labels, datasets }) {
       data: d,
       label: datasetNames[i],
       borderColor: colors[i],
-      backgroundColor: pSBC(-0.2, colors[i], false, true) + '40',
+      backgroundColor: `${pSBC(-0.2, colors[i], false, true)}40`,
       ...datasetOptions,
     })),
   };

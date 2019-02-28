@@ -14,7 +14,6 @@ const chartOptions = {
   },
 };
 
-
 const colors = [
   theme.primary,
   pSBC(-0.375, theme.primary, false, true),

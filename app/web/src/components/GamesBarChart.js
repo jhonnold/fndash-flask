@@ -38,7 +38,7 @@ const colors = [
   pSBC(-0.2, theme.primary, false, true),
   pSBC(-0.1, theme.primary, false, true),
   theme.primary,
-]
+];
 
 function GamesBarChart({ labels, datasets }) {
   const chartData = {
