@@ -1,9 +1,8 @@
 import styled from 'styled-components';
-import { colors, toRGB } from '../assets/constants/colors';
 
 export default styled.div`
-  background-color: ${colors.cardBack};
-  border: 1px solid ${toRGB(colors.white, 0.125)};
+  background-color: ${({ theme }) => theme.cardBack};
+  border: 1px solid ${({ theme }) => theme.border};
   padding: 1rem;
   margin-bottom: 1rem;
 `;

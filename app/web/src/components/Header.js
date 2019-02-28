@@ -6,11 +6,10 @@ import styled from 'styled-components';
 import { actions as usersActions } from '../ducks/users';
 import { actions as uiActions } from '../ducks/ui';
 import Container from './Container';
-import { colors, toRGB } from '../assets/constants/colors';
 
 const HeaderDiv = styled.div`
   width: 100%;
-  background-color: ${colors.black};
+  background-color: ${({ theme }) => theme.black};
 `;
 
 const HeaderContainer = styled(Container)`
@@ -32,13 +31,13 @@ const SiteTitle = styled.span`
 const HeaderBreak = styled.div`
   width: calc(100% - 1rem);
   margin: 0 0.5rem;
-  background-color: ${toRGB(colors.white, 0.125)};
+  background-color: ${({ theme }) => theme.border};
   height: 1px;
 `;
 
 const Name = styled.h2`
   text-transform: uppercase;
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.primary};
   margin: 0;
 `;
 
@@ -52,7 +51,7 @@ const TabList = styled.ul`
 
 const Tab = styled.li`
   > button {
-    color: ${({ isActive }) => isActive ? colors.primary : colors.white};
+    color: ${({ isActive, theme }) => isActive ? theme.primary : theme.white};
     padding: 1rem;
     text-transform: capitalize;
     cursor: pointer;

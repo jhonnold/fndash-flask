@@ -1,10 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import Card from './Card';
-import { colors } from '../assets/constants/colors';
 
 const H3 = styled.h3`
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.primary};
 `;
 
 function getHoursPlayed(data, mode) {

@@ -2,12 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import AnimatedNumber from './AnimatedNumber';
 import Container from './Container';
-import { colors, toRGB } from '../assets/constants/colors';
 
 const StatsDiv = styled.div`
   width: 100%;
-  background-color: ${colors.black};
-  box-shadow: 0px 4px 2px -2px ${colors.black};
+  background-color: ${({ theme }) => theme.black};
+  box-shadow: 0px 4px 2px -2px ${({ theme }) => theme.black};
 `;
 
 const StatsContainer = styled(Container)`
@@ -20,7 +19,7 @@ const Stat = styled.div`
   width: 50%;
   padding: 1rem;
   text-align: center;
-  border-right: 1px solid ${toRGB(colors.white, 0.125)};
+  border-right: 1px solid ${({ theme }) => theme.border};
 
   @media (min-width: 640px) {
     width: 25%;
@@ -37,7 +36,7 @@ const Stat = styled.div`
   }
 
   h2:last-of-type {
-    color: ${colors.primary};
+    color: ${({ theme }) => theme.primary};
   }
 `;
 

@@ -1,15 +1,14 @@
 import React from 'react';
 import moment from 'moment-timezone';
 import styled from 'styled-components';
-import { colors, toRGB } from '../assets/constants/colors';
 
 const GameDiv = styled.div`
-  border-bottom: 1px solid ${toRGB(colors.white, 0.125)};
+  border-bottom: 1px solid ${({ theme }) => theme.border};
   padding: 0.5rem;
   margin-bottom: 1rem;
 
   h5 {
-    color: ${colors.primary};
+    color: ${({ theme }) => theme.primary};
   }
 
   p { margin: 0; }
@@ -21,7 +20,7 @@ const GameDiv = styled.div`
 
   i {
     margin-left: 0.5rem;
-    color: ${colors.primary};
+    color: ${({ theme }) => theme.primary};
   }
 `;
 
