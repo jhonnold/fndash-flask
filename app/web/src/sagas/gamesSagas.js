@@ -27,3 +27,16 @@ function* requestUserRecords({ payload }) {
 export function* requestUserRecordsSaga() {
   yield takeEvery(types.USER_RECORDS_REQUESTED, requestUserRecords);
 }
+
+function* requestAllGames() {
+  try {
+    const response = yield call(api.getGames);
+    yield put(actions.receivedAllGames(response.data));
+  } catch (err) {
+    yield put(actions.rejectedAllGames(err));
+  }
+}
+
+export function* requestGamesSaga() {
+  yield takeEvery(types.ALL_GAMES_REQUESTED, requestAllGames);
+}

@@ -8,33 +8,30 @@ import NewGame from '../components/NewGame';
 class Homepage extends React.PureComponent {
   componentDidMount() {
     const {
-      requestUser,
-      requestUserGames,
+      requestUsers,
+      requestGames,
     } = this.props;
 
-    requestUser(id);
-    requestUserGames(id, 'all');
+    requestUsers();
+    requestGames();
   }
 
-  // componentDidUpdate() {
-  //   const {
-  //     match,
-  //     requestUser,
-  //     requestUserGames,
-  //   } = this.props;
+  componentDidUpdate() {
+    const {
+      requestUsers,
+      requestGames,
+    } = this.props;
 
-  //   const { userId: id } = match.params;
-
-  //   requestUser(id);
-  //   requestUserGames(id, 'all');
-  // }
+    requestUsers();
+    requestGames();
+  }
 
   render() {
     const {
-      users, match, games,
+      users, games,
     } = this.props;
 
-    const user = users.data[match.params.userId] || {};
+    const user = users.data || {};
     const data = games.data.games;
 
     return (

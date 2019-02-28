@@ -4,6 +4,10 @@ const USER_GAMES_REJECTED = 'fn-dash/games/USER_GAMES_REJECTED';
 const USER_RECORDS_REQUESTED = 'fn-dash/games/USER_RECORDS_REQUESTED';
 const USER_RECORDS_RECEIVED = 'fn-dash/games/USER_RECORDS_RECEIVED';
 const USER_RECORDS_REJECTED = 'fn-dash/games/USER_RECORDS_REJECTED';
+const ALL_GAMES_REQUESTED = 'fn-dash/games/ALL_GAMES_REQUESTED';
+const ALL_GAMES_RECEIVED = 'fn-dash/games/ALL_GAMES_REQUESTED';
+const ALL_GAMES_REJECTED = 'fn-dash/games/ALL_GAMES_REQUESTED';
+
 
 export const types = {
   USER_GAMES_REQUESTED,
@@ -12,6 +16,9 @@ export const types = {
   USER_RECORDS_REQUESTED,
   USER_RECORDS_RECEIVED,
   USER_RECORDS_REJECTED,
+  ALL_GAMES_REQUESTED,
+  ALL_GAMES_RECEIVED,
+  ALL_GAMES_REJECTED,
 };
 
 const initialState = {
@@ -96,6 +103,31 @@ export default (state = initialState, action) => {
         loading: false,
       };
     }
+    case ALL_GAMES_REQUESTED: {
+      return {
+        ...state,
+        error: null,
+        loading: true,
+      };
+    }
+    case ALL_GAMES_RECEIVED: {
+      return {
+        ...state,
+        error: null,
+        loading: false,
+        data: {
+          ...state.data,
+          games: payload,
+        },
+      };
+    }
+    case ALL_GAMES_REJECTED: {
+      return {
+        ...state,
+        error: payload,
+        loading: false,
+      };
+    }
     default: {
       return state;
     }
@@ -135,6 +167,20 @@ const rejectedUserRecords = err => ({
   payload: err.message,
 });
 
+const requestAllGames = () => ({
+  type: ALL_GAMES_REQUESTED,
+});
+
+const receivedAllGames = games => ({
+  type: ALL_GAMES_RECEIVED,
+  payload: games,
+});
+
+const rejectedAllGames = err => ({
+  type: ALL_GAMES_REJECTED,
+  payload: err,
+});
+
 export const actions = {
   requestUserGames,
   receivedUserGames,
@@ -142,4 +188,7 @@ export const actions = {
   requestUserRecords,
   receivedUserRecords,
   rejectedUserRecords,
+  requestAllGames,
+  receivedAllGames,
+  rejectedAllGames,
 };

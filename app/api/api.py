@@ -13,6 +13,12 @@ def home():
     return jsonify(foo='bar')
 
 
+@api.route('/games')
+def all_games(): 
+    games = Game.query.all()
+    serialized_games_all =  list(map(lambda game: g.serialize(), games))))
+    return jsonify(serialized_games_all)
+
 @api.route('/users')
 def users():
     users = User.query.all()

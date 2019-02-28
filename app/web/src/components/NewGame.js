@@ -23,7 +23,7 @@ function NewGame({ data, user }) {
         </p>
       </div>
     </div>
-  )
+  );
 }
 
 export default NewGame;
