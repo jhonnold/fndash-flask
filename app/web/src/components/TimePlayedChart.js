@@ -1,5 +1,7 @@
 import React from 'react';
 import { Pie as PieChart } from 'react-chartjs-2';
+import Card from './Card';
+import { theme, pSBC } from '../assets/constants/colors';
 
 const chartOptions = {
   aspectRatio: 2,
@@ -7,13 +9,16 @@ const chartOptions = {
     display: false,
     position: 'bottom',
     labels: {
-      fontColor: '#fafafa',
+      fontColor: theme.fontColor,
     },
   },
 };
 
-
-const colors = ['#22d900', '#19a100', '#106b00'];
+const colors = [
+  theme.primary,
+  pSBC(-0.375, theme.primary, false, true),
+  pSBC(-0.75, theme.primary, false, true),
+];
 
 function TimePlayedChart({ datasets, labels }) {
   const chartData = {
@@ -25,10 +30,10 @@ function TimePlayedChart({ datasets, labels }) {
   };
 
   return (
-    <div className="charts__chart">
+    <Card>
       <h3>Time Played</h3>
       <PieChart data={chartData} options={chartOptions} />
-    </div>
+    </Card>
   );
 }
 

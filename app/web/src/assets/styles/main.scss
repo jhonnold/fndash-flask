@@ -4,13 +4,8 @@
 
 @import 'settings';
 @import 'foundation-sites/scss/foundation.scss';
-@include foundation-everything;
-
-@import './header';
-@import './stats';
-@import './minuteData';
-@import './games';
-@import './charts';
+@include foundation-global-styles;
+@include foundation-typography; 
 
 html,
 body {
@@ -21,4 +16,5 @@ body {
   display: flex;
   flex-direction: column;
   background-color: $dark-gray;
+  overflow-x: hidden;
 }

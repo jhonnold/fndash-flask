@@ -1,4 +1,10 @@
 import React from 'react';
+import styled from 'styled-components';
+import Card from './Card';
+
+const H3 = styled.h3`
+  color: ${({ theme }) => theme.primary};
+`;
 
 function getHoursPlayed(data, mode) {
   if (mode === 'solo') {
@@ -19,12 +25,12 @@ function TimePlayed({ data, mode }) {
     hours = '< 1';
   }
   return (
-    <div className="charts__time">
-      <h3>Time Played</h3>
+    <Card>
+      <H3>Time Played</H3>
       <h4>
         {hours} <span>Hours</span>
       </h4>
-    </div>
+    </Card>
   );
 }
 
