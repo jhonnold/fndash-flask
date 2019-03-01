@@ -1,8 +1,24 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 import { actions as gamesActions } from '../ducks/games';
 import GamesList from '../components/GamesList';
+import Banner from '../components/Banner';
+import Column from '../components/Column';
+
+
+const HomeColumn = styled(Column)`
+  width: 30%!important;
+  margin: 3rem;
+`;
+
+const Main = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+`;
 
 class Homepage extends React.PureComponent {
   componentDidMount() {
@@ -22,14 +38,17 @@ class Homepage extends React.PureComponent {
 
     return (
       <React.Fragment>
-        <div className="banner">
-          <h1 className="banner--title">Fortnite Dashboard</h1>
-        </div>
-        <div className="main">
-          <div className="main__games">
-            <GamesList games={data} title="Recent Games" />
+        <Banner />
+        <Main>
+          <HomeColumn>
+            <div className="main__games">
+              <GamesList games={data} title="Recent Games" />
+            </div>
+          </HomeColumn>
+          <div className="fake-search-bar">
+            <input type="text" placeholder="FAKE" />
           </div>
-        </div>
+        </Main> 
       </React.Fragment>
     );
   }
