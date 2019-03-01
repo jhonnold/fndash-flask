@@ -19,12 +19,22 @@ const ReversedContainer = styled(Container)`
   flex-direction: row-reverse;
 `;
 
+const ChartColumn = styled(Column)`
+  height: min-content;
+`;
+
 const MinuteData = styled.div`
   margin-top: 1rem;
   width: 100%;
 `;
 
 class UserInfo extends React.PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.matchColumnHeights = this.matchColumnHeights.bind(this);
+  }
+
   componentDidMount() {
     const {
       match,
@@ -47,6 +57,9 @@ class UserInfo extends React.PureComponent {
     requestPlacementChart(id);
     requestGamesChart(id, ui.mode);
     requestTimePlayedChart(id);
+
+    window.addEventListener('resize', this.matchColumnHeights);
+    this.matchColumnHeights();
   }
 
   componentDidUpdate(prevProps) {
@@ -78,6 +91,20 @@ class UserInfo extends React.PureComponent {
       requestKdChart(id, ui.mode);
       requestGamesChart(id, ui.mode);
     }
+
+    this.matchColumnHeights();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.matchColumnHeights);
+  }
+
+  matchColumnHeights() {
+    // Must wait must a wee bit of time for the new sizes to
+    // be registered
+    setTimeout(() => {
+      this.gamesColumn.style.height = `${this.chartsColumn.scrollHeight}px`;
+    }, 10);
   }
 
   render() {
@@ -99,7 +126,11 @@ class UserInfo extends React.PureComponent {
         <Stats data={data} />
         <MinuteData>
           <ReversedContainer>
-            <Column>
+            <ChartColumn
+              ref={(el) => {
+                this.chartsColumn = el;
+              }}
+            >
               <KDChart {...kdChart.data} />
               <GamesBarChart {...gamesChart.data} />
               <PlacementPieChart mode={ui.mode} data={placementChart.data} />
@@ -108,10 +139,14 @@ class UserInfo extends React.PureComponent {
               ) : (
                 <TimePlayed data={timePlayedChart.data} mode={ui.mode} />
               )}
-            </Column>
-            <Column>
+            </ChartColumn>
+            <Column
+              ref={(el) => {
+                this.gamesColumn = el;
+              }}
+            >
               <GameList games={recordGames} title="Records" />
-              <GameList games={games.data.games} />
+              <GameList games={games.data.games} autoOverflow />
             </Column>
           </ReversedContainer>
         </MinuteData>
@@ -121,9 +156,7 @@ class UserInfo extends React.PureComponent {
 }
 
 // eslint-disable-next-line object-curly-newline
-const mapStateToProps = ({
-  users, ui, games, charts,
-}) => ({
+const mapStateToProps = ({ users, ui, games, charts }) => ({
   users,
   ui,
   games,
