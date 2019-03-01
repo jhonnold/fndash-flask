@@ -31,12 +31,12 @@ export function* requestUserRecordsSaga() {
 function* requestRecentGames() {
   try {
     const response = yield call(api.getRecentGames);
-    yield put(actions.receivedAllGames(response.data));
+    yield put(actions.receivedRecentGames(response.data));
   } catch (err) {
-    yield put(actions.rejectedAllGames(err));
+    yield put(actions.rejectedRecentGames(err));
   }
 }
 
 export function* requestRecentGamesSaga() {
-  yield takeEvery(types.ALL_GAMES_REQUESTED, requestRecentGames);
+  yield takeEvery(types.RECENT_GAMES_REQUESTED, requestRecentGames);
 }

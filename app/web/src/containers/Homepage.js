@@ -1,37 +1,23 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { actions as userActions } from '../ducks/users';
 import { actions as gamesActions } from '../ducks/games';
-import NewGame from '../components/NewGame';
+import GamesList from '../components/GamesList';
 
 class Homepage extends React.PureComponent {
   componentDidMount() {
     const {
-      requestUsers,
-      requestGames,
+      requestRecentGames,
     } = this.props;
 
-    requestUsers();
-    requestGames();
-  }
-
-  componentDidUpdate() {
-    const {
-      requestUsers,
-      requestGames,
-    } = this.props;
-
-    requestUsers();
-    requestGames();
+    requestRecentGames();
   }
 
   render() {
     const {
-      users, games,
+      games,
     } = this.props;
 
-    const user = users.data || {};
     const data = games.data.games;
 
     return (
@@ -41,7 +27,7 @@ class Homepage extends React.PureComponent {
         </div>
         <div className="main">
           <div className="main__games">
-            <NewGame data={data} user={user} />
+            <GamesList games={data} title="Recent Games" />
           </div>
         </div>
       </React.Fragment>
@@ -50,14 +36,12 @@ class Homepage extends React.PureComponent {
 }
 
 const mapStateToProps = ({
-  users, games,
+  games,
 }) => ({
-  users,
   games,
 });
 
 const matchDispatchToProps = dispatch => ({
-  ...bindActionCreators(userActions, dispatch),
   ...bindActionCreators(gamesActions, dispatch),
 });
 
