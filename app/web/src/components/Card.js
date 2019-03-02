@@ -5,4 +5,5 @@ export default styled.div`
   border: 1px solid ${({ theme }) => theme.border};
   padding: 0.5rem 1rem;
   margin-bottom: 1rem;
+  ${({ autoOverflow }) => (autoOverflow ? 'overflow: auto;' : '')}
 `;
