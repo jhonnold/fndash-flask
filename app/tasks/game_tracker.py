@@ -2,37 +2,41 @@ import celery, requests
 
 from app import db
 from app.models import User, Game
+from celery.utils.log import get_task_logger
 
-API_LINK = 'https://fortnite-public-api.theapinetwork.com/prod09/users/public/br_stats?user_id={}&platform=pc'
+logger = get_task_logger(__name__)
+
+BASE_URL = 'https://fortnite-public-api.theapinetwork.com/prod09'
+USER_STATS_ENDPOINT = BASE_URL + '/users/public/br_stats_v2?platform=pc&user_id={}'
 
 
 @celery.task()
 def check_games():
     users = User.query.all()
+
     for user in users:
-        r = requests.get(API_LINK.format(user.uid))
-        data = r.json()
+        r = requests.get(USER_STATS_ENDPOINT.format(user.uid))
+        json = r.json()
 
-        totals = data['totals']
-        stats = data['stats']
+        logger.info('Requesting user info for {}'.format(user))
+        total_stats = json['overallData']['defaultModes']
 
-        if totals['matchesplayed'] != user.matchesplayed_total:
-            user.kills_total = totals['kills']
-            user.wins_total = totals['wins']
-            user.matchesplayed_total = totals['matchesplayed']
-            user.hoursplayed_total = totals['hoursplayed']
-            user.lastmodified_total = totals['lastupdate']
+        keyboardmouse_data = json['data']['keyboardmouse']
+        solo_stats = keyboardmouse_data['defaultsolo']['default']
+        duo_stats = keyboardmouse_data['defaultduo']['default']
+        squad_stats = keyboardmouse_data['defaultsquad']['default']
 
-        if stats['matchesplayed_solo'] != user.matchesplayed_solo:
+        if solo_stats['matchesplayed'] != user.matchesplayed_solo:
+            logger.debug('{} played a solo game'.format(user))
             placement = 'Loss'
-            if user.placetop1_solo != stats['placetop1_solo']:
+            if user.placetop1_solo != solo_stats['placetop1']:
                 placement = 'Victory'
-            elif user.placetop10_solo != stats['placetop10_solo']:
+            elif user.placetop10_solo != solo_stats['placetop10']:
                 placement = 'Top 10'
-            elif user.placetop25_solo != stats['placetop25_solo']:
+            elif user.placetop25_solo != solo_stats['placetop25']:
                 placement = 'Top 25'
 
-            kills = stats['kills_solo'] - user.kills_solo
+            kills = solo_stats['kills'] - user.kills_solo
             if kills >= 0 and kills <= 99:
                 game = Game(
                     user_id=user.id,
@@ -41,24 +45,25 @@ def check_games():
                     placement=placement)
                 db.session.add(game)
 
-            user.kills_solo = stats['kills_solo']
-            user.placetop1_solo = stats['placetop1_solo']
-            user.placetop10_solo = stats['placetop10_solo']
-            user.placetop25_solo = stats['placetop25_solo']
-            user.matchesplayed_solo = stats['matchesplayed_solo']
-            user.minutesplayed_solo = stats['minutesplayed_solo']
-            user.lastmodified_solo = stats['lastmodified_solo']
+            user.kills_solo = solo_stats['kills']
+            user.placetop1_solo = solo_stats['placetop1']
+            user.placetop10_solo = solo_stats['placetop10']
+            user.placetop25_solo = solo_stats['placetop25']
+            user.matchesplayed_solo = solo_stats['matchesplayed']
+            user.minutesplayed_solo = solo_stats['minutesplayed']
+            user.lastmodified_solo = solo_stats['lastmodified']
 
-        if stats['matchesplayed_duo'] != user.matchesplayed_duo:
+        if duo_stats['matchesplayed'] != user.matchesplayed_duo:
+            logger.debug('{} played a duo game'.format(user))
             placement = 'Loss'
-            if user.placetop1_duo != stats['placetop1_duo']:
+            if user.placetop1_duo != duo_stats['placetop1']:
                 placement = 'Victory'
-            elif user.placetop5_duo != stats['placetop5_duo']:
+            elif user.placetop5_duo != duo_stats['placetop5']:
                 placement = 'Top 5'
-            elif user.placetop12_duo != stats['placetop12_duo']:
+            elif user.placetop12_duo != duo_stats['placetop12']:
                 placement = 'Top 12'
 
-            kills = stats['kills_duo'] - user.kills_duo
+            kills = duo_stats['kills'] - user.kills_duo
             if kills >= 0 and kills <= 99:
                 game = Game(
                     user_id=user.id,
@@ -67,24 +72,25 @@ def check_games():
                     placement=placement)
                 db.session.add(game)
 
-            user.kills_duo = stats['kills_duo']
-            user.placetop1_duo = stats['placetop1_duo']
-            user.placetop5_duo = stats['placetop5_duo']
-            user.placetop12_duo = stats['placetop12_duo']
-            user.matchesplayed_duo = stats['matchesplayed_duo']
-            user.minutesplayed_duo = stats['minutesplayed_duo']
-            user.lastmodified_duo = stats['lastmodified_duo']
+            user.kills_duo = duo_stats['kills']
+            user.placetop1_duo = duo_stats['placetop1']
+            user.placetop5_duo = duo_stats['placetop5']
+            user.placetop12_duo = duo_stats['placetop12']
+            user.matchesplayed_duo = duo_stats['matchesplayed']
+            user.minutesplayed_duo = duo_stats['minutesplayed']
+            user.lastmodified_duo = duo_stats['lastmodified']
 
-        if stats['matchesplayed_squad'] != user.matchesplayed_squad:
+        if squad_stats['matchesplayed'] != user.matchesplayed_squad:
+            logger.debug('{} played a squad game'.format(user))
             placement = 'Loss'
-            if user.placetop1_squad != stats['placetop1_squad']:
+            if user.placetop1_squad != squad_stats['placetop1']:
                 placement = 'Victory'
-            elif user.placetop3_squad != stats['placetop3_squad']:
+            elif user.placetop3_squad != squad_stats['placetop3']:
                 placement = 'Top 3'
-            elif user.placetop6_squad != stats['placetop6_squad']:
+            elif user.placetop6_squad != squad_stats['placetop6']:
                 placement = 'Top 6'
 
-            kills = stats['kills_squad'] - user.kills_squad
+            kills = squad_stats['kills'] - user.kills_squad
             if kills >= 0 and kills <= 99:
                 game = Game(
                     user_id=user.id,
@@ -93,12 +99,20 @@ def check_games():
                     placement=placement)
                 db.session.add(game)
 
-            user.kills_squad = stats['kills_squad']
-            user.placetop1_squad = stats['placetop1_squad']
-            user.placetop3_squad = stats['placetop3_squad']
-            user.placetop6_squad = stats['placetop6_squad']
-            user.matchesplayed_squad = stats['matchesplayed_squad']
-            user.minutesplayed_squad = stats['minutesplayed_squad']
-            user.lastmodified_squad = stats['lastmodified_squad']
+            user.kills_squad = squad_stats['kills']
+            user.placetop1_squad = squad_stats['placetop1']
+            user.placetop3_squad = squad_stats['placetop3']
+            user.placetop6_squad = squad_stats['placetop6']
+            user.matchesplayed_squad = squad_stats['matchesplayed']
+            user.minutesplayed_squad = squad_stats['minutesplayed']
+            user.lastmodified_squad = squad_stats['lastmodified']
+
+        if total_stats['matchesplayed'] != user.matchesplayed_total:
+            user.kills_total = total_stats['kills']
+            user.wins_total = total_stats['placetop1']
+            user.matchesplayed_total = total_stats['matchesplayed']
+            # These were removed?
+            # user.hoursplayed_total = total_stats['hoursplayed']
+            # user.lastmodified_total = total_stats['lastupdate']
 
         db.session.commit()
