@@ -8,6 +8,7 @@ import Column from '../components/Column';
 import SearchBar from '../components/SearchBar';
 import Container from '../components/Container';
 import { theme as mainTheme } from '../assets/constants/colors';
+import '../assets/images/fn-dash.png';
 
 const Banner = styled.div`
   width: 100%;
@@ -125,7 +126,7 @@ class Homepage extends React.PureComponent {
     return (
       <React.Fragment>
         <Banner>
-          <h1>FN Dash</h1>
+          <img src={require('../assets/images/fn-dash.png')} alt="Logo" />
         </Banner>
         <HomeContainer>
           <SearchBar styles={homeStyles} />
