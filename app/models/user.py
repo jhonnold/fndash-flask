@@ -32,6 +32,7 @@ class User(db.Model):
     minutesplayed_squad = db.Column(db.Integer(), default=0)
     lastmodified_squad = db.Column(db.Integer(), default=0)
 
+    stats = db.relationship('Stat', backref='user', lazy='dynamic')
     games = db.relationship('Game', backref='user', lazy='dynamic')
     kds = db.relationship('KD', backref='user', lazy='dynamic')
     progressions = db.relationship('UserProgressionData', backref='user', lazy='dynamic')
