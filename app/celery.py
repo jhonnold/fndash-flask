@@ -2,7 +2,8 @@ from celery.schedules import crontab
 
 
 class CeleryConfig(object):
-    CELERY_IMPORTS = ('app.tasks.game_tracker', 'app.tasks.kd_monitor', 'app.tasks.user_monitor')
+    CELERY_IMPORTS = ('app.tasks.game_tracker', 'app.tasks.kd_monitor',
+                      'app.tasks.user_monitor', 'app.tasks.stat_tracker')
     CELERY_TASK_RESULT_EXPIRES = 60
     CELERY_TIMEZONE = 'UTC'
 
@@ -14,12 +15,16 @@ class CeleryConfig(object):
         'game_tracker': {
             'task': 'app.tasks.game_tracker.check_games',
             # Every minute for watching games
-            'schedule': crontab(minute="*"),
+            'schedule': crontab(minute='*'),
+        },
+        'stat_tracker': {
+            'task': 'app.tasks.stat_tracker.stat_tracker',
+            'schedule': crontab(minute='*'),
         },
         'kd_monitor': {
             'task': 'app.tasks.kd_monitor.record_stats',
             # Everyday store current stats
-            'schedule': crontab(hour="5", minute="0"),
+            'schedule': crontab(hour='5', minute='0'),
         },
         'user_monitor': {
             'task': 'app.tasks.user_monitor.record_user',
