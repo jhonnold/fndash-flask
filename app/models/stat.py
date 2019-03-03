@@ -17,7 +17,18 @@ class Stat(db.Model):
     minutesplayed = db.Column(db.Integer(), default=0)
     updated = db.Column(db.DateTime(), default=datetime.datetime.now)
 
-    __table_args__ = (db.UniqueConstraint('user_id', 'name', 'mode', name='_name_mode_uc'),)
+    __table_args__ = (db.UniqueConstraint(
+        'user_id', 'name', 'mode', name='_name_mode_uc'), )
 
     def __repr__(self):
-        return "<Stat '{}' - '{}' for user_id: {}>".format(self.name, self.mode, self.user_id)
+        return "<Stat '{}' - '{}' for user_id: {}>".format(
+            self.name, self.mode, self.user_id)
+
+    def serialize(self):
+        data = dict(**self.__dict__)
+        del data['_sa_instance_state']
+
+        wins = self.placements.get('placetop1', 0)
+        data['kd'] = self.kills / (self.matchesplayed - wins)
+
+        return data

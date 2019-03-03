@@ -44,39 +44,16 @@ class User(db.Model):
     def __repr__(self):
         return "<User '{}'>".format(self.username)
 
-    def serialize(self):
-        user_data = dict()
-        user_data['all'] = dict(
-            wins=self.wins_total,
-            matches=self.matchesplayed_total,
-            kills=self.kills_total,
-            kd=self.kd_total(),
-        )
+    def serialize(self, include_stats=False):
+        user_data = dict(**self.__dict__)
+        del user_data['_sa_instance_state']
 
-        user_data['solo'] = dict(
-            wins=self.placetop1_solo,
-            matches=self.matchesplayed_solo,
-            kills=self.kills_solo,
-            kd=self.kd_solo(),
-        )
-
-        user_data['duo'] = dict(
-            wins=self.placetop1_duo,
-            matches=self.matchesplayed_duo,
-            kills=self.kills_duo,
-            kd=self.kd_duo(),
-        )
-
-        user_data['squad'] = dict(
-            wins=self.placetop1_squad,
-            matches=self.matchesplayed_squad,
-            kills=self.kills_squad,
-            kd=self.kd_squad(),
-        )
-
-        user_data['id'] = self.id
-        user_data['username'] = self.username
-        user_data['uid'] = self.uid
+        if include_stats:
+            user_data['stats'] = dict()
+            for stat in self.stats.all():
+                if (stat.name not in user_data['stats']):
+                    user_data['stats'][stat.name] = dict()
+                user_data['stats'][stat.name][stat.mode] = stat.serialize()
 
         return user_data
 

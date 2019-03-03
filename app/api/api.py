@@ -24,16 +24,17 @@ def users():
 @api.route('/users/<user_id>')
 def user(user_id):
     user = get_user(user_id)
-    user_data = user.serialize()
-
+    stats = request.args.get('stats')
+    stats = (stats == 'true')
+    
+    user_data = user.serialize(include_stats=stats)
     return jsonify(user_data)
 
 
 @api.route('/users/<user_id>/kd')
 def kds(user_id):
     user = get_user(user_id)
-    mode = request.args.get('m')
-    mode = 'all' if mode is None else mode
+    mode = request.args.get('m', 'all')
 
     labels, datasets = kd_per_day(user, mode)
 
@@ -55,8 +56,7 @@ def placements(user_id):
 @api.route('/users/<user_id>/game_counts')
 def game_counts(user_id):
     user = get_user(user_id)
-    mode = request.args.get('m')
-    mode = 'all' if mode is None else mode
+    mode = request.args.get('m', 'all')
 
     labels, datasets = games_per_day(user, mode)
 
@@ -66,8 +66,7 @@ def game_counts(user_id):
 @api.route("/users/<user_id>/games")
 def games(user_id):
     user = get_user(user_id)
-    mode = request.args.get('m')
-    mode = 'all' if mode is None else mode
+    mode = request.args.get('m', 'all')
 
     if mode != 'all':
         games = user.games.filter_by(game_type=mode.capitalize()).order_by(
