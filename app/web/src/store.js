@@ -2,7 +2,6 @@ import {
   createStore, combineReducers, applyMiddleware, compose,
 } from 'redux';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
-// eslint-disable-next-line
 import { createLogger } from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
 import usersReducer from './ducks/users';
@@ -23,18 +22,16 @@ const configureStore = (history, initialState = {}) => {
   const sagaMiddleware = createSagaMiddleware();
   const logger = createLogger({ collapsed: () => true });
   const routeMiddleware = routerMiddleware(history);
-  const middleware = process.env.NODE_ENV === 'development' ? [routeMiddleware, logger, sagaMiddleware] : [routeMiddleware, sagaMiddleware];
+  const middleware = process.env.NODE_ENV === 'development'
+    ? [routeMiddleware, logger, sagaMiddleware]
+    : [routeMiddleware, sagaMiddleware];
 
   /* eslint-disable no-underscore-dangle */
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
   /* eslint-enable */
 
   return {
-    ...createStore(
-      routedReducer,
-      initialState,
-      composeEnhancers(applyMiddleware(...middleware)),
-    ),
+    ...createStore(routedReducer, initialState, composeEnhancers(applyMiddleware(...middleware))),
     runSaga: sagaMiddleware.run,
   };
 };

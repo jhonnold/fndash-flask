@@ -4,6 +4,7 @@ import { requestUserGamesSaga, requestUserRecordsSaga, requestRecentGamesSaga } 
 import {
   requestKdChartSaga, requestPlacementChartSaga, requestGamesChartSaga, requestTimePlayedChartSaga,
 } from './chartSagas';
+import { requestAllDataSaga, requestModeDependantDataSaga } from './globalSagas';
 
 export default function* () {
   yield [
@@ -16,5 +17,7 @@ export default function* () {
     fork(requestPlacementChartSaga),
     fork(requestGamesChartSaga),
     fork(requestTimePlayedChartSaga),
+    fork(requestAllDataSaga),
+    fork(requestModeDependantDataSaga),
   ];
 }

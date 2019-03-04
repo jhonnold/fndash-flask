@@ -2,9 +2,7 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { actions as userActions } from '../ducks/users';
-import { actions as gamesActions } from '../ducks/games';
-import { actions as chartActions } from '../ducks/charts';
+import { actions as globalActions } from '../ducks/global';
 import Stats from '../components/Stats';
 import GameList from '../components/GamesList';
 import KDChart from '../components/KDChart';
@@ -36,27 +34,11 @@ class UserInfo extends React.PureComponent {
   }
 
   componentDidMount() {
-    const {
-      match,
-      ui,
-      requestUser,
-      requestUserGames,
-      requestUserRecords,
-      requestKdChart,
-      requestPlacementChart,
-      requestGamesChart,
-      requestTimePlayedChart,
-    } = this.props;
+    const { match, ui, requestAllData } = this.props;
 
     const { userId: id } = match.params;
 
-    requestUser(id);
-    requestUserGames(id, ui.mode);
-    requestUserRecords(id);
-    requestKdChart(id, ui.mode);
-    requestPlacementChart(id);
-    requestGamesChart(id, ui.mode);
-    requestTimePlayedChart(id);
+    requestAllData(id, ui.mode);
 
     window.addEventListener('resize', this.matchColumnHeights);
     this.matchColumnHeights();
@@ -65,34 +47,20 @@ class UserInfo extends React.PureComponent {
   componentDidUpdate(prevProps) {
     const { match: prevMatch, ui: prevUi } = prevProps;
     const {
-      match,
-      ui,
-      requestUser,
-      requestUserGames,
-      requestUserRecords,
-      requestKdChart,
-      requestPlacementChart,
-      requestGamesChart,
-      requestTimePlayedChart,
+      ui, match, requestAllData, requestModeDependantData,
     } = this.props;
-
     const { userId: id } = match.params;
 
+    this.matchColumnHeights();
+
     if (id !== prevMatch.params.userId) {
-      requestUser(id);
-      requestUserGames(id, ui.mode);
-      requestUserRecords(id);
-      requestKdChart(id, ui.mode);
-      requestPlacementChart(id);
-      requestGamesChart(id, ui.mode);
-      requestTimePlayedChart(id);
-    } else if (ui.mode !== prevUi.mode) {
-      requestUserGames(id, ui.mode);
-      requestKdChart(id, ui.mode);
-      requestGamesChart(id, ui.mode);
+      requestAllData(id, ui.mode);
+      return;
     }
 
-    this.matchColumnHeights();
+    if (ui.mode !== prevUi.mode) {
+      requestModeDependantData(id, ui.mode);
+    }
   }
 
   componentWillUnmount() {
@@ -155,7 +123,6 @@ class UserInfo extends React.PureComponent {
   }
 }
 
-// eslint-disable-next-line object-curly-newline
 const mapStateToProps = ({ users, ui, games, charts }) => ({
   users,
   ui,
@@ -164,9 +131,7 @@ const mapStateToProps = ({ users, ui, games, charts }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  ...bindActionCreators(userActions, dispatch),
-  ...bindActionCreators(gamesActions, dispatch),
-  ...bindActionCreators(chartActions, dispatch),
+  ...bindActionCreators(globalActions, dispatch),
 });
 
 export default connect(
