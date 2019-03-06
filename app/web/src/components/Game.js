@@ -8,7 +8,8 @@ const GameDiv = styled.div`
   margin-bottom: 1rem;
   position: relative;
 
-  h5, h4 {
+  h5,
+  h4 {
     color: ${({ theme }) => theme.primary};
   }
 
@@ -18,7 +19,9 @@ const GameDiv = styled.div`
     transform: translate(-50%);
   }
 
-  p { margin: 0; }
+  p {
+    margin: 0;
+  }
 
   > div {
     display: flex;
@@ -44,9 +47,7 @@ function Game({
     <GameDiv>
       <div>
         <h5>{gameType} Match</h5>
-        {username !== undefined
-          && <h4>{username}</h4>
-        }
+        {username && <h5>{username}</h5>}
         <p>{moment(timePlayed).format('MMM Do - h:mm a')}</p>
       </div>
       <div>

@@ -2,12 +2,15 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
+import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { actions as usersActions } from '../ducks/users';
 import { actions as uiActions } from '../ducks/ui';
 import Container from './Container';
 import SearchBar from './SearchBar';
+
+import logo from '../assets/images/horizontal-logo.png';
 
 const HeaderDiv = styled.div`
   width: 100%;
@@ -28,6 +31,10 @@ const Row = styled.div`
 
 const SiteTitle = styled.span`
   margin: 0.5rem 1rem 0.5rem 0;
+
+  img {
+    max-height: 2.5rem;
+  }
 `;
 
 const HeaderBreak = styled.div`
@@ -80,13 +87,17 @@ class Header extends React.PureComponent {
     return (
       <React.Fragment>
         <Helmet>
-          <title>{`${username} Stats - FN Dashboard`}</title>
+          <title>{`${username} Stats - FN Dash`}</title>
         </Helmet>
         <HeaderDiv>
           <HeaderContainer>
             <Row>
-              <SiteTitle>Fortnite Dashboard</SiteTitle>
-              <SearchBar />
+              <SiteTitle>
+                <Link to="/">
+                  <img src={logo} alt="FN Dash Logo" />
+                </Link>
+              </SiteTitle>
+              <SearchBar placeholder="Select User..." />
             </Row>
             <HeaderBreak />
             <Row>

@@ -6,7 +6,7 @@ function GamesList({ title = 'Games', games = [], autoOverflow }) {
   return (
     <Card autoOverflow={autoOverflow}>
       <h3>{title}</h3>
-      {games.map(g => g && <Game key={`${g.time_played} - ${g.game_type}`} data={g} />)}
+      {games.map(g => g && <Game key={`${g.time_played} - ${g.game_type} - ${g.username}`} data={g} />)}
     </Card>
   );
 }

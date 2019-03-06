@@ -8,16 +8,14 @@ import { theme as mainTheme } from '../assets/constants/colors';
 
 class SearchBar extends React.PureComponent {
   componentDidMount() {
-    const {
-      requestUserList,
-    } = this.props;
+    const { requestUserList } = this.props;
 
     requestUserList();
   }
 
   render() {
     const {
-      users, goTo, styles,
+      users, goTo, styles, placeholder,
     } = this.props;
     const { data } = users;
 
@@ -101,7 +99,7 @@ class SearchBar extends React.PureComponent {
         styles={styles || selectStyles}
         onChange={option => goTo(`/users/${option.value}`)}
         isClearable={false}
-        value={{ label: userOptions.label, value: userOptions.value }}
+        placeholder={placeholder || 'Search...'}
       />
     );
   }

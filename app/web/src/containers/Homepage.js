@@ -8,13 +8,13 @@ import Column from '../components/Column';
 import SearchBar from '../components/SearchBar';
 import Container from '../components/Container';
 import { theme as mainTheme } from '../assets/constants/colors';
-import '../assets/images/fn-dash.png';
+import logo from '../assets/images/vertical-logo.png';
 
 const Banner = styled.div`
   width: 100%;
-  border-bottom: 3px solid ${({ theme }) => theme.border};
+  box-shadow: 0px 4px 2px -2px ${({ theme }) => theme.black};
   text-align: center;
-  padding: 2.3rem 0 2rem;
+  padding: 2.25rem 0 2rem;
   background-color: ${({ theme }) => theme.black};
 
   h1 {
@@ -23,16 +23,24 @@ const Banner = styled.div`
     color: ${({ theme }) => theme.primary};
     font-weight:
   }
+
+  img {
+    max-height: 16rem;
+  }
 `;
 
 const HomeContainer = styled(Container)`
   flex-direction: column;
   align-items: center;
-  padding-top: 8rem;
+  padding-top: 4rem;
 `;
 
 const HomeColumn = styled(Column)`
-  margin-top: 12rem;
+  margin-top: 4rem;
+
+  @media (min-width: 640px) {
+    width: 750px;
+  }
 `;
 
 const homeStyles = {
@@ -41,8 +49,7 @@ const homeStyles = {
     fontWeight: '200',
     color: mainTheme.primary,
     width: '100%',
-    maxWidth: 500,
-    height: 65,
+    maxWidth: 760,
   }),
   control: base => ({
     ...base,
@@ -68,7 +75,7 @@ const homeStyles = {
   }),
   placeholder: base => ({
     ...base,
-    color: mainTheme.fontColor,
+    // color: mainTheme.fontColor,
   }),
   input: base => ({
     ...base,
@@ -91,7 +98,6 @@ const homeStyles = {
     color: state.isSelected ? mainTheme.primary : mainTheme.fontColor,
     backgroundColor: mainTheme.black,
     cursor: 'pointer',
-    fontSize: 25,
   }),
   indicatorSeparator: base => ({
     ...base,
@@ -126,12 +132,12 @@ class Homepage extends React.PureComponent {
     return (
       <React.Fragment>
         <Banner>
-          <img src={require('../assets/images/fn-dash.png')} alt="Logo" />
+          <img src={logo} alt="Logo" />
         </Banner>
         <HomeContainer>
-          <SearchBar styles={homeStyles} />
+          <SearchBar styles={homeStyles} placeholder="Select User..." />
           <HomeColumn>
-            <GamesList games={data} title="Recent Games" />
+            <GamesList games={data} title="All Recent Games" />
           </HomeColumn>
         </HomeContainer>
       </React.Fragment>
