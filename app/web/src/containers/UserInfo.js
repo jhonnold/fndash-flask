@@ -31,6 +31,8 @@ class UserInfo extends React.PureComponent {
     super(props);
 
     this.matchColumnHeights = this.matchColumnHeights.bind(this);
+    this.getUser = this.getUser.bind(this);
+    this.getStats = this.getStats.bind(this);
   }
 
   componentDidMount() {
@@ -67,6 +69,54 @@ class UserInfo extends React.PureComponent {
     window.removeEventListener('resize', this.matchColumnHeights);
   }
 
+  getUser() {
+    const { users, match } = this.props;
+
+    return users.data[match.params.userId];
+  }
+
+  getStats() {
+    const {
+      ui: { mode },
+    } = this.props;
+
+    const user = this.getUser();
+
+    if (!user) return {};
+    if (!user.stats) return {};
+    if (!user.stats.default) return {};
+
+    const { stats } = user;
+    const { default: defaultStats } = stats;
+
+    if (mode === 'all') {
+      const compiledStats = {
+        placements: {
+          placetop1: 0,
+        },
+        matchesplayed: 0,
+        kills: 0,
+      };
+
+      Object.keys(defaultStats).forEach((k) => {
+        const defaultModeStats = defaultStats[k];
+
+        compiledStats.placements.placetop1 += defaultModeStats.placements.placetop1 || 0;
+        compiledStats.matchesplayed += defaultModeStats.matchesplayed;
+        compiledStats.kills += defaultModeStats.kills;
+      });
+
+      let denominator = compiledStats.matchesplayed - compiledStats.placements.placetop1;
+      if (denominator === 0) denominator = 1;
+
+      compiledStats.kd = compiledStats.kills / denominator;
+
+      return compiledStats;
+    }
+
+    return stats.default[mode];
+  }
+
   matchColumnHeights() {
     // Must wait must a wee bit of time for the new sizes to
     // be registered
@@ -76,12 +126,7 @@ class UserInfo extends React.PureComponent {
   }
 
   render() {
-    const {
-      users, match, ui, games, charts,
-    } = this.props;
-
-    const user = users.data[match.params.userId] || {};
-    const data = user[ui.mode] || {};
+    const { ui, games, charts } = this.props;
 
     const recordGames = ui.mode === 'all' ? Object.values(games.data.records) : [games.data.records[ui.mode]];
 
@@ -91,7 +136,7 @@ class UserInfo extends React.PureComponent {
 
     return (
       <React.Fragment>
-        <Stats data={data} />
+        <Stats {...this.getStats()} />
         <MinuteData>
           <ReversedContainer>
             <ChartColumn
@@ -123,7 +168,9 @@ class UserInfo extends React.PureComponent {
   }
 }
 
-const mapStateToProps = ({ users, ui, games, charts }) => ({
+const mapStateToProps = ({
+  users, ui, games, charts,
+}) => ({
   users,
   ui,
   games,

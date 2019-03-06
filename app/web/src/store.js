@@ -2,7 +2,7 @@ import {
   createStore, combineReducers, applyMiddleware, compose,
 } from 'redux';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
-import { createLogger } from 'redux-logger';
+import { createLogger } from 'redux-logger'; //eslint-disable-line
 import createSagaMiddleware from 'redux-saga';
 import usersReducer from './ducks/users';
 import uiReducer from './ducks/ui';

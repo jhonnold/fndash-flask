@@ -41,9 +41,7 @@ const Stat = styled.div`
 `;
 
 function Stats({
-  data: {
-    wins, matches, kd, kills,
-  },
+  matchesplayed, kd, kills, placements,
 }) {
   return (
     <StatsDiv>
@@ -52,14 +50,14 @@ function Stats({
           <h2>
             <i className="fas fa-trophy" />
           </h2>
-          <AnimatedNumber number={wins} noDecimal />
+          <AnimatedNumber number={placements.placetop1} noDecimal />
           <h3>Victories</h3>
         </Stat>
         <Stat>
           <h2>
             <i className="fas fa-gamepad" />
           </h2>
-          <AnimatedNumber number={matches} noDecimal />
+          <AnimatedNumber number={matchesplayed} noDecimal />
           <h3>Matches</h3>
         </Stat>
         <Stat>
@@ -80,5 +78,14 @@ function Stats({
     </StatsDiv>
   );
 }
+
+Stats.defaultProps = {
+  matchesplayed: 0,
+  kd: 0,
+  kills: 0,
+  placements: {
+    placetop1: 0,
+  },
+};
 
 export default Stats;

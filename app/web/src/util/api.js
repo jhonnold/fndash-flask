@@ -8,7 +8,7 @@ export const apiBase = axios.create({
 
 export default {
   getUsers: () => apiBase.get('/users'),
-  getUser: id => apiBase.get(`/users/${id}`),
+  getUser: id => apiBase.get(`/users/${id}?stats=true`),
   getUserGames: (id, mode) => apiBase.get(`/users/${id}/games?m=${mode}`),
   getUserRecords: id => apiBase.get(`/users/${id}/game_records`),
   getKdChart: (id, mode) => apiBase.get(`/users/${id}/kd?m=${mode}`),

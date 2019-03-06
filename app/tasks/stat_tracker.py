@@ -37,9 +37,14 @@ def stat_tracker():
         pc_data = json.get('data').get('keyboardmouse')
         for playlist in pc_data.keys():
             for mode in pc_data.get(playlist, dict()).keys():
-                stat = user.stats.filter_by(mode=mode, name=playlist).first()
                 mode_data = pc_data.get(playlist).get(mode)
 
+                if (playlist in ['defaultsolo', 'defaultduo', 'defaultsquad']):
+                    mode = playlist[7:]
+                    playlist = 'default'
+
+                stat = user.stats.filter_by(mode=mode, name=playlist).first()
+                
                 if (stat is None):
                     logger.debug('No stat for {} regarding {}/{}'.format(
                         user, playlist, mode))

@@ -28,7 +28,17 @@ class Stat(db.Model):
         data = dict(**self.__dict__)
         del data['_sa_instance_state']
 
-        wins = self.placements.get('placetop1', 0)
-        data['kd'] = self.kills / (self.matchesplayed - wins)
+        # Sometimes JSONB stores dict as list?
+        placements = self.placements
+        if (type(placements) is list):
+            placements = placements[0]
+        
+        wins = placements.get('placetop1', 0)
+
+        denominator = self.matchesplayed - wins
+        if denominator == 0:
+            denominator = 1
+
+        data['kd'] = self.kills / denominator
 
         return data
