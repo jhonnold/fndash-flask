@@ -13,12 +13,6 @@ const GameDiv = styled.div`
     color: ${({ theme }) => theme.primary};
   }
 
-  h4 {
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%);
-  }
-
   p {
     margin: 0;
   }
@@ -38,6 +32,12 @@ const GameDiv = styled.div`
   }
 `;
 
+const H5 = styled.h5`
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+`;
+
 function Game({
   data: {
     game_type: gameType, time_played: timePlayed, kills, placement, username,
@@ -47,7 +47,7 @@ function Game({
     <GameDiv>
       <div>
         <h5>{gameType} Match</h5>
-        {username && <h5>{username}</h5>}
+        {username && <H5>{username}</H5>}
         <p>{moment(timePlayed).format('MMM Do - h:mm a')}</p>
       </div>
       <div>
