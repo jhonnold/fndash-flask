@@ -74,8 +74,8 @@ def check_games():
 
             user.kills_duo = duo_stats.get('kills', 0)
             user.placetop1_duo = duo_stats.get('placetop1', 0)
-            user.placetop10_duo = duo_stats.get('placetop10', 0)
-            user.placetop25_duo = duo_stats.get('placetop25', 0)
+            user.placetop5_duo = duo_stats.get('placetop5', 0)
+            user.placetop12_duo = duo_stats.get('placetop12', 0)
             user.matchesplayed_duo = duo_stats.get('matchesplayed', 0)
             user.minutesplayed_duo = duo_stats.get('minutesplayed', 0)
             user.lastmodified_duo = duo_stats.get('lastmodified', 0)
@@ -101,8 +101,8 @@ def check_games():
 
             user.kills_squad = squad_stats.get('kills', 0)
             user.placetop1_squad = squad_stats.get('placetop1', 0)
-            user.placetop10_squad = squad_stats.get('placetop10', 0)
-            user.placetop25_squad = squad_stats.get('placetop25', 0)
+            user.placetop3_squad = squad_stats.get('placetop3', 0)
+            user.placetop6_squad = squad_stats.get('placetop6', 0)
             user.matchesplayed_squad = squad_stats.get('matchesplayed', 0)
             user.minutesplayed_squad = squad_stats.get('minutesplayed', 0)
             user.lastmodified_squad = squad_stats.get('lastmodified', 0)
