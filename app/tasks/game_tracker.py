@@ -72,13 +72,13 @@ def check_games():
                     placement=placement)
                 db.session.add(game)
 
-            user.kills_solo = duo_stats.get('kills', 0)
-            user.placetop1_solo = duo_stats.get('placetop1', 0)
-            user.placetop10_solo = duo_stats.get('placetop10', 0)
-            user.placetop25_solo = duo_stats.get('placetop25', 0)
-            user.matchesplayed_solo = duo_stats.get('matchesplayed', 0)
-            user.minutesplayed_solo = duo_stats.get('minutesplayed', 0)
-            user.lastmodified_solo = duo_stats.get('lastmodified', 0)
+            user.kills_duo = duo_stats.get('kills', 0)
+            user.placetop1_duo = duo_stats.get('placetop1', 0)
+            user.placetop10_duo = duo_stats.get('placetop10', 0)
+            user.placetop25_duo = duo_stats.get('placetop25', 0)
+            user.matchesplayed_duo = duo_stats.get('matchesplayed', 0)
+            user.minutesplayed_duo = duo_stats.get('minutesplayed', 0)
+            user.lastmodified_duo = duo_stats.get('lastmodified', 0)
 
         if squad_stats['matchesplayed'] != user.matchesplayed_squad:
             logger.debug('{} played a squad game'.format(user))
@@ -99,13 +99,13 @@ def check_games():
                     placement=placement)
                 db.session.add(game)
 
-            user.kills_solo = squad_stats.get('kills', 0)
-            user.placetop1_solo = squad_stats.get('placetop1', 0)
-            user.placetop10_solo = squad_stats.get('placetop10', 0)
-            user.placetop25_solo = squad_stats.get('placetop25', 0)
-            user.matchesplayed_solo = squad_stats.get('matchesplayed', 0)
-            user.minutesplayed_solo = squad_stats.get('minutesplayed', 0)
-            user.lastmodified_solo = squad_stats.get('lastmodified', 0)
+            user.kills_squad = squad_stats.get('kills', 0)
+            user.placetop1_squad = squad_stats.get('placetop1', 0)
+            user.placetop10_squad = squad_stats.get('placetop10', 0)
+            user.placetop25_squad = squad_stats.get('placetop25', 0)
+            user.matchesplayed_squad = squad_stats.get('matchesplayed', 0)
+            user.minutesplayed_squad = squad_stats.get('minutesplayed', 0)
+            user.lastmodified_squad = squad_stats.get('lastmodified', 0)
 
         if total_stats['matchesplayed'] != user.matchesplayed_total:
             user.kills_total = total_stats.get('kills', 0)
