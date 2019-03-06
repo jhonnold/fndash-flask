@@ -12,6 +12,7 @@ import TimePlayedChart from '../components/TimePlayedChart';
 import TimePlayed from '../components/TimePlayed';
 import Column from '../components/Column';
 import Container from '../components/Container';
+import Footer from '../components/Footer';
 
 const ReversedContainer = styled(Container)`
   flex-direction: row-reverse;
@@ -163,6 +164,7 @@ class UserInfo extends React.PureComponent {
             </Column>
           </ReversedContainer>
         </MinuteData>
+        <Footer />
       </React.Fragment>
     );
   }
