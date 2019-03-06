@@ -29,11 +29,10 @@ class Stat(db.Model):
         del data['_sa_instance_state']
 
         # Sometimes JSONB stores dict as list?
-        placements = self.placements
-        if (type(placements) is list):
-            placements = placements[0]
+        if (type(self.placements) is list):
+            data['placements'] = data.get('placements')[0]
         
-        wins = placements.get('placetop1', 0)
+        wins = data.get('placements', dict()).get('placetop1', 0)
 
         denominator = self.matchesplayed - wins
         if denominator == 0:
