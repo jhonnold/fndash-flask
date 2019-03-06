@@ -21,7 +21,7 @@ const FooterDiv = styled.div`
     margin-bottom: 0;
 
     a {
-      margin: 0 .6rem;
+      margin: 0 .4rem;
       color: ${({ theme }) => theme.white}!important;
     }
   }
