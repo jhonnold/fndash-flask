@@ -29,11 +29,11 @@ def check_games():
         if solo_stats['matchesplayed'] != user.matchesplayed_solo:
             logger.debug('{} played a solo game'.format(user))
             placement = 'Loss'
-            if user.placetop1_solo != solo_stats['placetop1']:
+            if user.placetop1_solo != solo_stats.get('placetop1', 0):
                 placement = 'Victory'
-            elif user.placetop10_solo != solo_stats['placetop10']:
+            elif user.placetop10_solo != solo_stats.get('placetop10', 0):
                 placement = 'Top 10'
-            elif user.placetop25_solo != solo_stats['placetop25']:
+            elif user.placetop25_solo != solo_stats.get('placetop25', 0):
                 placement = 'Top 25'
 
             kills = solo_stats['kills'] - user.kills_solo
@@ -45,22 +45,22 @@ def check_games():
                     placement=placement)
                 db.session.add(game)
 
-            user.kills_solo = solo_stats['kills']
-            user.placetop1_solo = solo_stats['placetop1']
-            user.placetop10_solo = solo_stats['placetop10']
-            user.placetop25_solo = solo_stats['placetop25']
-            user.matchesplayed_solo = solo_stats['matchesplayed']
-            user.minutesplayed_solo = solo_stats['minutesplayed']
-            user.lastmodified_solo = solo_stats['lastmodified']
+            user.kills_solo = solo_stats.get('kills', 0)
+            user.placetop1_solo = solo_stats.get('placetop1', 0)
+            user.placetop10_solo = solo_stats.get('placetop10', 0)
+            user.placetop25_solo = solo_stats.get('placetop25', 0)
+            user.matchesplayed_solo = solo_stats.get('matchesplayed', 0)
+            user.minutesplayed_solo = solo_stats.get('minutesplayed', 0)
+            user.lastmodified_solo = solo_stats.get('lastmodified', 0)
 
         if duo_stats['matchesplayed'] != user.matchesplayed_duo:
             logger.debug('{} played a duo game'.format(user))
             placement = 'Loss'
-            if user.placetop1_duo != duo_stats['placetop1']:
+            if user.placetop1_duo != duo_stats.get('placetop1', 0):
                 placement = 'Victory'
-            elif user.placetop5_duo != duo_stats['placetop5']:
+            elif user.placetop5_duo != duo_stats.get('placetop5', 0):
                 placement = 'Top 5'
-            elif user.placetop12_duo != duo_stats['placetop12']:
+            elif user.placetop12_duo != duo_stats.get('placetop12', 0):
                 placement = 'Top 12'
 
             kills = duo_stats['kills'] - user.kills_duo
@@ -72,22 +72,22 @@ def check_games():
                     placement=placement)
                 db.session.add(game)
 
-            user.kills_duo = duo_stats['kills']
-            user.placetop1_duo = duo_stats['placetop1']
-            user.placetop5_duo = duo_stats['placetop5']
-            user.placetop12_duo = duo_stats['placetop12']
-            user.matchesplayed_duo = duo_stats['matchesplayed']
-            user.minutesplayed_duo = duo_stats['minutesplayed']
-            user.lastmodified_duo = duo_stats['lastmodified']
+            user.kills_solo = duo_stats.get('kills', 0)
+            user.placetop1_solo = duo_stats.get('placetop1', 0)
+            user.placetop10_solo = duo_stats.get('placetop10', 0)
+            user.placetop25_solo = duo_stats.get('placetop25', 0)
+            user.matchesplayed_solo = duo_stats.get('matchesplayed', 0)
+            user.minutesplayed_solo = duo_stats.get('minutesplayed', 0)
+            user.lastmodified_solo = duo_stats.get('lastmodified', 0)
 
         if squad_stats['matchesplayed'] != user.matchesplayed_squad:
             logger.debug('{} played a squad game'.format(user))
             placement = 'Loss'
-            if user.placetop1_squad != squad_stats['placetop1']:
+            if user.placetop1_squad != squad_stats.get('placetop1', 0):
                 placement = 'Victory'
-            elif user.placetop3_squad != squad_stats['placetop3']:
+            elif user.placetop3_squad != squad_stats.get('placetop3', 0):
                 placement = 'Top 3'
-            elif user.placetop6_squad != squad_stats['placetop6']:
+            elif user.placetop6_squad != squad_stats.get('placetop6', 0):
                 placement = 'Top 6'
 
             kills = squad_stats['kills'] - user.kills_squad
@@ -99,18 +99,18 @@ def check_games():
                     placement=placement)
                 db.session.add(game)
 
-            user.kills_squad = squad_stats['kills']
-            user.placetop1_squad = squad_stats['placetop1']
-            user.placetop3_squad = squad_stats['placetop3']
-            user.placetop6_squad = squad_stats['placetop6']
-            user.matchesplayed_squad = squad_stats['matchesplayed']
-            user.minutesplayed_squad = squad_stats['minutesplayed']
-            user.lastmodified_squad = squad_stats['lastmodified']
+            user.kills_solo = squad_stats.get('kills', 0)
+            user.placetop1_solo = squad_stats.get('placetop1', 0)
+            user.placetop10_solo = squad_stats.get('placetop10', 0)
+            user.placetop25_solo = squad_stats.get('placetop25', 0)
+            user.matchesplayed_solo = squad_stats.get('matchesplayed', 0)
+            user.minutesplayed_solo = squad_stats.get('minutesplayed', 0)
+            user.lastmodified_solo = squad_stats.get('lastmodified', 0)
 
         if total_stats['matchesplayed'] != user.matchesplayed_total:
-            user.kills_total = total_stats['kills']
-            user.wins_total = total_stats['placetop1']
-            user.matchesplayed_total = total_stats['matchesplayed']
+            user.kills_total = total_stats.get('kills', 0)
+            user.wins_total = total_stats.get('placetop1', 0)
+            user.matchesplayed_total = total_stats.get('matchesplayed', 0)
             # These were removed?
             # user.hoursplayed_total = total_stats['hoursplayed']
             # user.lastmodified_total = total_stats['lastupdate']
