@@ -1,9 +1,11 @@
 import datetime
 
 from functools import reduce
+from sqlalchemy.orm import joinedload
 from flask import Blueprint, jsonify, request
 from app.models import User, Game
 from app.util import get_user, kd_per_day, games_per_day
+from app.database import db
 
 api = Blueprint('api', __name__, url_prefix='/api')
 
@@ -12,6 +14,19 @@ api = Blueprint('api', __name__, url_prefix='/api')
 def home():
     return jsonify(foo='bar')
 
+
+@api.route('/recent_games')
+def recent_games():
+    games = db.session.query(Game).options(joinedload(Game.user)).order_by(Game.time_played.desc()).limit(20).all()
+    serialized_recent_games = list(
+        map(lambda game: dict(game_type=game.game_type,
+                            username=game.user.username,
+                            kills=game.kills, 
+                            placement=game.placement,
+                            time_played=game.time_played), games)
+    )
+
+    return jsonify(serialized_recent_games)
 
 @api.route('/users')
 def users():

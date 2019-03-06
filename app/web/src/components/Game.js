@@ -6,9 +6,16 @@ const GameDiv = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.border};
   padding: 0.5rem;
   margin-bottom: 1rem;
+  position: relative;
 
-  h5 {
+  h5, h4 {
     color: ${({ theme }) => theme.primary};
+  }
+
+  h4 {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
   }
 
   p { margin: 0; }
@@ -30,13 +37,16 @@ const GameDiv = styled.div`
 
 function Game({
   data: {
-    game_type: gameType, time_played: timePlayed, kills, placement,
+    game_type: gameType, time_played: timePlayed, kills, placement, username,
   },
 }) {
   return (
     <GameDiv>
       <div>
         <h5>{gameType} Match</h5>
+        {username !== undefined
+          && <h4>{username}</h4>
+        }
         <p>{moment(timePlayed).format('MMM Do - h:mm a')}</p>
       </div>
       <div>
