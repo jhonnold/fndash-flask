@@ -7,6 +7,7 @@ import GamesList from '../components/GamesList';
 import Column from '../components/Column';
 import SearchBar from '../components/SearchBar';
 import Container from '../components/Container';
+import Footer from '../components/Footer';
 import { theme as mainTheme } from '../assets/constants/colors';
 import logo from '../assets/images/vertical-logo.png';
 
@@ -140,6 +141,7 @@ class Homepage extends React.PureComponent {
             <GamesList games={data} title="All Recent Games" />
           </HomeColumn>
         </HomeContainer>
+        <Footer />
       </React.Fragment>
     );
   }
