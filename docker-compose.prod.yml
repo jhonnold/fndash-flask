@@ -24,8 +24,6 @@ services:
       - 5000:5000
     depends_on:
       - postgres
-    volumes:
-      - .:/usr/share/fn-dash
 
   redis:
     restart: always
