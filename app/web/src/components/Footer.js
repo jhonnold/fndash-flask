@@ -9,7 +9,7 @@ const FooterDiv = styled.div`
   text-align: center;
   box-shadow: 0px -4px 2px -2px #131313;
   margin-top: 3rem;
-  
+
   a {
     font-size: 16px;
     margin: 0 1rem;
@@ -21,7 +21,7 @@ const FooterDiv = styled.div`
     margin-bottom: 0;
 
     a {
-      margin: 0 .4rem;
+      margin: 0 0.4rem;
       color: ${({ theme }) => theme.white}!important;
     }
   }
@@ -41,14 +41,22 @@ function Footer() {
     <FooterDiv>
       <FooterContainer>
         <div>
-          <a href="https://fortniteapi.com/" rel="noopener noreferrer" target="_blank">fortniteapi.com</a>
-          <a href="https://github.com/jhonnold/fndash" rel="noopener noreferrer" target="_blank"><i className="fab fa-github"></i></a>
+          <a href="https://fortniteapi.com/" rel="noopener noreferrer" target="_blank">
+            fortniteapi.com
+          </a>
+          <a href="https://github.com/jhonnold/fndash" rel="noopener noreferrer" target="_blank">
+            <i className="fab fa-github" />
+          </a>
         </div>
         <p>
           Created By
-          <a href="https://github.com/jhonnold" rel="noopener noreferrer" target="_blank">Jay Honnold</a>
+          <a href="https://github.com/jhonnold" rel="noopener noreferrer" target="_blank">
+            Jay Honnold
+          </a>
           and
-          <a href="https://github.com/JackSomm" rel="noopener noreferrer" target="_blank">Jack Sommer</a>
+          <a href="https://github.com/JackSomm" rel="noopener noreferrer" target="_blank">
+            Jack Sommer
+          </a>
         </p>
       </FooterContainer>
     </FooterDiv>
