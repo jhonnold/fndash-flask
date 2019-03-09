@@ -41,7 +41,7 @@ def kd_per_day(user, mode):
         # This is all logic for calculating daily_kds#
         ##############################################
         if mode != 'all':
-            games = user.games.filter_by(game_type=mode.capitalize()).filter(
+            games = user.games.filter_by(mode=mode).filter(
                 Game.time_played >= start_date).filter(
                     Game.time_played < end_date)
         else:
