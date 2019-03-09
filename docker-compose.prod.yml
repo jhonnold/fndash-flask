@@ -9,12 +9,6 @@ services:
       - POSTGRES_DB=fndash
     volumes:
       - db:/var/lib/postgresql/data
-    logging:
-      driver: awslogs
-      options:
-        awslogs-region: us-east-2
-        awslogs-group: fndash
-        awslogs-stream: postgres
 
   app:
     build:
@@ -30,24 +24,12 @@ services:
       - 5000:5000
     depends_on:
       - postgres
-    logging:
-      driver: awslogs
-      options:
-        awslogs-region: us-east-2
-        awslogs-group: fndash
-        awslogs-stream: app
 
   redis:
     restart: always
     image: redis
     volumes:
       - redis:/data
-    logging:
-      driver: awslogs
-      options:
-        awslogs-region: us-east-2
-        awslogs-group: fndash
-        awslogs-stream: redis
 
   celery:
     build:
@@ -59,12 +41,6 @@ services:
     depends_on:
       - postgres
       - redis
-    logging:
-      driver: awslogs
-      options:
-        awslogs-region: us-east-2
-        awslogs-group: fndash
-        awslogs-stream: celery
   
   upgrade:
     build:
@@ -76,12 +52,6 @@ services:
       - FLASK_APP=manage.py
     links:
       - postgres
-    logging:
-      driver: awslogs
-      options:
-        awslogs-region: us-east-2
-        awslogs-group: fndash
-        awslogs-stream: upgrade
 
 volumes:
   db:
