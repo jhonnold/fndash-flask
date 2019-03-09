@@ -1,15 +1,6 @@
 version: '3'
 
 services:
-  postgres:
-    restart: always
-    image: postgres:10
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=fndash
-    volumes:
-      - db:/var/lib/postgresql/data
-
   app:
     build:
       context: .
@@ -22,8 +13,6 @@ services:
       - FLASK_ENV=production
     ports:
       - 5000:5000
-    depends_on:
-      - postgres
 
   redis:
     restart: always
@@ -39,7 +28,6 @@ services:
     restart: always
     command: sh docker/docker.celery.sh
     depends_on:
-      - postgres
       - redis
   
   upgrade:
@@ -47,12 +35,9 @@ services:
       context: .
       dockerfile: docker/DockerFileProd
     image: fn-dash-prod
-    command: bash -c 'while ! nc -q 1 postgres 5432 </dev/null; do sleep 1; done && flask db upgrade'
+    command: bash -c 'while ! nc -q 1 ${DB_HOST} 5432 </dev/null; do sleep 1; done && flask db upgrade'
     environment:
       - FLASK_APP=manage.py
-    links:
-      - postgres
 
 volumes:
-  db:
   redis:
