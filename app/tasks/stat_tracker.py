@@ -1,6 +1,6 @@
 import celery, requests, datetime
 
-from app import db
+from app import db, app
 from app.models import User, Game, Stat
 from celery.utils.log import get_task_logger
 
@@ -20,14 +20,25 @@ def get_placements(stat):
     return placements
 
 
-@celery.task()
-def stat_tracker():
-    users = User.query.all()
+@celery.task(ignore_result=True)
+def get_user_from_fortnite_api(url):
+    with app.app_context():
+        r = requests.get(url)
+        r.raise_for_status()
 
-    for user in users:
-        logger.info('Requesting user info for {}'.format(user))
-        r = requests.get(USER_STATS_ENDPOINT.format(user.uid))
         json = r.json()
+        return json
+
+
+@celery.task(ignore_result=True)
+def update_user_stats(json, user_id):
+    with app.app_context():
+        user = User.query.filter_by(id=user_id).first()
+
+        if json is None or 'error' in json:
+            # Simply didn't get anything back
+            logger.warn('There was an error in fetching data for {}'.format(user))
+            return
 
         total_stats = json.get('overallData').get('defaultModes')
         user.kills_total = total_stats.get('kills', 0)
@@ -44,11 +55,11 @@ def stat_tracker():
                     playlist = 'default'
 
                 stat = user.stats.filter_by(mode=mode, name=playlist).first()
-                
+
                 if (stat is None):
-                    logger.debug('No stat for {} regarding {}/{}'.format(
+                    logger.info('No stat for {} regarding {}/{}'.format(
                         user, playlist, mode))
-                    logger.debug('Creating...')
+                    logger.info('Creating...')
                     stat = Stat(
                         user_id=user.id,
                         name=playlist,
@@ -62,8 +73,6 @@ def stat_tracker():
                     db.session.add(stat)
                     continue
 
-                logger.debug('Matched stat for {} regarding {}/{}'.format(
-                    user, playlist, mode))
                 if (mode_data.get('matchesplayed', 0) != stat.matchesplayed):
                     stat.placements = get_placements(mode_data),
                     stat.kills = mode_data.get('kills', 0)
@@ -72,4 +81,16 @@ def stat_tracker():
                     stat.minutesplayed = mode_data.get('minutesplayed', 0)
                     stat.updated = datetime.datetime.now()
 
-        db.session.commit()
+            db.session.commit()
+
+
+@celery.task(ignore_result=True)
+def stat_tracker():
+    with app.app_context():
+        users = User.query.all()
+
+        for user in users:
+            logger.info('Starting to update info for {}'.format(user))
+            get_user_from_fortnite_api.apply_async(
+                (USER_STATS_ENDPOINT.format(user.uid), ),
+                link=update_user_stats.s(user.id))

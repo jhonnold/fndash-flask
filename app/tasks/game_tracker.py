@@ -1,6 +1,6 @@
 import celery, requests
 
-from app import db
+from app import db, app
 from app.models import User, Game
 from celery.utils.log import get_task_logger
 
@@ -10,15 +10,26 @@ BASE_URL = 'https://fortnite-public-api.theapinetwork.com/prod09'
 USER_STATS_ENDPOINT = BASE_URL + '/users/public/br_stats_v2?platform=pc&user_id={}'
 
 
-@celery.task()
-def check_games():
-    users = User.query.all()
 
-    for user in users:
-        r = requests.get(USER_STATS_ENDPOINT.format(user.uid))
+@celery.task(ignore_result=True)
+def get_user_from_fortnite_api(url):
+    with app.app_context():
+        r = requests.get(url)
+        r.raise_for_status()
+
         json = r.json()
+        return json
 
-        logger.info('Requesting user info for {}'.format(user))
+@celery.task(ignore_result=True)
+def update_old_user_stats(json, user_id):
+    with app.app_context():
+        user = User.query.filter_by(id=user_id).first()
+
+        if json is None or 'error' in json:
+            # Simply didn't get anything back
+            logger.warn('[OLD STATS] There was an error in fetching data for {}'.format(user))
+            return
+
         total_stats = json['overallData']['defaultModes']
 
         keyboardmouse_data = json['data']['keyboardmouse']
@@ -27,7 +38,7 @@ def check_games():
         squad_stats = keyboardmouse_data['defaultsquad']['default']
 
         if solo_stats['matchesplayed'] != user.matchesplayed_solo:
-            logger.debug('{} played a solo game'.format(user))
+            logger.info('{} played a solo game'.format(user))
             placement = 'Loss'
             if user.placetop1_solo != solo_stats.get('placetop1', 0):
                 placement = 'Victory'
@@ -40,8 +51,9 @@ def check_games():
             if kills >= 0 and kills <= 99:
                 game = Game(
                     user_id=user.id,
-                    game_type='Solo',
+                    mode='solo',
                     kills=kills,
+                    playlist='default',
                     placement=placement)
                 db.session.add(game)
 
@@ -54,7 +66,7 @@ def check_games():
             user.lastmodified_solo = solo_stats.get('lastmodified', 0)
 
         if duo_stats['matchesplayed'] != user.matchesplayed_duo:
-            logger.debug('{} played a duo game'.format(user))
+            logger.info('{} played a duo game'.format(user))
             placement = 'Loss'
             if user.placetop1_duo != duo_stats.get('placetop1', 0):
                 placement = 'Victory'
@@ -67,7 +79,8 @@ def check_games():
             if kills >= 0 and kills <= 99:
                 game = Game(
                     user_id=user.id,
-                    game_type='Duo',
+                    mode='duo',
+                    playlist='default',
                     kills=kills,
                     placement=placement)
                 db.session.add(game)
@@ -81,7 +94,7 @@ def check_games():
             user.lastmodified_duo = duo_stats.get('lastmodified', 0)
 
         if squad_stats['matchesplayed'] != user.matchesplayed_squad:
-            logger.debug('{} played a squad game'.format(user))
+            logger.info('{} played a squad game'.format(user))
             placement = 'Loss'
             if user.placetop1_squad != squad_stats.get('placetop1', 0):
                 placement = 'Victory'
@@ -94,7 +107,8 @@ def check_games():
             if kills >= 0 and kills <= 99:
                 game = Game(
                     user_id=user.id,
-                    game_type='Squad',
+                    mode='Squad',
+                    playlist='default',
                     kills=kills,
                     placement=placement)
                 db.session.add(game)
@@ -111,8 +125,16 @@ def check_games():
             user.kills_total = total_stats.get('kills', 0)
             user.wins_total = total_stats.get('placetop1', 0)
             user.matchesplayed_total = total_stats.get('matchesplayed', 0)
-            # These were removed?
-            # user.hoursplayed_total = total_stats['hoursplayed']
-            # user.lastmodified_total = total_stats['lastupdate']
 
         db.session.commit()
+
+@celery.task(ignore_result=True)
+def check_games():
+    with app.app_context():
+        users = User.query.all()
+
+        for user in users:
+            logger.info('Starting to update info for {}'.format(user))
+            get_user_from_fortnite_api.apply_async(
+                (USER_STATS_ENDPOINT.format(user.uid), ),
+                link=update_old_user_stats.s(user.id))

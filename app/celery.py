@@ -14,7 +14,6 @@ class CeleryConfig(object):
     CELERYBEAT_SCHEDULE = {
         'game_tracker': {
             'task': 'app.tasks.game_tracker.check_games',
-            # Every minute for watching games
             'schedule': crontab(minute='*'),
         },
         'stat_tracker': {
@@ -23,7 +22,6 @@ class CeleryConfig(object):
         },
         'kd_monitor': {
             'task': 'app.tasks.kd_monitor.record_stats',
-            # Everyday store current stats
             'schedule': crontab(hour='5', minute='0'),
         },
         'user_monitor': {
