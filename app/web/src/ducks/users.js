@@ -144,4 +144,7 @@ export const actions = {
   requestUser,
   receivedUser,
   rejectedUser,
+  requestJoinUser,
+  receivedJoinUser,
+  rejectedJoinUser,
 };

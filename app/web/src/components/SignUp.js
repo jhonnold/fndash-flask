@@ -13,20 +13,18 @@ const SignUpContainer = styled(Container)`
 `;
 
 const Button = styled.button`
-  background-color: ${({ theme }) => theme.white};
-  padding: .5rem 2rem;
-  color: ${({ theme }) => theme.black};
+  color: ${({ theme }) => theme.white};
   border-radius: 4px;
   cursor: pointer;
+  font-size: 18px;
 
   &:hover {
-
+    color: ${({ theme }) => theme.black};
   }
 `;
 
 const Span = styled.span`
   font-size: 18px;
-  font-weight: 500;
   margin-right: 2rem;
 `;
 
