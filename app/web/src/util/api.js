@@ -16,4 +16,5 @@ export default {
   getPlacementChart: id => apiBase.get(`/users/${id}/placements`),
   getGamesPerDayChart: (id, mode) => apiBase.get(`/users/${id}/game_counts?m=${mode}`),
   getTimePlayedChart: id => apiBase.get(`/users/${id}/time_played`),
+  postNewUser: id => apiBase.post(`/new_user/${id}`),
 };

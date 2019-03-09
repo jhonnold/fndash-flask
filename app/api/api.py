@@ -121,3 +121,10 @@ def time_played(user_id):
     return jsonify(dict(
         labels=['Solo Hours', 'Duo Hours', 'Squad Hours'], 
         datasets=[[hours_solo, hours_duo, hours_squad]]))
+
+
+@api.route("/new_user/<user_id>", methods=["POST"])
+def new_user(user_id):
+    new_user = User(uid=user_id)
+    db.session.add(new_user)
+    db.session.commit()

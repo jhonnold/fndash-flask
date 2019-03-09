@@ -8,6 +8,7 @@ import Column from '../components/Column';
 import SearchBar from '../components/SearchBar';
 import Container from '../components/Container';
 import Footer from '../components/Footer';
+import SignUp from '../components/SignUp';
 import { theme as mainTheme } from '../assets/constants/colors';
 import logo from '../assets/images/vertical-logo.png';
 
@@ -132,6 +133,7 @@ class Homepage extends React.PureComponent {
 
     return (
       <React.Fragment>
+        <SignUp />
         <Banner>
           <img src={logo} alt="Logo" />
         </Banner>
