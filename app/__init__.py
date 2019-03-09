@@ -5,14 +5,12 @@ from flask_cors import CORS
 from celery import Celery
 from app.api import api
 from app.database import db
-from app.config import DevConfig, ProdConfig, RCConfig
+from app.config import DevConfig, ProdConfig
 from app.celery import CeleryConfig
 
 app = Flask(__name__, static_folder='web/build')
-if os.environ.get('FLASK_ENV') == 'production':
+if os.environ.get('FLASK_ENV') == 'production' or os.environ.get('CI'):
     app.config.from_object(ProdConfig)
-elif os.environ.get('FLASK_ENV') == 'rc':
-    app.config.from_object(RCConfig)
 else:
     CORS(app)
     app.config.from_object(DevConfig)

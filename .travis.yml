@@ -1,7 +1,3 @@
-services:
-  - postgresql
-  - redis-server
-
 matrix:
   include:
     - language: python
