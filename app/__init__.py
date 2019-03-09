@@ -9,12 +9,13 @@ from app.config import DevConfig, ProdConfig, RCConfig
 from app.celery import CeleryConfig
 
 app = Flask(__name__, static_folder='web/build')
+CORS(app)
+
 if os.environ.get('FLASK_ENV') == 'production':
     app.config.from_object(ProdConfig)
 elif os.environ.get('FLASK_ENV') == 'rc':
     app.config.from_object(RCConfig)
 else:
-    CORS(app)
     app.config.from_object(DevConfig)
 
 db.init_app(app)

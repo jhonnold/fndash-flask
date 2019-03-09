@@ -31,9 +31,9 @@ export function* requestUserSaga() {
 function* requestJoinUser({ payload }) {
   try {
     yield call(api.postNewUser, payload);
-    yield put(actions.receivedUser());
+    yield put(actions.receivedJoinUser());
   } catch (err) {
-    yield put(actions.rejectedUser(err));
+    yield put(actions.rejectedJoinUser(err.response.data));
   }
 }
 

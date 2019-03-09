@@ -3,20 +3,37 @@ import styled from 'styled-components';
 import Container from './Container';
 
 const Wrap = styled.div`
+  position: relative;
   background-color: ${({ theme }) => theme.primary};
 `;
 
+const CloseButton = styled.span`
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+  height: 1rem;
+  width: 1rem;
+  cursor: pointer;
+
+  i {
+    font-size: 1rem;
+    color: ${({ theme }) => theme.white};
+
+    &:hover {
+      color: ${({ theme }) => theme.black};
+    }
+  }
+`;
+
 const SignUpContainer = styled(Container)`
-  padding: 1rem 0;
+  padding: 1rem;
   justify-content: center;
   align-items: center;
 `;
 
 const Button = styled.button`
   color: ${({ theme }) => theme.white};
-  border-radius: 4px;
   cursor: pointer;
-  font-size: 18px;
 
   &:hover {
     color: ${({ theme }) => theme.black};
@@ -24,30 +41,86 @@ const Button = styled.button`
 `;
 
 const Span = styled.span`
-  font-size: 18px;
-  margin-right: 2rem;
+  font-weight: 400;
+  margin: 0.5rem;
+  text-align: center;
+`;
+
+const Error = styled.span`
+  font-weight: 400;
+  margin: 0.5rem;
+  text-align: center;
+  color: red;
 `;
 
 const Input = styled.input`
-  border-radius: 4px;
-  height: 2rem;
-  width: 18rem;
+  border-radius: 0.25rem;
+  width: 20rem;
   border: none;
-  margin-right: 1rem;
+  margin: 0 1rem;
+  padding: 0.25rem;
+
+  @media (max-width: 640px) {
+    width: 15rem;
+  }
 `;
 
-function SignUp() {
-  return (
-    <React.Fragment>
-      <Wrap>
-        <SignUpContainer>
-          <Span>Interested in signing up? Enter your Fortnite User ID!</Span>
-          <Input name="user_id" value="" placeholder="Enter User ID..." />
-          <Button type="submit">Join</Button>
-        </SignUpContainer>
-      </Wrap>
-    </React.Fragment>
-  );
+const Row = styled.div`
+  display: flex;
+`;
+
+class SignUp extends React.PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      uid: '',
+    };
+  }
+
+  render() {
+    const { onClose, onSubmit, users } = this.props;
+    const { uid } = this.state;
+
+    return (
+      <React.Fragment>
+        <Wrap>
+          <CloseButton onClick={onClose}>
+            <i className="fas fa-times" />
+          </CloseButton>
+          {!users.signedUp ? (
+            <SignUpContainer>
+              {!users.error ? (
+                <Span>
+                  Interested in signing up?
+                  <br />
+                  Enter your Fortnite User ID!
+                </Span>
+              ) : (
+                <Error>{users.error}</Error>
+              )}
+              <Row>
+                <Input
+                  name="user_id"
+                  value={uid}
+                  onChange={({ target }) => this.setState({ uid: target.value })}
+                  placeholder="Enter User ID..."
+                />
+                <Button onClick={() => onSubmit(uid)}>Join</Button>
+              </Row>
+            </SignUpContainer>
+          ) : (
+            <SignUpContainer>
+              <Span>
+                Thanks for Signing Up! If you refresh, your name should appear in the list of
+                options. Please wait a minute for your stats to be loaded.
+              </Span>
+            </SignUpContainer>
+          )}
+        </Wrap>
+      </React.Fragment>
+    );
+  }
 }
 
 export default SignUp;

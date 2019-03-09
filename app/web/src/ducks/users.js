@@ -26,12 +26,37 @@ const initialState = {
   error: null,
   loading: false,
   data: {},
+  signedUp: false,
 };
 
 export default (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
+    case JOIN_USER_REQUESTED: {
+      return {
+        ...state,
+        error: null,
+        loading: true,
+        signedUp: false,
+      };
+    }
+    case JOIN_USER_RECEIVED: {
+      return {
+        ...state,
+        error: null,
+        loading: false,
+        signedUp: true,
+      };
+    }
+    case JOIN_USER_REJECTED: {
+      return {
+        ...state,
+        error: payload,
+        loading: false,
+        signedUp: false,
+      };
+    }
     case USER_LIST_REQUESTED: {
       return {
         ...state,
@@ -134,7 +159,7 @@ const receivedJoinUser = () => ({
 
 const rejectedJoinUser = err => ({
   type: JOIN_USER_REJECTED,
-  payload: err.message,
+  payload: err,
 });
 
 export const actions = {
