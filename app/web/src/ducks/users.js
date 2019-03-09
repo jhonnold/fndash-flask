@@ -6,6 +6,10 @@ const USER_REQUESTED = 'fn-dash/users/USER_REQUESTED';
 const USER_RECEIVED = 'fn-dash/users/USER_RECEIVED';
 const USER_REJECTED = 'fn-dash/users/USER_REJECTED';
 
+const JOIN_USER_REQUESTED = 'fn-dash/user/NEW_USER_REQUESTED';
+const JOIN_USER_RECEIVED = 'fn-dash/user/NEW_USER_RECEIVED';
+const JOIN_USER_REJECTED = 'fn-dash/user/NEW_USER_REJECTED';
+
 export const types = {
   USER_LIST_REQUESTED,
   USER_LIST_RECEIVED,
@@ -13,6 +17,9 @@ export const types = {
   USER_REQUESTED,
   USER_RECEIVED,
   USER_REJECTED,
+  JOIN_USER_REQUESTED,
+  JOIN_USER_RECEIVED,
+  JOIN_USER_REJECTED,
 };
 
 const initialState = {
@@ -113,6 +120,20 @@ const receivedUser = user => ({
 
 const rejectedUser = err => ({
   type: USER_REJECTED,
+  payload: err.message,
+});
+
+const requestJoinUser = uid => ({
+  type: JOIN_USER_REQUESTED,
+  payload: uid,
+});
+
+const receivedJoinUser = () => ({
+  type: JOIN_USER_RECEIVED,
+});
+
+const rejectedJoinUser = err => ({
+  type: JOIN_USER_REJECTED,
   payload: err.message,
 });
 
