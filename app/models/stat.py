@@ -17,8 +17,10 @@ class Stat(db.Model):
     minutesplayed = db.Column(db.Integer(), default=0)
     updated = db.Column(db.DateTime(), default=datetime.datetime.now)
 
-    __table_args__ = (db.UniqueConstraint(
-        'user_id', 'name', 'mode', name='_name_mode_uc'), )
+    __table_args__ = (
+        db.UniqueConstraint('user_id', 'name', 'mode', name='_name_mode_uc'),
+        db.Index('_name_mode_ix', 'name', 'mode'),
+    )
 
     def __repr__(self):
         return "<Stat '{}' - '{}' for user_id: {}>".format(
