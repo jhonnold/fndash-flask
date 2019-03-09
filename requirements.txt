@@ -14,3 +14,4 @@ eventlet
 gunicorn
 
 requests
+python-dotenv
