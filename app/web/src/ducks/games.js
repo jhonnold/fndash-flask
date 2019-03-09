@@ -29,19 +29,19 @@ const initialState = {
     records: {
       solo: {
         time_played: 0,
-        game_type: 'solo',
+        mode: 'solo',
         kills: 0,
         placement: 'Loss',
       },
       duo: {
         time_played: 0,
-        game_type: 'duo',
+        mode: 'duo',
         kills: 0,
         placement: 'Loss',
       },
       squad: {
         time_played: 0,
-        game_type: 'squad',
+        mode: 'squad',
         kills: 0,
         placement: 'Loss',
       },

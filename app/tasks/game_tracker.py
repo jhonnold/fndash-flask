@@ -51,8 +51,9 @@ def update_old_user_stats(json, user_id):
             if kills >= 0 and kills <= 99:
                 game = Game(
                     user_id=user.id,
-                    game_type='Solo',
+                    mode='solo',
                     kills=kills,
+                    playlist='default',
                     placement=placement)
                 db.session.add(game)
 
@@ -78,7 +79,8 @@ def update_old_user_stats(json, user_id):
             if kills >= 0 and kills <= 99:
                 game = Game(
                     user_id=user.id,
-                    game_type='Duo',
+                    mode='duo',
+                    playlist='default',
                     kills=kills,
                     placement=placement)
                 db.session.add(game)
@@ -105,7 +107,8 @@ def update_old_user_stats(json, user_id):
             if kills >= 0 and kills <= 99:
                 game = Game(
                     user_id=user.id,
-                    game_type='Squad',
+                    mode='Squad',
+                    playlist='default',
                     kills=kills,
                     placement=placement)
                 db.session.add(game)
