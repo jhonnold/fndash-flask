@@ -9,7 +9,12 @@ class Config(object):
 
 class ProdConfig(Config):
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres@postgres/fndash'
+    DB_HOST = os.getenv('DB_HOST')
+    DB_USER = os.getenv('DB_USER')
+    DB_PASS = os.getenv('DB_PASS')
+    DB_NAME = os.getenv('DB_NAME')
+    SQLALCHEMY_DATABASE_URI = 'postgresql://{}:{}@{}:5432/{}'.format(
+        DB_USER, DB_PASS, DB_HOST, DB_NAME)
     SQLALCHEMY_ECHO = False
     CELERY_BROKER_URL = 'redis://redis:6379/0'
     CELERY_RESULT_BACKEND = 'redis://redis:6379/0'

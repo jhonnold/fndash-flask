@@ -38,7 +38,7 @@ def update_old_user_stats(json, user_id):
         squad_stats = keyboardmouse_data['defaultsquad']['default']
 
         if solo_stats['matchesplayed'] != user.matchesplayed_solo:
-            logger.debug('{} played a solo game'.format(user))
+            logger.info('{} played a solo game'.format(user))
             placement = 'Loss'
             if user.placetop1_solo != solo_stats.get('placetop1', 0):
                 placement = 'Victory'
@@ -65,7 +65,7 @@ def update_old_user_stats(json, user_id):
             user.lastmodified_solo = solo_stats.get('lastmodified', 0)
 
         if duo_stats['matchesplayed'] != user.matchesplayed_duo:
-            logger.debug('{} played a duo game'.format(user))
+            logger.info('{} played a duo game'.format(user))
             placement = 'Loss'
             if user.placetop1_duo != duo_stats.get('placetop1', 0):
                 placement = 'Victory'
@@ -92,7 +92,7 @@ def update_old_user_stats(json, user_id):
             user.lastmodified_duo = duo_stats.get('lastmodified', 0)
 
         if squad_stats['matchesplayed'] != user.matchesplayed_squad:
-            logger.debug('{} played a squad game'.format(user))
+            logger.info('{} played a squad game'.format(user))
             placement = 'Loss'
             if user.placetop1_squad != squad_stats.get('placetop1', 0):
                 placement = 'Victory'
