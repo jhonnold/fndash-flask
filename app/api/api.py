@@ -19,8 +19,7 @@ def home():
 def recent_games():
     games = db.session.query(Game).options(joinedload(Game.user)).order_by(Game.time_played.desc()).limit(20).all()
     serialized_recent_games = list(
-        map(lambda game: dict(mode=game.mode,
-                            playlist=game.playlist,
+        map(lambda game: dict(game_type=game.game_type,
                             username=game.user.username,
                             kills=game.kills, 
                             placement=game.placement,
@@ -85,7 +84,7 @@ def games(user_id):
     mode = request.args.get('m', 'all')
 
     if mode != 'all':
-        games = user.games.filter_by(mode=mode).order_by(
+        games = user.games.filter_by(game_type=mode.capitalize()).order_by(
             Game.time_played.desc()).limit(100).all()
     else:
         games = user.games.order_by(Game.time_played.desc()).limit(100).all()
@@ -98,11 +97,11 @@ def games(user_id):
 @api.route("/users/<user_id>/game_records")
 def records(user_id):
     user = get_user(user_id)
-    solo_record = user.games.filter_by(mode='solo').order_by(
+    solo_record = user.games.filter_by(game_type='Solo').order_by(
         Game.kills.desc()).first()
-    duo_record = user.games.filter_by(mode='duo').order_by(
+    duo_record = user.games.filter_by(game_type='Duo').order_by(
         Game.kills.desc()).first()
-    squad_record = user.games.filter_by(mode='squad').order_by(
+    squad_record = user.games.filter_by(game_type='Squad').order_by(
         Game.kills.desc()).first()
 
     return jsonify(
@@ -124,8 +123,8 @@ def time_played(user_id):
         datasets=[[hours_solo, hours_duo, hours_squad]]))
 
 
-@api.route("/new_user/<user_id>", methods=["POST"])
-def new_user(user_id):
-    new_user = User(uid=user_id)
+@api.route("/new_user", methods=["POST"])
+def new_user():
+    new_user = User(uid=int(request.data))
     db.session.add(new_user)
     db.session.commit()
