@@ -1,6 +1,7 @@
 import dotenv, os
 
-dotenv.load_dotenv(verbose=True)
+if not os.environ.get('CI'):
+    dotenv.load_dotenv(verbose=True)
 
 
 class Config(object):
