@@ -1,5 +1,5 @@
 export const theme = {
-  primary: '#03C03C',
+  primary: '#5dbc4f',
   lightGray: '#e6e6e6',
   mediumGray: '#cacaca',
   darkGray: '#272727',
@@ -8,6 +8,7 @@ export const theme = {
   cardBack: '#1f1f1f',
   border: 'rgba(250, 250, 250, 0.125)',
   fontColor: '#fafafa',
+  blue: '#145c9e',
 };
 
 /* eslint-disable */

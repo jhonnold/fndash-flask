@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import Container from './Container';
 
 const Wrap = styled.div`
   position: relative;
@@ -25,18 +24,25 @@ const CloseButton = styled.span`
   }
 `;
 
-const SignUpContainer = styled(Container)`
-  padding: 1rem;
+const SignUpContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  padding: 1rem;
 `;
 
 const Button = styled.button`
   color: ${({ theme }) => theme.white};
+  border: 1px solid ${({ theme }) => theme.white};
+  border-radius: 0.25rem;
+  padding: 0.125rem 0.5rem;
   cursor: pointer;
+  transition: all 0.1s ease-in;
 
   &:hover {
-    color: ${({ theme }) => theme.black};
+    color: ${({ theme }) => theme.primary};
+    background-color: ${({ theme }) => theme.white};
   }
 `;
 
@@ -44,6 +50,16 @@ const Span = styled.span`
   font-weight: 400;
   margin: 0.5rem;
   text-align: center;
+
+  a {
+    color: ${({ theme }) => theme.blue};
+    margin: 0 0.25rem;
+
+    &:hover {
+      color: ${({ theme }) => theme.blue};
+      text-decoration: underline;
+    }
+  }
 `;
 
 const Error = styled.span`
@@ -59,6 +75,7 @@ const Input = styled.input`
   border: none;
   margin: 0 1rem;
   padding: 0.25rem;
+  box-shadow: inset 0 0 4px ${({ theme }) => theme.darkGray};
 
   @media (max-width: 640px) {
     width: 15rem;
@@ -92,9 +109,10 @@ class SignUp extends React.PureComponent {
             <SignUpContainer>
               {!users.error ? (
                 <Span>
-                  Interested in signing up?
-                  <br />
-                  Enter your Fortnite User ID!
+                  Interested in signing up? Enter your
+                  <a href="https://imgur.com/a/SmzoIIY" target="_blank" rel="noreferrer noopener">
+                    Epic Account ID!
+                  </a>
                 </Span>
               ) : (
                 <Error>{users.error}</Error>
