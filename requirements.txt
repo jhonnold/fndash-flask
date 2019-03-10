@@ -15,3 +15,5 @@ gunicorn
 
 requests
 python-dotenv
+
+pytest
