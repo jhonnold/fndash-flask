@@ -1,8 +1,9 @@
-import datetime
+import datetime, requests
 
 from functools import reduce
+from sqlalchemy import exc
 from sqlalchemy.orm import joinedload
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, current_app, Response, abort
 from app.models import User, Game
 from app.util import get_user, kd_per_day, games_per_day
 from app.database import db
@@ -17,17 +18,20 @@ def home():
 
 @api.route('/recent_games')
 def recent_games():
-    games = db.session.query(Game).options(joinedload(Game.user)).order_by(Game.time_played.desc()).limit(20).all()
+    games = db.session.query(Game).options(joinedload(Game.user)).order_by(
+        Game.time_played.desc()).limit(20).all()
     serialized_recent_games = list(
-        map(lambda game: dict(mode=game.mode,
-                            playlist=game.playlist,
-                            username=game.user.username,
-                            kills=game.kills, 
-                            placement=game.placement,
-                            time_played=game.time_played), games)
-    )
+        map(
+            lambda game: dict(
+                mode=game.mode,
+                playlist=game.playlist,
+                username=game.user.username,
+                kills=game.kills,
+                placement=game.placement,
+                time_played=game.time_played), games))
 
     return jsonify(serialized_recent_games)
+
 
 @api.route('/users')
 def users():
@@ -42,7 +46,7 @@ def user(user_id):
     user = get_user(user_id)
     stats = request.args.get('stats')
     stats = (stats == 'true')
-    
+
     user_data = user.serialize(include_stats=stats)
     return jsonify(user_data)
 
@@ -119,6 +123,43 @@ def time_played(user_id):
     hours_duo = round(user.minutesplayed_duo / 60, 2)
     hours_squad = round(user.minutesplayed_squad / 60, 2)
 
-    return jsonify(dict(
-        labels=['Solo Hours', 'Duo Hours', 'Squad Hours'], 
-        datasets=[[hours_solo, hours_duo, hours_squad]]))
+    return jsonify(
+        dict(
+            labels=['Solo Hours', 'Duo Hours', 'Squad Hours'],
+            datasets=[[hours_solo, hours_duo, hours_squad]]))
+
+
+@api.route("/new_user", methods=["POST"])
+def new_user():
+    json = request.get_json()
+    if ('uid' not in json):
+        abort(Response(response='No UID Received', status=400))
+
+    uid = json.get('uid')
+
+    base = 'https://fortnite-public-api.theapinetwork.com/prod09'
+    endpoint = base + '/users/public/br_stats_v2?platform=pc&user_id={}'
+
+    r = requests.get(endpoint.format(uid))
+    res_json = r.json()
+
+    if res_json is None or 'error' in json:
+        abort(
+            Response(
+                response='Unable to locate you on Fortniteapi', status=500))
+
+    username = res_json.get('epicName')
+
+    if username is None:
+        abort(
+            Response(
+                response='Unable to locate you on Fortniteapi', status=500))
+
+    try:
+        user = User(uid=uid, username=username)
+        db.session.add(user)
+        db.session.commit()
+    except exc.IntegrityError:
+        abort(Response(response='This user already exists!', status=500))
+
+    return Response(status=200)

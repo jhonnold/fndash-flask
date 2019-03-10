@@ -37,10 +37,6 @@ class User(db.Model):
     kds = db.relationship('KD', backref='user', lazy='dynamic')
     progressions = db.relationship('UserProgressionData', backref='user', lazy='dynamic')
 
-    def __init__(self, uid, username):
-        self.uid = uid
-        self.username = username
-
     def __repr__(self):
         return "<User '{}'>".format(self.username)
 

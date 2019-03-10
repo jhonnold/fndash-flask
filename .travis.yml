@@ -1,0 +1,19 @@
+matrix:
+  include:
+    - language: python
+      python: 3.6
+      script:
+        - python -m unittest discover
+
+    - language: node_js
+      node_js: 8
+      before_install:
+        - npm i -g yarn
+      before_script:
+        - cd app/web && yarn
+      script:
+        - yarn eslint && yarn test
+
+notifications:
+  email:
+    - jayhonnold@gmail.com

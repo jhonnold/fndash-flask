@@ -3,11 +3,13 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { actions as gamesActions } from '../ducks/games';
+import { actions as userActions } from '../ducks/users';
 import GamesList from '../components/GamesList';
 import Column from '../components/Column';
 import SearchBar from '../components/SearchBar';
 import Container from '../components/Container';
 import Footer from '../components/Footer';
+import SignUp from '../components/SignUp';
 import { theme as mainTheme } from '../assets/constants/colors';
 import logo from '../assets/images/vertical-logo.png';
 
@@ -22,7 +24,6 @@ const Banner = styled.div`
     font-size: 50px;
     font-weight: 500;
     color: ${({ theme }) => theme.primary};
-    font-weight:
   }
 
   img {
@@ -115,23 +116,48 @@ const homeStyles = {
 };
 
 class Homepage extends React.PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      signupOpen: true,
+    };
+
+    this.onJoin = this.onJoin.bind(this);
+  }
+
   componentDidMount() {
-    const {
-      requestRecentGames,
-    } = this.props;
+    const { requestRecentGames } = this.props;
 
     requestRecentGames();
   }
 
+  onJoin(uid) {
+    const { requestJoinUser, rejectedJoinUser } = this.props;
+
+    if (uid.length !== 32) {
+      rejectedJoinUser('Invalid UID');
+      return;
+    }
+
+    requestJoinUser(uid);
+  }
+
   render() {
-    const {
-      games,
-    } = this.props;
+    const { signupOpen } = this.state;
+    const { games, users } = this.props;
 
     const data = games.data.games;
 
     return (
       <React.Fragment>
+        {signupOpen && (
+          <SignUp
+            users={users}
+            onSubmit={this.onJoin}
+            onClose={() => this.setState({ signupOpen: false })}
+          />
+        )}
         <Banner>
           <img src={logo} alt="Logo" />
         </Banner>
@@ -147,14 +173,15 @@ class Homepage extends React.PureComponent {
   }
 }
 
-const mapStateToProps = ({
+const mapStateToProps = ({ games, users }) => ({
   games,
-}) => ({
-  games,
+  users,
 });
 
 const matchDispatchToProps = dispatch => ({
   ...bindActionCreators(gamesActions, dispatch),
+  requestJoinUser: uid => dispatch(userActions.requestJoinUser(uid)),
+  rejectedJoinUser: err => dispatch(userActions.rejectedJoinUser(err)),
 });
 
 export default connect(

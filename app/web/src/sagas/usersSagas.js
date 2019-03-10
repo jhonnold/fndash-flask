@@ -27,3 +27,16 @@ function* requestUser({ payload }) {
 export function* requestUserSaga() {
   yield takeEvery(types.USER_REQUESTED, requestUser);
 }
+
+function* requestJoinUser({ payload }) {
+  try {
+    yield call(api.postNewUser, payload);
+    yield put(actions.receivedJoinUser());
+  } catch (err) {
+    yield put(actions.rejectedJoinUser(err.response.data));
+  }
+}
+
+export function* requestJoinUserSaga() {
+  yield takeEvery(types.JOIN_USER_REQUESTED, requestJoinUser);
+}
