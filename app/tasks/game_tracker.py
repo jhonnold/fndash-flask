@@ -107,7 +107,7 @@ def update_old_user_stats(json, user_id):
             if kills >= 0 and kills <= 99:
                 game = Game(
                     user_id=user.id,
-                    mode='Squad',
+                    mode='squad',
                     playlist='default',
                     kills=kills,
                     placement=placement)
