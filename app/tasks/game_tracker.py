@@ -25,12 +25,33 @@ def update_old_user_stats(json, user_id):
     with app.app_context():
         user = User.query.filter_by(id=user_id).first()
 
-        if json is None or 'error' in json:
-            # Simply didn't get anything back
-            logger.warn('[OLD STATS] There was an error in fetching data for {}'.format(user))
+        if json is None:
+            logger.error('*' * 40)
+            logger.error('There was an error in fetching data for {}'.format(user))
+            logger.error('*' * 40)
+            return
+
+        if 'error' in json:
+            logger.error('*' * 40)
+            logger.error('There was an error in fetching data for {}'.format(user))
+            logger.error(json.error)
+            logger.error('*' * 40)
+            return
+
+        if 'overallData' not in json or 'data' not in json:
+            logger.warn('*' * 40)
+            logger.warn('JSON returned in invalid format {}'.format(user))
+            logger.warn(json)
+            logger.warn('*' * 40)
             return
 
         total_stats = json['overallData']['defaultModes']
+
+        if 'keyboardmouse' not in json['data']:
+            logger.warn('*' * 40)
+            logger.warn('User {} has no keyboardmouse data'.format(user))
+            logger.warn('*' * 40)
+            return
 
         keyboardmouse_data = json['data']['keyboardmouse']
         solo_stats = keyboardmouse_data['defaultsolo']['default']

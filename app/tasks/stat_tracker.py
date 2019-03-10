@@ -35,9 +35,24 @@ def update_user_stats(json, user_id):
     with app.app_context():
         user = User.query.filter_by(id=user_id).first()
 
-        if json is None or 'error' in json:
-            # Simply didn't get anything back
-            logger.warn('There was an error in fetching data for {}'.format(user))
+        if json is None:
+            logger.error('*' * 40)
+            logger.error('There was an error in fetching data for {}'.format(user))
+            logger.error('*' * 40)
+            return
+
+        if 'error' in json:
+            logger.error('*' * 40)
+            logger.error('There was an error in fetching data for {}'.format(user))
+            logger.error(json.error)
+            logger.error('*' * 40)
+            return
+
+        if 'overallData' not in json or 'data' not in json:
+            logger.warn('*' * 40)
+            logger.warn('JSON returned in invalid format {}'.format(user))
+            logger.warn(json)
+            logger.warn('*' * 40)
             return
 
         total_stats = json.get('overallData').get('defaultModes')
@@ -45,9 +60,16 @@ def update_user_stats(json, user_id):
         user.wins_total = total_stats.get('placetop1', 0)
         user.matchesplayed_total = total_stats.get('matchesplayed', 0)
 
-        pc_data = json.get('data').get('keyboardmouse')
+        input_types = json.get('data')
+        if 'keyboardmouse' not in input_types:
+            logger.warn('*' * 40)
+            logger.warn('User {} has no keyboardmouse data'.format(user))
+            logger.warn('*' * 40)
+            return
+        
+        pc_data = input_types.get('keyboardmouse')
         for playlist in pc_data.keys():
-            for mode in pc_data.get(playlist, dict()).keys():
+            for mode in pc_data.get(playlist).keys():
                 mode_data = pc_data.get(playlist).get(mode)
 
                 if (playlist in ['defaultsolo', 'defaultduo', 'defaultsquad']):
