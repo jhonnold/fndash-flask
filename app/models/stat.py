@@ -3,6 +3,15 @@ import datetime
 from sqlalchemy.dialects.postgresql import JSONB
 from app.database import db
 
+def get_placements(stat):
+    placements = dict()
+
+    for key in stat.keys():
+        if ('placetop' in key):
+            placements[key] = stat.get(key)
+
+    return placements
+
 
 class Stat(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
@@ -25,6 +34,14 @@ class Stat(db.Model):
     def __repr__(self):
         return "<Stat '{}' - '{}' for user_id: {}>".format(
             self.name, self.mode, self.user_id)
+
+    def update(self, data):
+        self.placements = get_placements(data)
+        self.kills = data.get('kills', 0)
+        self.matchesplayed = data.get('matchesplayed', 0)
+        self.playersoutlived = data.get('playersoutlived', 0)
+        self.minutesplayed = data.get('minutesplayed', 0)
+        self.updated = datetime.datetime.now()
 
     def serialize(self):
         data = dict(**self.__dict__)
