@@ -12,10 +12,10 @@ class CeleryConfig(object):
     CELERY_RESULT_SERIALIZER = 'json'
 
     CELERYBEAT_SCHEDULE = {
-        'game_tracker': {
-            'task': 'app.tasks.game_tracker.check_games',
-            'schedule': crontab(minute='*'),
-        },
+        # 'game_tracker': {
+        #     'task': 'app.tasks.game_tracker.check_games',
+        #     'schedule': crontab(minute='*'),
+        # },
         'stat_tracker': {
             'task': 'app.tasks.stat_tracker.stat_tracker',
             'schedule': crontab(minute='*'),

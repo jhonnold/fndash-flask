@@ -35,14 +35,6 @@ class Stat(db.Model):
         return "<Stat '{}' - '{}' for user_id: {}>".format(
             self.name, self.mode, self.user_id)
 
-    def update(self, data):
-        self.placements = get_placements(data)
-        self.kills = data.get('kills', 0)
-        self.matchesplayed = data.get('matchesplayed', 0)
-        self.playersoutlived = data.get('playersoutlived', 0)
-        self.minutesplayed = data.get('minutesplayed', 0)
-        self.updated = datetime.datetime.now()
-
     def serialize(self):
         data = dict(**self.__dict__)
         del data['_sa_instance_state']
