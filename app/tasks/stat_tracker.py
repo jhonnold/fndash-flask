@@ -4,8 +4,11 @@ from app import db, app
 from app.models import User, Game, Stat
 from app.models.stat import get_placements
 from celery.utils.log import get_task_logger
+from redis import Redis
 
 logger = get_task_logger(__name__)
+
+redis = Redis(host='redis', port=6379)
 
 BASE_URL = 'https://fortnite-public-api.theapinetwork.com/prod09'
 USER_STATS_ENDPOINT = BASE_URL + '/users/public/br_stats_v2?platform=pc&user_id={}'
@@ -103,10 +106,39 @@ def update_user_stats(json, user_id):
             logger.warn(json)
             return
 
-        total_stats = json.get('overallData').get('defaultModes')
-        user.kills_total = total_stats.get('kills', 0)
-        user.wins_total = total_stats.get('placetop1', 0)
-        user.matchesplayed_total = total_stats.get('matchesplayed', 0)
+        overall_data = json.get('overallData')
+
+        default_modes_data = overall_data.get('defaultModes')
+        ltm_modes_data = overall_data.get('ltmModes')
+        large_team_data = overall_data.get('largeTeamModes')
+
+        default_matchesplayed = redis.get('{}_user_default_matches'.format(
+            user.id))
+        ltm_matchesplayed = redis.get('{}_user_ltm_matches'.format(user.id))
+        large_team_matchesplayed = redis.get(
+            '{}_user_large_team_matches'.format(user.id))
+
+        if (default_matchesplayed is not None and ltm_matchesplayed is not None
+                and large_team_matchesplayed is not None):
+            if (int(default_matchesplayed) == default_modes_data.get(
+                    'matchesplayed', 0)
+                    and int(ltm_matchesplayed) == ltm_modes_data.get(
+                        'matchesplayed', 0)
+                    and int(large_team_matchesplayed) == large_team_data.get(
+                        'matchesplayed', 0)):
+                logger.info('{} has had no changes!'.format(user))
+                return
+
+        redis.set('{}_user_default_matches'.format(user.id),
+                  default_modes_data.get('matchesplayed', 0))
+        redis.set('{}_user_ltm_matches'.format(user.id),
+                  ltm_modes_data.get('matchesplayed', 0))
+        redis.set('{}_user_large_team_matches'.format(user.id),
+                  large_team_data.get('matchesplayed', 0))
+
+        user.kills_total = default_modes_data.get('kills', 0)
+        user.wins_total = default_modes_data.get('placetop1', 0)
+        user.matchesplayed_total = default_modes_data.get('matchesplayed', 0)
         db.session.commit()
 
         input_types = json.get('data')
@@ -126,7 +158,7 @@ def update_user_stats(json, user_id):
                     playlist = 'default'
 
                 update_or_create_stat.apply((user_id, mode, playlist,
-                                                   mode_data))
+                                             mode_data))
 
 
 @celery.task(ignore_result=True)
