@@ -3,6 +3,15 @@ import datetime
 from sqlalchemy.dialects.postgresql import JSONB
 from app.database import db
 
+def get_placements(stat):
+    placements = dict()
+
+    for key in stat.keys():
+        if ('placetop' in key):
+            placements[key] = stat.get(key)
+
+    return placements
+
 
 class Stat(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
