@@ -61,10 +61,15 @@ def update_or_create_stat(user_id, mode, playlist, data):
 def create_game(user_id, mode, playlist, stat, data):
     logger.info('Creating game for {}, in playlist/mode - {}/{}'.format(
         user_id, playlist, mode))
+               
+    stat_placements = stat.placements 
+    if type(stat_plaments) is list:
+        stat_placements = stat_placements[0]   
+       
     placements = get_placements(data)
     placement = 'Loss'
     for key in placements.keys():
-        if (placements.get(key, 0) <= data.get(key, 0)):
+        if (stat_placements.get(key, 0) < placements.get(key)):
             place = re.findall(r'\d+', key)[0]
             if place == '1':
                 placement = 'Victory'
