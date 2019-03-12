@@ -63,7 +63,7 @@ def create_game(user_id, mode, playlist, stat, data):
         user_id, playlist, mode))
                
     stat_placements = stat.placements 
-    if type(stat_plaments) is list:
+    if type(stat_placements) is list:
         stat_placements = stat_placements[0]   
        
     placements = get_placements(data)
