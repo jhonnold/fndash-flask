@@ -5,6 +5,6 @@ then
   rm /tmp/celerybeat.pid
 fi
 
-celery beat -A manage.celery --schedule=/tmp/celerybeat-schedule --loglevel=WARNING --pidfile=/tmp/celerybeat.pid &
-celery worker -A manage.celery -P eventlet -c 100 --loglevel=WARNING &
+celery beat -A manage.celery --schedule=/tmp/celerybeat-schedule --loglevel=INFO --pidfile=/tmp/celerybeat.pid &
+celery worker -A manage.celery -P eventlet -c 100 --loglevel=INFO &
 tail -f /dev/null
