@@ -68,14 +68,23 @@ def create_game(user_id, mode, playlist, stat, data):
        
     placements = get_placements(data)
     placement = 'Loss'
+    place = 101
+
+    # Go thru our placements
     for key in placements.keys():
+        # If this placement is less than the other one that means its calculating
         if (stat_placements.get(key, 0) < placements.get(key)):
-            place = re.findall(r'\d+', key)[0]
-            if place == '1':
-                placement = 'Victory'
-            else:
-                placement = 'Top {}'.format(place)
-            break
+            # Get the placement number
+            new_place = int(re.findall(r'\d+', key)[0])
+            # If its less than it is more important
+            # place 1 is better than place 3, but place1 affects place 3
+            if new_place < place:
+                place = new_place
+
+    if place == 1:
+        placement = 'Victory'
+    elif place != 101:
+        placement = 'Top {}'.format(place)
 
     kills = data.get('kills', 0) - stat.kills
 
