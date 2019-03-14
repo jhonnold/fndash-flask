@@ -31,6 +31,8 @@ class Stat(db.Model):
         db.Index('_name_mode_ix', 'name', 'mode'),
     )
 
+    histories = db.relationship('StatHistory', backref='current_stat', lazy='dynamic')
+
     def __repr__(self):
         return "<Stat '{}' - '{}' for user_id: {}>".format(
             self.name, self.mode, self.user_id)
