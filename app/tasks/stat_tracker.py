@@ -30,6 +30,7 @@ def update_or_create_stat(user_id, mode, playlist, data):
         stat = Stat.query.filter_by(
             user_id=user_id, mode=mode, name=playlist).first()
 
+        just_created = False
         if stat is None:
             logger.info('No Stat ({}/{}) for user_id: {}'.format(
                 playlist, mode, user_id))
@@ -42,12 +43,14 @@ def update_or_create_stat(user_id, mode, playlist, data):
                 kills=0,
                 placements=dict(),
                 is_ltm=(playlist != 'default'))
+            just_created = True
             db.session.add(stat)
 
         if stat.matchesplayed < data.get('matchesplayed', 0):
-            game = create_game(user_id, mode, playlist, stat, data)
-            if game is not None:
-                db.session.add(game)
+            if not just_created:
+                game = create_game(user_id, mode, playlist, stat, data)
+                if game is not None:
+                    db.session.add(game)
 
             stat.placements = get_placements(data)
             stat.kills = data.get('kills', 0)
