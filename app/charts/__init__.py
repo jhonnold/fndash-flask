@@ -1,6 +1,6 @@
 import datetime
 
-from app.models import Game
+from app.models import Game, Stat
 
 one_day = datetime.timedelta(days=1)
 
@@ -31,7 +31,8 @@ def kd_per_day(user, included_playlists, included_modes, t_to, t_from):
     return labels, kds
 
 
-def games_played_per_day(user, included_playlists, included_modes, t_to, t_from):
+def games_played_per_day(user, included_playlists, included_modes, t_to,
+                         t_from):
     upper_date = t_to
     lower_date = upper_date - one_day
 
@@ -49,3 +50,16 @@ def games_played_per_day(user, included_playlists, included_modes, t_to, t_from)
         upper_date, lower_date = lower_date, lower_date - one_day
 
     return labels, play_count
+
+
+def minutes_played_per_playlist_mode(user, included_playlists, included_modes):
+    labels, minutes = [], []
+
+    for mode in included_modes:
+        stat = user.stats.filter(Stat.name.in_(included_playlists)).filter(
+            Stat.mode == mode).first()
+
+        labels.append('{} Minutes'.format(mode.capitalize()))
+        minutes.append(stat.minutesplayed if stat is not None else 0)
+
+    return labels, minutes

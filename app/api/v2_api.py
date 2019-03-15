@@ -4,7 +4,7 @@ from functools import wraps
 from flask import Blueprint, jsonify, current_app, Response, abort, request
 from app.models import User, Game
 from app.database import db
-from app.charts import kd_per_day, games_played_per_day
+from app.charts import kd_per_day, games_played_per_day, minutes_played_per_playlist_mode
 
 v2_api = Blueprint('v2_api', __name__, url_prefix='/v2/api')
 
@@ -166,5 +166,9 @@ def user_games_count(user, params):
 
 @v2_api.route('/users/<user_id>/time_played')
 @prefetch_user
-def user_time_played(user):
-    pass
+@append_params
+def user_time_played(user, params):
+    labels, minutes = minutes_played_per_playlist_mode(
+        user, params.included_playlists, params.included_modes)
+
+    return jsonify(dict(labels=labels, datasets=[minutes]))
