@@ -56,6 +56,16 @@ def user(user):
     current_app.logger.debug('Fetched user: {}'.format(user))
     return jsonify(user.serialize(include_stats=True))
 
+@v2_api.route('/users/<user_id>/games')
+@prefetch_user
+def user_games(user):
+    pass
+
+@v2_api.route('/users/<user_id>/records')
+@prefetch_user
+def user_records(user):
+    pass
+
 
 @v2_api.route('/users/<user_id>/kd')
 @prefetch_user
@@ -95,3 +105,20 @@ def user_kd(user):
                              t_from)
 
     return jsonify(dict(labels=labels, kds=kds))
+
+@v2_api.route('/users/<user_id>/placements')
+@prefetch_user
+def user_placements(user):
+    pass
+
+
+@v2_api.route('/users/<user_id>/games_count')
+@prefetch_user
+def user_games_count(user):
+    pass
+
+
+@v2_api.route('/users/<user_id>/time_played')
+@prefetch_user
+def user_time_played(user):
+    pass
