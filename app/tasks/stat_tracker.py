@@ -40,6 +40,7 @@ def update_or_create_stat(user_id, mode, playlist, data):
                 mode=mode,
                 matchesplayed=0,
                 kills=0,
+                placements=dict(),
                 is_ltm=(playlist != 'default'))
             db.session.add(stat)
 
