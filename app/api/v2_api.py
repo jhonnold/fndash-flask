@@ -4,7 +4,7 @@ from functools import wraps
 from flask import Blueprint, jsonify, current_app, Response, abort, request
 from app.models import User, Game
 from app.database import db
-from app.charts import kd_per_day, games_played_per_day, minutes_played_per_playlist_mode
+from app.charts import kd_per_day, games_played_per_day, minutes_played_per_playlist_mode, placements_per_mode
 
 v2_api = Blueprint('v2_api', __name__, url_prefix='/v2/api')
 
@@ -150,7 +150,10 @@ def user_kd(user, params):
 @prefetch_user
 @append_params
 def user_placements(user, params):
-    pass
+    labels, placements = placements_per_mode(user, params.included_playlists,
+                                             params.included_modes)
+    
+    return jsonify(dict(labels=labels, datasets=placements))
 
 
 @v2_api.route('/users/<user_id>/games_count')

@@ -1,4 +1,4 @@
-import datetime
+import datetime, re
 
 from app.models import Game, Stat
 
@@ -50,6 +50,63 @@ def games_played_per_day(user, included_playlists, included_modes, t_to,
         upper_date, lower_date = lower_date, lower_date - one_day
 
     return labels, play_count
+
+
+def placements_per_mode(user, included_playlists, included_modes):
+    labels, datasets = [], []
+
+    for idx, mode in enumerate(included_modes):
+        stats = user.stats.filter(
+            Stat.name.in_(included_playlists)).filter(Stat.mode == mode).all()
+
+        # No stats? Shove on empty data
+        if len(stats) == 0:
+            datasets.append([])
+            labels.append([])
+            continue
+
+        datasets.append(dict())
+
+        # Summate the placement dictionaries, add in placetop100 (Loss)
+        for stat in stats:
+            placements = stat.placements[0] if type(
+                stat.placements) is list else stat.placements
+            for place in placements.keys():
+                if place not in datasets[idx]:
+                    datasets[idx][place] = 0
+
+                datasets[idx][place] += placements.get(place)
+
+            if 'placetop100' not in datasets[idx]:
+                datasets[idx]['placetop100'] = 0
+
+            datasets[idx]['placetop100'] += stat.matchesplayed
+
+        # Convert this to an array, and map dict to array in order
+        possible_placements = []
+        for key in datasets[idx].keys():
+            possible_placements.append(int(re.findall(r'\d+', key)[0]))
+        possible_placements.sort()
+        datasets[idx] = [
+            datasets[idx].get('placetop{}'.format(p))
+            for p in possible_placements
+        ]
+
+        # Modify placement logic to correct values by going thru array backwards
+        for j, e in reversed(list(enumerate(datasets[idx]))):
+            if j == 0: break
+            datasets[idx][j] -= datasets[idx][j - 1]
+
+        labels.append(len(possible_placements) * [None])
+        for j, place in enumerate(possible_placements):
+            if place == 100:
+                labels[idx][j] = '{} Loss'.format(mode.capitalize())
+            elif place == 1:
+                labels[idx][j] = '{} Victory'.format(mode.capitalize())
+            else:
+                labels[idx][j] = '{} Top {}'.format(mode.capitalize(), place)
+
+    return labels, datasets
 
 
 def minutes_played_per_playlist_mode(user, included_playlists, included_modes):
