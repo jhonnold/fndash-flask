@@ -29,3 +29,23 @@ def kd_per_day(user, included_playlists, included_modes, t_to, t_from):
         upper_date, lower_date = lower_date, lower_date - one_day
 
     return labels, kds
+
+
+def games_played_per_day(user, included_playlists, included_modes, t_to, t_from):
+    upper_date = t_to
+    lower_date = upper_date - one_day
+
+    labels, play_count = [], []
+
+    while (upper_date > t_from):
+        games = user.games.filter(Game.time_played >= lower_date).filter(
+            Game.time_played < upper_date).filter(
+                Game.playlist.in_(included_playlists)).filter(
+                    Game.mode.in_(included_modes))
+
+        labels.insert(0, lower_date.__format__('%b %-d'))
+        play_count.insert(0, games.count())
+
+        upper_date, lower_date = lower_date, lower_date - one_day
+
+    return labels, play_count
