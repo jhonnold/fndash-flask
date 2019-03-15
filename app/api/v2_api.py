@@ -123,8 +123,17 @@ def user_games(user, params):
 
 @v2_api.route('/users/<user_id>/records')
 @prefetch_user
-def user_records(user):
-    pass
+@append_params
+def user_records(user, params):
+    record_games = []
+    for mode in params.included_modes:
+        game = user.games.filter(Game.playlist.in_(
+            params.included_playlists)).filter(Game.mode == mode).order_by(
+                Game.kills.desc()).first()
+
+        record_games.append(game)
+
+    return jsonify([g.serialize() for g in record_games])
 
 
 @v2_api.route('/users/<user_id>/kd')
