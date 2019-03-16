@@ -39,9 +39,8 @@ const initialState = {
     error: null,
     loading: false,
     data: {
-      solo: [],
-      duo: [],
-      squad: [],
+      labels: [],
+      datasets: [],
     },
   },
   gamesChart: {

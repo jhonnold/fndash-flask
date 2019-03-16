@@ -16,18 +16,19 @@ const chartOptions = {
   scales: {
     yAxes: [
       {
+        color: theme.border,
         ticks: {
           fontColor: theme.fontColor,
         },
         gridLines: {
-          color: theme.border,
+          display: false,
         },
       },
     ],
     xAxes: [
       {
-        ticks: {
-          fontColor: theme.fontColor,
+        gridLines: {
+          display: false,
         },
       },
     ],

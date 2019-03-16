@@ -20,15 +20,12 @@ function getHoursPlayed(data, mode) {
 }
 
 function TimePlayed({ data, mode }) {
-  let hours = getHoursPlayed(data.datasets[0], mode);
-  if (hours < 1) {
-    hours = '< 1';
-  }
+  const hours = getHoursPlayed(data.datasets[0], mode);
   return (
     <Card>
       <H3>Time Played</H3>
       <h4>
-        {hours} <span>Hours</span>
+        {hours} <span>Minutes</span>
       </h4>
     </Card>
   );

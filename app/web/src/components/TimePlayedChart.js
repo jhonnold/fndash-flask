@@ -26,6 +26,8 @@ function TimePlayedChart({ datasets, labels }) {
     datasets: datasets.map(d => ({
       data: d,
       backgroundColor: colors,
+      borderColor: theme.cardBack,
+      borderWidth: 6,
     })),
   };
 
