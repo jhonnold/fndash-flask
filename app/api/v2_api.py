@@ -4,7 +4,7 @@ from functools import wraps
 from flask import Blueprint, jsonify, current_app, Response, abort, request
 from app.models import User, Game
 from app.database import db
-from app.charts import kd_per_day, games_played_per_day, minutes_played_per_playlist_mode, placements_per_mode
+from app.charts import kd_per_day, games_played_per_day, minutes_played_per_playlist_mode, placements_per_mode, lifetime_kd_progression
 
 v2_api = Blueprint('v2_api', __name__, url_prefix='/v2/api')
 
@@ -35,18 +35,19 @@ def prefetch_user(f):
     return wrapper
 
 
+class Params:
+    def __init__(self, included_playlists, included_modes, t_to, t_from,
+                 timezone):
+        self.included_playlists = included_playlists
+        self.included_modes = included_modes
+        self.t_to = t_to
+        self.t_from = t_from
+        self.timezone = timezone
+
+
 def append_params(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
-        class Params:
-            def __init__(self, included_playlists, included_modes, t_to,
-                         t_from, timezone):
-                self.included_playlists = included_playlists
-                self.included_modes = included_modes
-                self.t_to = t_to
-                self.t_from = t_from
-                self.timezone = timezone
-
         playlist_csv = request.args.get('p', 'default,showdownalt,showdown')
         included_playlists = playlist_csv.split(',')
 
@@ -146,13 +147,24 @@ def user_kd(user, params):
     return jsonify(dict(labels=labels, datasets=[kds]))
 
 
+@v2_api.route('/users/<user_id>/kd_progression')
+@prefetch_user
+@append_params
+def user_kd_progression(user, params):
+    labels, kds = lifetime_kd_progression(user, params.included_playlists,
+                                          params.included_modes, params.t_to,
+                                          params.t_from)
+
+    return jsonify(dict(labels=labels, datasets=[kds]))
+
+
 @v2_api.route('/users/<user_id>/placements')
 @prefetch_user
 @append_params
 def user_placements(user, params):
     labels, placements = placements_per_mode(user, params.included_playlists,
                                              params.included_modes)
-    
+
     return jsonify(dict(labels=labels, datasets=placements))
 
 

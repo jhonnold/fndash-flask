@@ -1,6 +1,6 @@
 import datetime, re
 
-from app.models import Game, Stat
+from app.models import Game, Stat, StatHistory
 
 one_day = datetime.timedelta(days=1)
 
@@ -27,6 +27,45 @@ def kd_per_day(user, included_playlists, included_modes, t_to, t_from):
         kds.insert(0, kills / max(1, len(games) - wins))
 
         upper_date, lower_date = lower_date, lower_date - one_day
+
+    return labels, kds
+
+
+def lifetime_kd_progression(user, included_playlists, included_modes, t_to,
+                            t_from):
+    lower_date = t_from
+    upper_date = lower_date + one_day
+
+    labels, kds = [], []
+
+    stats = user.stats.filter(Stat.name.in_(included_playlists)).filter(
+        Stat.mode.in_(included_modes)).all()
+
+
+    if stats is None or len(stats) == 0: return [], []
+
+    while (lower_date < t_to):
+        kills, games, wins = 0, 0, 0
+        for stat in stats:
+            historical_stat = stat.histories.filter(
+                StatHistory.created_at >= lower_date).filter(
+                    StatHistory.created_at < upper_date).first()
+
+            if historical_stat is None:
+                continue
+
+            kills += historical_stat.kills
+            games += historical_stat.matchesplayed
+
+            placements = historical_stat.placements if type(
+                historical_stat.placements
+            ) is not list else historical_stat.placements[0]
+            wins += placements.get('placetop1', 0)
+
+        labels.append(lower_date.__format__('%b %-d'))
+        kds.append(kills / max(1, games - wins))
+
+        lower_date, upper_date = upper_date, upper_date + one_day
 
     return labels, kds
 
