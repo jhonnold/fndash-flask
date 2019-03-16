@@ -129,10 +129,11 @@ def user_records(user, params):
     record_games = []
     for mode in params.included_modes:
         game = user.games.filter(Game.playlist.in_(
-            params.included_playlists)).filter(Game.mode == mode).order_by(
-                Game.kills.desc()).first()
-
-        record_games.append(game)
+            params.included_playlists)).filter(Game.mode == mode).filter(
+                Game.kills > 0).order_by(Game.kills.desc()).first()
+        
+        if game is not None:
+            record_games.append(game)
 
     return jsonify([g.serialize() for g in record_games])
 
