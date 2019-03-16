@@ -3,7 +3,7 @@ matrix:
     - language: python
       python: 3.6
       script:
-        - python -m unittest discover
+        - python -m unittest discover -v
 
     - language: node_js
       node_js: 8

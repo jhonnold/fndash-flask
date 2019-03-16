@@ -17,11 +17,18 @@ const chartOptions = {
     yAxes: [
       {
         gridLines: {
-          color: theme.border,
+          display: false,
         },
         ticks: {
           fontColor: theme.fontColor,
           beginAtZero: true,
+        },
+      },
+    ],
+    xAxes: [
+      {
+        gridLines: {
+          display: false,
         },
       },
     ],

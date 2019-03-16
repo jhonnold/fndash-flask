@@ -129,7 +129,7 @@ class UserInfo extends React.PureComponent {
   render() {
     const { ui, games, charts } = this.props;
 
-    const recordGames = ui.mode === 'all' ? Object.values(games.data.records) : [games.data.records[ui.mode]];
+    const recordGames = ui.mode === 'all' ? games.data.records : [games.data.records.find(d => d.mode === ui.mode)];
 
     const {
       kdChart, placementChart, gamesChart, timePlayedChart,

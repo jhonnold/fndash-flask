@@ -26,26 +26,7 @@ const initialState = {
   loading: false,
   data: {
     games: [],
-    records: {
-      solo: {
-        time_played: 0,
-        mode: 'solo',
-        kills: 0,
-        placement: 'Loss',
-      },
-      duo: {
-        time_played: 0,
-        mode: 'duo',
-        kills: 0,
-        placement: 'Loss',
-      },
-      squad: {
-        time_played: 0,
-        mode: 'squad',
-        kills: 0,
-        placement: 'Loss',
-      },
-    },
+    records: [],
   },
 };
 
