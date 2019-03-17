@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import Card from './Card';
 
 const H3 = styled.h3`
-  color: ${({ theme }) => theme.primary};
+  color: ${({ theme }) => theme.white};
 `;
 
-function getHoursPlayed(data, mode) {
+function getHoursPlayed(data = [], mode) {
   if (mode === 'solo') {
     return data[0];
   }

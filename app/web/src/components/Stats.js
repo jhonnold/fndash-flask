@@ -16,12 +16,13 @@ const Stat = styled.div`
   width: 50%;
   padding: 1rem;
 
-  @media (min-width: 640px) {
+  @media (min-width: 900px) {
     width: 25%;
   }
 
+  h1,
   h2,
-  h3 {
+  h4 {
     margin: 0;
   }
 `;
@@ -46,7 +47,7 @@ const StatBox = styled.div`
   justify-content: space-between;
   align-items: center;
 
-  @media (max-width: 639px) {
+  @media (max-width: 768px) {
     padding: 0.5rem 1rem;
   }
 `;
@@ -54,6 +55,8 @@ const StatBox = styled.div`
 const StatNumber = styled.div`
   text-align: left;
 `;
+
+const H1 = styled.h1``;
 
 function Stats({
   matchesplayed, kd, kills, placements,
@@ -64,7 +67,7 @@ function Stats({
         <Stat>
           <StatBox color="green">
             <StatNumber>
-              <AnimatedNumber number={placements.placetop1} noDecimal />
+              <AnimatedNumber component={H1} number={placements.placetop1} noDecimal />
               <h4>Victories</h4>
             </StatNumber>
             <h2>
@@ -75,7 +78,7 @@ function Stats({
         <Stat>
           <StatBox color="blue">
             <StatNumber>
-              <AnimatedNumber number={matchesplayed} noDecimal />
+              <AnimatedNumber component={H1} number={matchesplayed} noDecimal />
               <h4>Matches</h4>
             </StatNumber>
             <h2>
@@ -86,7 +89,7 @@ function Stats({
         <Stat>
           <StatBox color="purple">
             <StatNumber>
-              <AnimatedNumber number={kills} noDecimal />
+              <AnimatedNumber component={H1} number={kills} noDecimal />
               <h4>Kills</h4>
             </StatNumber>
             <h2>
@@ -97,7 +100,7 @@ function Stats({
         <Stat>
           <StatBox>
             <StatNumber>
-              <AnimatedNumber number={kd} format={v => v.toFixed(3)} />
+              <AnimatedNumber component={H1} number={kd} format={v => v.toFixed(3)} />
               <h4>K/D</h4>
             </StatNumber>
             <h2>

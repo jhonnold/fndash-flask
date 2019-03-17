@@ -1,5 +1,5 @@
 import { takeEvery, put, call } from 'redux-saga/effects';
-import api from '../util/api';
+import api, { api2 } from '../util/api';
 import { types, actions } from '../ducks/users';
 
 function* requestUsers() {
@@ -17,7 +17,7 @@ export function* requestUsersSaga() {
 
 function* requestUser({ payload }) {
   try {
-    const response = yield call(api.getUser, payload);
+    const response = yield call(api2.getUser, payload);
     yield put(actions.receivedUser(response.data));
   } catch (err) {
     yield put(actions.rejectedUser(err));

@@ -43,7 +43,7 @@ const HeaderBreak = styled.div`
   height: 1px;
 `;
 
-const Name = styled.h2`
+const Name = styled.h1`
   text-transform: uppercase;
   margin: 0;
 `;

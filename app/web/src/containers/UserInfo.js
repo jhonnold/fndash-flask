@@ -84,45 +84,45 @@ class UserInfo extends React.PureComponent {
     const user = this.getUser();
 
     if (!user) return {};
-    if (!user.stats) return {};
-    if (!user.stats.default) return {};
+    if (!user.compiled_stats) return {};
 
-    const { stats } = user;
-    const { default: defaultStats } = stats;
+    return user.compiled_stats[mode];
 
-    if (mode === 'all') {
-      const compiledStats = {
-        placements: {
-          placetop1: 0,
-        },
-        matchesplayed: 0,
-        kills: 0,
-      };
+    // if (mode === 'all') {
+    //   const compiledStats = {
+    //     placements: {
+    //       placetop1: 0,
+    //     },
+    //     matchesplayed: 0,
+    //     kills: 0,
+    //   };
 
-      Object.keys(defaultStats).forEach((k) => {
-        const defaultModeStats = defaultStats[k];
+    //   Object.keys(defaultStats).forEach((k) => {
+    //     const defaultModeStats = defaultStats[k];
 
-        compiledStats.placements.placetop1 += defaultModeStats.placements.placetop1 || 0;
-        compiledStats.matchesplayed += defaultModeStats.matchesplayed;
-        compiledStats.kills += defaultModeStats.kills;
-      });
+    //     compiledStats.placements.placetop1 += defaultModeStats.placements.placetop1 || 0;
+    //     compiledStats.matchesplayed += defaultModeStats.matchesplayed;
+    //     compiledStats.kills += defaultModeStats.kills;
+    //   });
 
-      let denominator = compiledStats.matchesplayed - compiledStats.placements.placetop1;
-      if (denominator === 0) denominator = 1;
+    //   let denominator = compiledStats.matchesplayed - compiledStats.placements.placetop1;
+    //   if (denominator === 0) denominator = 1;
 
-      compiledStats.kd = compiledStats.kills / denominator;
+    //   compiledStats.kd = compiledStats.kills / denominator;
 
-      return compiledStats;
-    }
+    //   return compiledStats;
+    // }
 
-    return stats.default[mode];
+    // return stats.default[mode];
   }
 
   matchColumnHeights() {
     // Must wait must a wee bit of time for the new sizes to
     // be registered
     setTimeout(() => {
-      this.gamesColumn.style.height = `${this.chartsColumn.scrollHeight}px`;
+      if (this.gamesColumn) {
+        this.gamesColumn.style.height = `${this.chartsColumn.scrollHeight}px`;
+      }
     }, 10);
   }
 
@@ -159,8 +159,8 @@ class UserInfo extends React.PureComponent {
                 this.gamesColumn = el;
               }}
             >
-              <GameList games={recordGames} title="Records" />
-              <GameList games={games.data.games} autoOverflow />
+              <GameList loading={games.loading} games={recordGames} title="Records" />
+              <GameList loading={games.loading} games={games.data.games} autoOverflow />
             </Column>
           </ReversedContainer>
         </MinuteData>

@@ -2,11 +2,13 @@ import datetime, requests
 
 from functools import wraps
 from flask import Blueprint, jsonify, current_app, Response, abort, request
-from app.models import User, Game
+from app.models import User, Game, Stat
 from app.database import db
 from app.charts import kd_per_day, games_played_per_day, minutes_played_per_playlist_mode, placements_per_mode, lifetime_kd_progression
 
 v2_api = Blueprint('v2_api', __name__, url_prefix='/v2/api')
+
+IMPORTANT_MODES = ['default', 'showdownalt', 'showdown', 'showdowntournament', 'blitz']
 
 
 def tomorrow(timezone):
@@ -48,7 +50,8 @@ class Params:
 def append_params(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
-        playlist_csv = request.args.get('p', 'default,showdownalt,showdown')
+        playlist_csv = request.args.get(
+            'p', 'default,showdownalt,showdown,showdowntournament,blitz')
         included_playlists = playlist_csv.split(',')
 
         mode_csv = request.args.get('m', 'solo,duo,squad')
@@ -106,7 +109,41 @@ def users():
 @prefetch_user
 def user(user):
     current_app.logger.debug('Fetched user: {}'.format(user))
-    return jsonify(user.serialize(include_stats=True))
+    user_dict = user.serialize(include_stats=True)
+
+    compiled_stats = dict(
+        all=dict(placements=dict(placetop1=0), matchesplayed=0, kills=0))
+
+    for m in ['solo', 'duo', 'squad']:
+        stats = user.stats.filter(
+            Stat.name.in_(IMPORTANT_MODES)).filter(Stat.mode == m).all()
+        compiled_stats[m] = dict(
+            placements=dict(placetop1=0), matchesplayed=0, kills=0)
+
+        for stat in stats:
+            placements = stat.placements if type(
+                stat.placements) is not list else stat.placements[0]
+            compiled_stats[m]['placements']['placetop1'] += placements.get(
+                'placetop1', 0)
+            compiled_stats[m]['matchesplayed'] += stat.matchesplayed
+            compiled_stats[m]['kills'] += stat.kills
+
+            compiled_stats['all']['placements']['placetop1'] += placements.get(
+                'placetop1', 0)
+            compiled_stats['all']['matchesplayed'] += stat.matchesplayed
+            compiled_stats['all']['kills'] += stat.kills
+
+        compiled_stats[m]['kd'] = compiled_stats[m]['kills'] / max(
+            1, compiled_stats[m]['matchesplayed'] -
+            compiled_stats[m]['placements']['placetop1'])
+
+        compiled_stats['all']['kd'] = compiled_stats['all']['kills'] / max(
+            1, compiled_stats['all']['matchesplayed'] -
+            compiled_stats['all']['placements']['placetop1'])
+
+    user_dict['compiled_stats'] = compiled_stats
+
+    return jsonify(user_dict)
 
 
 @v2_api.route('/users/<user_id>/games')
@@ -131,7 +168,7 @@ def user_records(user, params):
         game = user.games.filter(Game.playlist.in_(
             params.included_playlists)).filter(Game.mode == mode).filter(
                 Game.kills > 0).order_by(Game.kills.desc()).first()
-        
+
         if game is not None:
             record_games.append(game)
 

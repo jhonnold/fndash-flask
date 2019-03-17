@@ -48,6 +48,7 @@ function PlacementPieChart({ data, mode }) {
           backgroundColor: colors,
           borderColor: theme.primary,
           borderWidth: 6,
+          label: 0,
         },
       ],
     };

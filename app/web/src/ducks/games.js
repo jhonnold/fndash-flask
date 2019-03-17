@@ -39,6 +39,10 @@ export default (state = initialState, action) => {
         ...state,
         error: null,
         loading: true,
+        data: {
+          ...state.data,
+          games: [],
+        },
       };
     }
     case USER_GAMES_RECEIVED: {
@@ -64,6 +68,10 @@ export default (state = initialState, action) => {
         ...state,
         loading: true,
         error: null,
+        data: {
+          ...state.data,
+          records: [],
+        },
       };
     }
     case USER_RECORDS_RECEIVED: {
