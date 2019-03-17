@@ -15,10 +15,10 @@ import logo from '../assets/images/vertical-logo.png';
 
 const Banner = styled.div`
   width: 100%;
-  box-shadow: 0px 4px 2px -2px ${({ theme }) => theme.black};
+  box-shadow: 0px 4px 2px -2px ${({ theme }) => theme.primary};
   text-align: center;
   padding: 2.25rem 0 2rem;
-  background-color: ${({ theme }) => theme.black};
+  background-color: ${({ theme }) => theme.primary};
 
   h1 {
     font-size: 50px;
@@ -55,7 +55,7 @@ const homeStyles = {
   }),
   control: base => ({
     ...base,
-    backgroundColor: mainTheme.black,
+    backgroundColor: mainTheme.primary,
     width: '100%',
     height: '100%',
     border: 'none',
@@ -65,7 +65,7 @@ const homeStyles = {
   }),
   clearIndicator: base => ({
     ...base,
-    color: mainTheme.fontColor,
+    color: mainTheme.offWhite,
     cursor: 'pointer',
     '&:hover': {
       color: mainTheme.primary,
@@ -73,32 +73,30 @@ const homeStyles = {
   }),
   singleValue: base => ({
     ...base,
-    color: mainTheme.fontColor,
+    color: mainTheme.white,
   }),
   placeholder: base => ({
     ...base,
-    // color: mainTheme.fontColor,
+    color: mainTheme.offWhite,
   }),
   input: base => ({
     ...base,
-    color: mainTheme.primaryFont,
+    color: mainTheme.white,
   }),
   menu: base => ({
     ...base,
-    backgroundColor: mainTheme.black,
-    // boxShadow: '0 14px 12px rgba(0,0,0,.25), 0 10px 8px rgba(0,0,0,.22)',
+    backgroundColor: mainTheme.primary,
     borderRadius: 0,
     border: `1px solid ${mainTheme.white}`,
-    // marginTop: '-0.125rem',
   }),
   option: (base, state) => ({
     ...base,
     '&:hover': {
-      color: mainTheme.primary,
-      backgroundColor: mainTheme.darkGray,
+      color: mainTheme.white,
+      backgroundColor: mainTheme.secondary,
     },
-    color: state.isSelected ? mainTheme.primary : mainTheme.fontColor,
-    backgroundColor: mainTheme.black,
+    color: state.isSelected ? mainTheme.white : mainTheme.offWhite,
+    backgroundColor: state.isSelected ? mainTheme.secondary : mainTheme.primary,
     cursor: 'pointer',
   }),
   indicatorSeparator: base => ({
@@ -108,7 +106,7 @@ const homeStyles = {
   dropdownIndicator: base => ({
     ...base,
     cursor: 'pointer',
-    color: mainTheme.fontColor,
+    color: mainTheme.offWhite,
     '&:hover': {
       color: mainTheme.primary,
     },

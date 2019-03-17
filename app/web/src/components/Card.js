@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 
 export default styled.div`
-  background-color: ${({ theme }) => theme.cardBack};
-  border: 1px solid ${({ theme }) => theme.border};
+  background-color: ${({ theme }) => theme.primary};
+  border-radius: 0.5rem;
   padding: 0.5rem 1rem 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   ${({ autoOverflow }) => (autoOverflow ? 'overflow: auto;' : '')}
 
   h3 {

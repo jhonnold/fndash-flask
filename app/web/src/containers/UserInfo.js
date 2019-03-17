@@ -23,7 +23,7 @@ const ChartColumn = styled(Column)`
 `;
 
 const MinuteData = styled.div`
-  margin-top: 1rem;
+  margin-top: -1rem;
   width: 100%;
 `;
 

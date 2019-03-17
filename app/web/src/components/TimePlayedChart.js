@@ -14,10 +14,20 @@ const chartOptions = {
   },
 };
 
+// return `background: linear-gradient(to top right, ${theme.blue}, ${theme.lightBlue});`;
+//     }
+//     if (color === 'green') {
+//       return `background: linear-gradient(to top right, ${theme.turqoise}, ${theme.lightGreen});`;
+//     }
+//     if (color === 'purple') {
+//       return `background: linear-gradient(to top right, ${theme.purple}, ${theme.magenta});`;
+//     }
+//     return `background: linear-gradient(to top right, ${theme.pink}, ${theme.peach});`;
+
 const colors = [
-  theme.primary,
-  pSBC(-0.375, theme.primary, false, true),
-  pSBC(-0.75, theme.primary, false, true),
+  theme.lightGreen,
+  pSBC(-0.375, theme.lightGreen, false, true),
+  pSBC(-0.75, theme.lightGreen, false, true),
 ];
 
 function TimePlayedChart({ datasets, labels }) {
@@ -26,7 +36,7 @@ function TimePlayedChart({ datasets, labels }) {
     datasets: datasets.map(d => ({
       data: d,
       backgroundColor: colors,
-      borderColor: theme.cardBack,
+      borderColor: theme.primary,
       borderWidth: 6,
     })),
   };

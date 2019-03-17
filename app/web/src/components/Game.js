@@ -1,20 +1,16 @@
 import React from 'react';
 import moment from 'moment-timezone';
 import styled from 'styled-components';
+import { pSBC } from '../assets/constants/colors';
 
 const GameDiv = styled.div`
-  border-top: 1px solid ${({ theme }) => theme.border};
-  border-left: 1px solid ${({ theme }) => theme.border};
+  border-radius: 0.5rem;
+  border-left: 0.0625rem solid ${({ theme, color }) => theme[color] || theme.offWhite};
+  background-color: ${({ theme }) => pSBC(-0.0625, theme.primary, false, true)};
   padding: 0.5rem;
   margin-bottom: 1rem;
   position: relative;
   display: flex;
-
-  h5,
-  h4 {
-    color: ${({ theme }) => theme.primary};
-    text-transform: capitalize;
-  }
 
   p {
     margin: 0;
@@ -33,7 +29,6 @@ const GameDiv = styled.div`
 
   i {
     margin-right: 0.5rem;
-    color: ${({ theme }) => theme.primary};
   }
 
   &:last-of-type {
@@ -51,15 +46,35 @@ const GameHeader = styled.div`
   margin-bottom: 1rem;
 
   h5 {
-    text-transform: capitalize;
     margin: 0;
+    text-transform: capitalize;
+    ${({ color, theme }) => {
+    if (color === 'blue') {
+      return `background: linear-gradient(to top right, ${theme.blue}, ${theme.lightBlue});`;
+    }
+    if (color === 'green') {
+      return `background: linear-gradient(to top right, ${theme.turqoise}, ${theme.lightGreen});`;
+    }
+    if (color === 'purple') {
+      return `background: linear-gradient(to top right, ${theme.purple}, ${theme.magenta});`;
+    }
+    return `background: linear-gradient(to top right, ${theme.pink}, ${theme.peach});`;
+  }}
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   p {
     font-size: 0.75rem;
-    color: ${({ theme }) => theme.mediumGray};
+    color: ${({ theme }) => theme.offWhite};
   }
 `;
+
+const modeToColor = {
+  solo: 'blue',
+  duo: 'purple',
+  squad: 'pink',
+};
 
 function Game({
   data: {
@@ -67,9 +82,9 @@ function Game({
   },
 }) {
   return (
-    <GameDiv>
+    <GameDiv color={modeToColor[mode] || 'green'}>
       <div>
-        <GameHeader>
+        <GameHeader color={modeToColor[mode] || 'green'}>
           <h5>
             {playlist} {mode} Match
           </h5>

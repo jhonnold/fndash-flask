@@ -24,10 +24,10 @@ const chartOptions = {
 };
 
 const colors = [
-  theme.primary,
-  pSBC(-0.25, theme.primary, false, true),
-  pSBC(-0.5, theme.primary, false, true),
-  pSBC(-0.75, theme.primary, false, true),
+  theme.lightGreen,
+  pSBC(-0.25, theme.lightGreen, false, true),
+  pSBC(-0.5, theme.lightGreen, false, true),
+  pSBC(-0.75, theme.lightGreen, false, true),
 ];
 
 const modeEnum = {
@@ -46,7 +46,7 @@ function PlacementPieChart({ data, mode }) {
           data: data.datasets[modeEnum[mode]],
           labels: data.labels[modeEnum[mode]],
           backgroundColor: colors,
-          borderColor: theme.cardBack,
+          borderColor: theme.primary,
           borderWidth: 6,
         },
       ],
@@ -57,7 +57,7 @@ function PlacementPieChart({ data, mode }) {
         data: p,
         labels: data.labels[i],
         backgroundColor: colors,
-        borderColor: theme.cardBack,
+        borderColor: theme.primary,
         borderWidth: 6,
         label: i,
       })),

@@ -20,7 +20,7 @@ const chartOptions = {
           display: false,
         },
         ticks: {
-          fontColor: theme.fontColor,
+          fontColor: theme.offWhite,
           beginAtZero: true,
         },
       },
@@ -30,6 +30,9 @@ const chartOptions = {
         gridLines: {
           display: false,
         },
+        ticks: {
+          fontColor: theme.offWhite,
+        },
       },
     ],
   },
@@ -38,13 +41,13 @@ const chartOptions = {
 const datasetNames = ['Games'];
 
 const colors = [
-  pSBC(-0.6, theme.primary, false, true),
-  pSBC(-0.5, theme.primary, false, true),
-  pSBC(-0.4, theme.primary, false, true),
-  pSBC(-0.3, theme.primary, false, true),
-  pSBC(-0.2, theme.primary, false, true),
-  pSBC(-0.1, theme.primary, false, true),
-  theme.primary,
+  pSBC(-0.6, theme.lightGreen, false, true),
+  pSBC(-0.5, theme.lightGreen, false, true),
+  pSBC(-0.4, theme.lightGreen, false, true),
+  pSBC(-0.3, theme.lightGreen, false, true),
+  pSBC(-0.2, theme.lightGreen, false, true),
+  pSBC(-0.1, theme.lightGreen, false, true),
+  theme.lightGreen,
 ];
 
 function GamesBarChart({ labels, datasets }) {

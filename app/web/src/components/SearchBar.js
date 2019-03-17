@@ -23,13 +23,13 @@ class SearchBar extends React.PureComponent {
       container: base => ({
         ...base,
         fontWeight: '200',
-        color: mainTheme.primary,
+        color: mainTheme.secondary,
         width: '100%',
         maxWidth: 240,
       }),
       control: base => ({
         ...base,
-        backgroundColor: mainTheme.black,
+        backgroundColor: mainTheme.secondary,
         width: '100%',
         border: 'none',
         boxShadow: 'none',
@@ -38,7 +38,7 @@ class SearchBar extends React.PureComponent {
       }),
       clearIndicator: base => ({
         ...base,
-        color: mainTheme.fontColor,
+        color: mainTheme.offWhite,
         cursor: 'pointer',
         '&:hover': {
           color: mainTheme.primary,
@@ -46,11 +46,11 @@ class SearchBar extends React.PureComponent {
       }),
       singleValue: base => ({
         ...base,
-        color: mainTheme.fontColor,
+        color: mainTheme.white,
       }),
       placeholder: base => ({
         ...base,
-        color: mainTheme.fontColor,
+        color: mainTheme.offWhite,
       }),
       input: base => ({
         ...base,
@@ -67,11 +67,11 @@ class SearchBar extends React.PureComponent {
       option: (base, state) => ({
         ...base,
         '&:hover': {
-          color: mainTheme.primary,
-          backgroundColor: mainTheme.darkGray,
+          color: mainTheme.white,
+          backgroundColor: mainTheme.secondary,
         },
-        color: state.isSelected ? mainTheme.primary : mainTheme.fontColor,
-        backgroundColor: mainTheme.black,
+        color: state.isSelected ? mainTheme.white : mainTheme.offWhite,
+        backgroundColor: state.isSelected ? mainTheme.secondary : mainTheme.primary,
         cursor: 'pointer',
       }),
       indicatorSeparator: base => ({
@@ -81,7 +81,7 @@ class SearchBar extends React.PureComponent {
       dropdownIndicator: base => ({
         ...base,
         cursor: 'pointer',
-        color: mainTheme.fontColor,
+        color: mainTheme.offWhite,
         '&:hover': {
           color: mainTheme.primary,
         },

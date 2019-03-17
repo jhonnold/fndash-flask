@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
+import { pSBC } from '../assets/constants/colors';
 
 const Wrap = styled.div`
   position: relative;
-  background-color: ${({ theme }) => theme.primary};
+  background-color: ${({ theme }) => pSBC(-0.125, theme.primary, false, true)};
 `;
 
 const CloseButton = styled.span`
@@ -19,7 +20,7 @@ const CloseButton = styled.span`
     color: ${({ theme }) => theme.white};
 
     &:hover {
-      color: ${({ theme }) => theme.black};
+      color: ${({ theme }) => theme.pink};
     }
   }
 `;
@@ -52,11 +53,11 @@ const Span = styled.span`
   text-align: center;
 
   a {
-    color: ${({ theme }) => theme.blue};
+    color: ${({ theme }) => theme.pink};
     margin: 0 0.25rem;
 
     &:hover {
-      color: ${({ theme }) => theme.blue};
+      color: ${({ theme }) => theme.pink};
       text-decoration: underline;
     }
   }
@@ -75,7 +76,8 @@ const Input = styled.input`
   border: none;
   margin: 0 1rem;
   padding: 0.25rem;
-  box-shadow: inset 0 0 4px ${({ theme }) => theme.darkGray};
+  background-color: ${({ theme }) => theme.secondary};
+  color: ${({ theme }) => theme.white};
 
   @media (max-width: 640px) {
     width: 15rem;
