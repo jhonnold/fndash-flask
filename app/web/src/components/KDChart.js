@@ -7,40 +7,43 @@ const chartOptions = {
   responsive: true,
   aspectRatio: 2.5,
   legend: {
-    display: true,
+    display: false,
     position: 'bottom',
     labels: {
-      fontColor: theme.fontColor,
+      fontColor: theme.offWhite,
     },
   },
   scales: {
     yAxes: [
       {
         ticks: {
-          fontColor: theme.fontColor,
+          fontColor: theme.offWhite,
         },
         gridLines: {
-          color: theme.border,
+          display: false,
         },
       },
     ],
     xAxes: [
       {
+        gridLines: {
+          display: false,
+        },
         ticks: {
-          fontColor: theme.fontColor,
+          fontColor: theme.offWhite,
         },
       },
     ],
   },
 };
 
-const colors = [theme.primary, pSBC(-0.25, theme.primary, false, true)];
+const colors = [theme.lightGreen, pSBC(-0.25, theme.primary, false, true)];
 
 const datasetOptions = {
   borderWidth: 2,
   fill: true,
   pointRadius: 4,
-  lineTension: 0,
+  // lineTension: 0,
 };
 
 const datasetNames = ['Daily K/D', 'Lifetime K/D'];
@@ -52,6 +55,10 @@ function KDChart({ labels, datasets }) {
       data: d,
       label: datasetNames[i],
       borderColor: colors[i],
+      pointBorderColor: colors[i],
+      pointBackgroundColor: colors[i],
+      pointHoverBackgroundColor: colors[i],
+      pointHoverBorderColor: colors[i],
       backgroundColor: `${pSBC(-0.2, colors[i], false, true)}40`,
       ...datasetOptions,
     })),

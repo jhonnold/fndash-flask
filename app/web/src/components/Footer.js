@@ -4,30 +4,28 @@ import Container from './Container';
 
 const FooterDiv = styled.div`
   width: 100%;
-  background-color: ${({ theme }) => theme.black};
+  background-color: ${({ theme }) => theme.primary};
   padding: 2rem 3rem;
   text-align: center;
-  box-shadow: 0px -4px 2px -2px #131313;
-  margin-top: 3rem;
 
   a {
     font-size: 16px;
     margin: 0 1rem;
-    color: ${({ theme }) => theme.mediumGray}!important;
+    color: ${({ theme }) => theme.white};
   }
 
   p {
-    color: ${({ theme }) => theme.mediumGray};
+    color: ${({ theme }) => theme.offWhite};
     margin-bottom: 0;
 
     a {
       margin: 0 0.4rem;
-      color: ${({ theme }) => theme.white}!important;
+      color: ${({ theme }) => theme.white};
     }
   }
 
   a:hover {
-    color: ${({ theme }) => theme.primary}!important;
+    color: ${({ theme }) => theme.lightGreen};
   }
 `;
 
@@ -42,7 +40,7 @@ function Footer() {
       <FooterContainer>
         <div>
           <a href="https://fortniteapi.com/" rel="noopener noreferrer" target="_blank">
-            fortniteapi.com
+            https://fortniteapi.com
           </a>
           <a href="https://github.com/jhonnold/fndash" rel="noopener noreferrer" target="_blank">
             <i className="fab fa-github" />

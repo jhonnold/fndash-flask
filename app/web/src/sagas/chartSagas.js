@@ -1,10 +1,10 @@
 import { takeEvery, put, call } from 'redux-saga/effects';
-import api from '../util/api';
+import { api2 } from '../util/api';
 import { types, actions } from '../ducks/charts';
 
 function* requestKdChart({ payload: { id, mode } }) {
   try {
-    const response = yield call(api.getKdChart, id, mode);
+    const response = yield call(api2.getKdChart, id, mode);
     yield put(actions.receivedKdChart(response.data));
   } catch (err) {
     yield put(actions.rejectedKdChart(err));
@@ -17,7 +17,7 @@ export function* requestKdChartSaga() {
 
 function* requestGamesChart({ payload: { id, mode } }) {
   try {
-    const response = yield call(api.getGamesPerDayChart, id, mode);
+    const response = yield call(api2.getGamesPerDayChart, id, mode);
     yield put(actions.receivedGamesChart(response.data));
   } catch (err) {
     yield put(actions.rejectedGamesChart(err));
@@ -30,7 +30,7 @@ export function* requestGamesChartSaga() {
 
 function* requestPlacementChart({ payload }) {
   try {
-    const response = yield call(api.getPlacementChart, payload);
+    const response = yield call(api2.getPlacementChart, payload);
     yield put(actions.receivedPlacementChart(response.data));
   } catch (err) {
     yield put(actions.rejectedPlacementChart(err));
@@ -43,7 +43,7 @@ export function* requestPlacementChartSaga() {
 
 function* requestTimePlayedChart({ payload }) {
   try {
-    const response = yield call(api.getTimePlayedChart, payload);
+    const response = yield call(api2.getTimePlayedChart, payload);
     yield put(actions.receivedTimePlayedChart(response.data));
   } catch (err) {
     yield put(actions.rejectedTimePayedChart(err));

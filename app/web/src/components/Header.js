@@ -14,7 +14,7 @@ import logo from '../assets/images/horizontal-logo.png';
 
 const HeaderDiv = styled.div`
   width: 100%;
-  background-color: ${({ theme }) => theme.black};
+  background-color: ${({ theme }) => theme.primary};
 `;
 
 const HeaderContainer = styled(Container)`
@@ -40,13 +40,11 @@ const SiteTitle = styled.span`
 const HeaderBreak = styled.div`
   width: calc(100% - 1rem);
   margin: 0 0.5rem;
-  background-color: ${({ theme }) => theme.border};
   height: 1px;
 `;
 
-const Name = styled.h2`
+const Name = styled.h1`
   text-transform: uppercase;
-  color: ${({ theme }) => theme.primary};
   margin: 0;
 `;
 
@@ -60,11 +58,15 @@ const TabList = styled.ul`
 
 const Tab = styled.li`
   > button {
-    color: ${({ isActive, theme }) => (isActive ? theme.primary : theme.white)};
+    text-decoration: ${({ isActive }) => (isActive ? 'underline' : 'none')};
+    color: ${({ isActive, theme }) => (isActive ? theme.white : theme.offWhite)};
     padding: 1rem;
     text-transform: capitalize;
     cursor: pointer;
-    font-weight: 300;
+
+    &:hover {
+      color: ${({ theme }) => theme.white};
+    }
   }
 `;
 
@@ -100,7 +102,7 @@ class Header extends React.PureComponent {
               <SearchBar placeholder="Select User..." />
             </Row>
             <HeaderBreak />
-            <Row>
+            <Row style={{ marginTop: '2rem' }}>
               <Name>{username}</Name>
               <TabList>
                 {['all', 'solo', 'duo', 'squad'].map(v => (

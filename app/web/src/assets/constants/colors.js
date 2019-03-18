@@ -1,14 +1,16 @@
 export const theme = {
-  primary: '#5dbc4f',
-  lightGray: '#e6e6e6',
-  mediumGray: '#cacaca',
-  darkGray: '#272727',
-  black: '#131313',
+  primary: '#2B2E3D',
+  secondary: '#343F56',
   white: '#fafafa',
-  cardBack: '#1f1f1f',
-  border: 'rgba(250, 250, 250, 0.125)',
-  fontColor: '#fafafa',
-  blue: '#145c9e',
+  offWhite: '#91A6B5',
+  blue: '#6D80FE',
+  lightBlue: '#2ACAFD',
+  pink: '#FF6C88',
+  peach: '#FF998B',
+  turqoise: '#0BB4E3',
+  lightGreen: '#27EEA0',
+  purple: '#6F7CFF',
+  magenta: '#FA83ED',
 };
 
 /* eslint-disable */

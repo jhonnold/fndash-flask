@@ -39,9 +39,8 @@ const initialState = {
     error: null,
     loading: false,
     data: {
-      solo: [],
-      duo: [],
-      squad: [],
+      labels: [],
+      datasets: [],
     },
   },
   gamesChart: {
@@ -69,11 +68,7 @@ export default (state = initialState, action) => {
     case KD_CHART_REQUESTED: {
       return {
         ...state,
-        kdChart: {
-          ...state.kdChart,
-          loading: true,
-          error: null,
-        },
+        kdChart: initialState.kdChart,
       };
     }
     case KD_CHART_RECEIVED: {
@@ -103,11 +98,7 @@ export default (state = initialState, action) => {
     case GAMES_CHART_REQUESTED: {
       return {
         ...state,
-        gamesChart: {
-          ...state.gamesChart,
-          loading: true,
-          error: null,
-        },
+        gamesChart: initialState.gamesChart,
       };
     }
     case GAMES_CHART_RECEIVED: {
@@ -137,11 +128,7 @@ export default (state = initialState, action) => {
     case PLACEMENT_CHART_REQUESTED: {
       return {
         ...state,
-        placementChart: {
-          ...state.placementChart,
-          loading: true,
-          error: null,
-        },
+        placementChart: initialState.placementChart,
       };
     }
     case PLACEMENT_CHART_RECEIVED: {
@@ -168,11 +155,7 @@ export default (state = initialState, action) => {
     case TIME_PLAYED_CHART_REQUESTED: {
       return {
         ...state,
-        timePlayedChart: {
-          ...state.timePlayedChart,
-          loading: false,
-          error: null,
-        },
+        timePlayedChart: initialState.timePlayedChart,
       };
     }
     case TIME_PLAYED_CHART_RECEIVED: {

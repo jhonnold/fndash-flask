@@ -26,26 +26,7 @@ const initialState = {
   loading: false,
   data: {
     games: [],
-    records: {
-      solo: {
-        time_played: 0,
-        mode: 'solo',
-        kills: 0,
-        placement: 'Loss',
-      },
-      duo: {
-        time_played: 0,
-        mode: 'duo',
-        kills: 0,
-        placement: 'Loss',
-      },
-      squad: {
-        time_played: 0,
-        mode: 'squad',
-        kills: 0,
-        placement: 'Loss',
-      },
-    },
+    records: [],
   },
 };
 
@@ -58,6 +39,10 @@ export default (state = initialState, action) => {
         ...state,
         error: null,
         loading: true,
+        data: {
+          ...state.data,
+          games: [],
+        },
       };
     }
     case USER_GAMES_RECEIVED: {
@@ -83,6 +68,10 @@ export default (state = initialState, action) => {
         ...state,
         loading: true,
         error: null,
+        data: {
+          ...state.data,
+          records: [],
+        },
       };
     }
     case USER_RECORDS_RECEIVED: {

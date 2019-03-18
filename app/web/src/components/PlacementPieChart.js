@@ -24,16 +24,16 @@ const chartOptions = {
 };
 
 const colors = [
-  theme.primary,
-  pSBC(-0.25, theme.primary, false, true),
-  pSBC(-0.5, theme.primary, false, true),
-  pSBC(-0.75, theme.primary, false, true),
+  theme.lightGreen,
+  pSBC(-0.25, theme.lightGreen, false, true),
+  pSBC(-0.5, theme.lightGreen, false, true),
+  pSBC(-0.75, theme.lightGreen, false, true),
 ];
 
-const datasetLabels = {
-  solo: ['Solo Victory', 'Solo Top 10', 'Solo Top 25', 'Solo Loss'],
-  duo: ['Duo Victory', 'Duo Top 5', 'Duo Top 12', 'Duo Loss'],
-  squad: ['Squad Victory', 'Squad Top 3', 'Squad Top 6', 'Squad Loss'],
+const modeEnum = {
+  solo: 0,
+  duo: 1,
+  squad: 2,
 };
 
 function PlacementPieChart({ data, mode }) {
@@ -43,19 +43,24 @@ function PlacementPieChart({ data, mode }) {
     chartData = {
       datasets: [
         {
-          data: data[mode],
-          labels: datasetLabels[mode],
+          data: data.datasets[modeEnum[mode]],
+          labels: data.labels[modeEnum[mode]],
           backgroundColor: colors,
+          borderColor: theme.primary,
+          borderWidth: 6,
+          label: 0,
         },
       ],
     };
   } else {
     chartData = {
-      datasets: ['solo', 'duo', 'squad'].map(k => ({
-        data: data[k],
-        labels: datasetLabels[k],
+      datasets: data.datasets.map((p, i) => ({
+        data: p,
+        labels: data.labels[i],
         backgroundColor: colors,
-        label: k,
+        borderColor: theme.primary,
+        borderWidth: 6,
+        label: i,
       })),
     };
   }

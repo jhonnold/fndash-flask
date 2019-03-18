@@ -15,9 +15,9 @@ const chartOptions = {
 };
 
 const colors = [
-  theme.primary,
-  pSBC(-0.375, theme.primary, false, true),
-  pSBC(-0.75, theme.primary, false, true),
+  theme.lightGreen,
+  pSBC(-0.375, theme.lightGreen, false, true),
+  pSBC(-0.75, theme.lightGreen, false, true),
 ];
 
 function TimePlayedChart({ datasets, labels }) {
@@ -26,6 +26,9 @@ function TimePlayedChart({ datasets, labels }) {
     datasets: datasets.map(d => ({
       data: d,
       backgroundColor: colors,
+      borderColor: theme.primary,
+      borderWidth: 6,
+      label: `time-played-${d}`,
     })),
   };
 
