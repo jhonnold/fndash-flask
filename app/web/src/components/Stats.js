@@ -28,18 +28,8 @@ const Stat = styled.div`
 `;
 
 const StatBox = styled.div`
-  ${({ color, theme }) => {
-    if (color === 'blue') {
-      return `background: linear-gradient(to top right, ${theme.blue}, ${theme.lightBlue});`;
-    }
-    if (color === 'green') {
-      return `background: linear-gradient(to top right, ${theme.turqoise}, ${theme.lightGreen});`;
-    }
-    if (color === 'purple') {
-      return `background: linear-gradient(to top right, ${theme.purple}, ${theme.magenta});`;
-    }
-    return `background: linear-gradient(to top right, ${theme.pink}, ${theme.peach});`;
-  }}
+  background: ${({ theme }) => theme.primary};
+  border-left: 0.0625rem solid ${({ theme, color }) => theme[color] || theme.lightBlue};
   border-radius: 0.5rem;
   padding: 1rem 2rem;
   width: 100%;
@@ -65,7 +55,7 @@ function Stats({
     <StatsDiv>
       <StatsContainer>
         <Stat>
-          <StatBox color="green">
+          <StatBox color="lightGreen">
             <StatNumber>
               <AnimatedNumber component={H1} number={placements.placetop1} noDecimal />
               <h4>Victories</h4>
@@ -76,7 +66,7 @@ function Stats({
           </StatBox>
         </Stat>
         <Stat>
-          <StatBox color="blue">
+          <StatBox color="lightGreen">
             <StatNumber>
               <AnimatedNumber component={H1} number={matchesplayed} noDecimal />
               <h4>Matches</h4>
@@ -87,7 +77,7 @@ function Stats({
           </StatBox>
         </Stat>
         <Stat>
-          <StatBox color="purple">
+          <StatBox color="lightGreen">
             <StatNumber>
               <AnimatedNumber component={H1} number={kills} noDecimal />
               <h4>Kills</h4>
@@ -98,7 +88,7 @@ function Stats({
           </StatBox>
         </Stat>
         <Stat>
-          <StatBox>
+          <StatBox color="lightGreen">
             <StatNumber>
               <AnimatedNumber component={H1} number={kd} format={v => v.toFixed(3)} />
               <h4>K/D</h4>

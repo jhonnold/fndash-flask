@@ -67,7 +67,7 @@ const Error = styled.span`
   font-weight: 400;
   margin: 0.5rem;
   text-align: center;
-  color: red;
+  color: ${({ theme }) => theme.pink};
 `;
 
 const Input = styled.input`
@@ -111,10 +111,7 @@ class SignUp extends React.PureComponent {
             <SignUpContainer>
               {!users.error ? (
                 <Span>
-                  Interested in signing up? Enter your
-                  <a href="https://imgur.com/a/SmzoIIY" target="_blank" rel="noreferrer noopener">
-                    Epic Account ID!
-                  </a>
+                  Interested in signing up? Enter your Fortnite Username!
                 </Span>
               ) : (
                 <Error>{users.error}</Error>
@@ -124,7 +121,7 @@ class SignUp extends React.PureComponent {
                   name="user_id"
                   value={uid}
                   onChange={({ target }) => this.setState({ uid: target.value })}
-                  placeholder="Enter User ID..."
+                  placeholder="Enter Username..."
                 />
                 <Button onClick={() => onSubmit(uid)}>Join</Button>
               </Row>

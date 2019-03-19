@@ -148,9 +148,9 @@ const rejectedUser = err => ({
   payload: err.message,
 });
 
-const requestJoinUser = uid => ({
+const requestJoinUser = username => ({
   type: JOIN_USER_REQUESTED,
-  payload: uid,
+  payload: username,
 });
 
 const receivedJoinUser = () => ({
