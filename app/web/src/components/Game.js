@@ -5,7 +5,7 @@ import { pSBC } from '../assets/constants/colors';
 
 const GameDiv = styled.div`
   border-radius: 0.5rem;
-  border-left: 0.0625rem solid ${({ theme, color }) => theme[color] || theme.offWhite};
+  border-left: 0.0625rem solid ${({ theme, color }) => theme[color] || theme.lightBlue};
   background-color: ${({ theme }) => pSBC(-0.0625, theme.primary, false, true)};
   padding: 0.5rem;
   margin-bottom: 1rem;
