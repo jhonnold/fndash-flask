@@ -130,15 +130,10 @@ class Homepage extends React.PureComponent {
     requestRecentGames();
   }
 
-  onJoin(uid) {
-    const { requestJoinUser, rejectedJoinUser } = this.props;
+  onJoin(username) {
+    const { requestJoinUser } = this.props;
 
-    if (uid.length !== 32) {
-      rejectedJoinUser('Invalid UID');
-      return;
-    }
-
-    requestJoinUser(uid);
+    requestJoinUser(username);
   }
 
   render() {
@@ -179,7 +174,6 @@ const mapStateToProps = ({ games, users }) => ({
 const matchDispatchToProps = dispatch => ({
   ...bindActionCreators(gamesActions, dispatch),
   requestJoinUser: uid => dispatch(userActions.requestJoinUser(uid)),
-  rejectedJoinUser: err => dispatch(userActions.rejectedJoinUser(err)),
 });
 
 export default connect(

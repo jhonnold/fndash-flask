@@ -132,15 +132,15 @@ def time_played(user_id):
 @api.route("/new_user", methods=["POST"])
 def new_user():
     json = request.get_json()
-    if ('uid' not in json):
-        abort(Response(response='No UID Received', status=400))
+    if ('username' not in json):
+        abort(Response(response='No Username Received', status=400))
 
-    uid = json.get('uid')
+    username = json.get('username')
 
     base = 'https://fortnite-public-api.theapinetwork.com/prod09'
-    endpoint = base + '/users/public/br_stats_v2?platform=pc&user_id={}'
+    endpoint = base + '/users/id?username={}'
 
-    r = requests.get(endpoint.format(uid))
+    r = requests.get(endpoint.format(username))
     res_json = r.json()
 
     if res_json is None or 'error' in json:
@@ -148,9 +148,9 @@ def new_user():
             Response(
                 response='Unable to locate you on Fortniteapi', status=500))
 
-    username = res_json.get('epicName')
+    uid = res_json.get('uid')
 
-    if username is None:
+    if uid is None:
         abort(
             Response(
                 response='Unable to locate you on Fortniteapi', status=500))
