@@ -1,3 +1,9 @@
+const ACTIVE_USERS_REQUESTED = 'fn-dash/users/ACTIVE_USERS_REQUESTED';
+const ACTIVE_USERS_RECEIVED = 'fn-dash/users/ACTIVE_USERS_RECIEVED';
+const ACTIVE_USERS_REJECTED = 'fn-dash/users/ACTIVE_USERS_REJECTED';
+const START_REQUESTING_ACTIVE_USERS = 'fn-dash/users/START_REQUESTING_ACTIVE_USERS';
+const STOP_REQUESTING_ACTIVE_USERS = 'fn-dash/users/STOP_REQUESTING_ACTIVE_USERS';
+
 const USER_LIST_REQUESTED = 'fn-dash/users/USER_LIST_REQUESTED';
 const USER_LIST_RECEIVED = 'fn-dash/users/USER_LIST_RECEIVED';
 const USER_LIST_REJECTED = 'fn-dash/users/USER_LIST_REJECTED';
@@ -11,6 +17,11 @@ const JOIN_USER_RECEIVED = 'fn-dash/user/NEW_USER_RECEIVED';
 const JOIN_USER_REJECTED = 'fn-dash/user/NEW_USER_REJECTED';
 
 export const types = {
+  ACTIVE_USERS_REQUESTED,
+  ACTIVE_USERS_RECEIVED,
+  ACTIVE_USERS_REJECTED,
+  START_REQUESTING_ACTIVE_USERS,
+  STOP_REQUESTING_ACTIVE_USERS,
   USER_LIST_REQUESTED,
   USER_LIST_RECEIVED,
   USER_LIST_REJECTED,
@@ -25,7 +36,9 @@ export const types = {
 const initialState = {
   error: null,
   loading: false,
-  data: {},
+  data: {
+    activeUsers: [],
+  },
   signedUp: false,
 };
 
@@ -33,6 +46,31 @@ export default (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
+    case ACTIVE_USERS_REQUESTED: {
+      return {
+        ...state,
+        error: null,
+        loading: true,
+      };
+    }
+    case ACTIVE_USERS_RECEIVED: {
+      return {
+        ...state,
+        error: null,
+        loading: false,
+        data: {
+          ...state.data,
+          activeUsers: payload,
+        },
+      };
+    }
+    case ACTIVE_USERS_REJECTED: {
+      return {
+        ...state,
+        error: payload,
+        loading: false,
+      };
+    }
     case JOIN_USER_REQUESTED: {
       return {
         ...state,
@@ -73,7 +111,10 @@ export default (state = initialState, action) => {
         };
       });
       return {
-        data: users,
+        data: {
+          ...state.data,
+          ...users,
+        },
         error: null,
         loading: false,
       };
@@ -119,6 +160,28 @@ export default (state = initialState, action) => {
   }
 };
 
+const requestActiveUsers = () => ({
+  type: ACTIVE_USERS_REQUESTED,
+});
+
+const receivedActiveUsers = activeUsers => ({
+  type: ACTIVE_USERS_RECEIVED,
+  payload: activeUsers,
+});
+
+const rejectedActiveUsers = err => ({
+  type: ACTIVE_USERS_REJECTED,
+  payload: err,
+});
+
+const startRequestingActiveUsers = () => ({
+  type: START_REQUESTING_ACTIVE_USERS,
+});
+
+const stopRequestingActiveUsers = () => ({
+  type: STOP_REQUESTING_ACTIVE_USERS,
+});
+
 const requestUserList = () => ({
   type: USER_LIST_REQUESTED,
 });
@@ -163,6 +226,11 @@ const rejectedJoinUser = err => ({
 });
 
 export const actions = {
+  requestActiveUsers,
+  receivedActiveUsers,
+  rejectedActiveUsers,
+  startRequestingActiveUsers,
+  stopRequestingActiveUsers,
   requestUserList,
   receivedUserList,
   rejectedUserList,

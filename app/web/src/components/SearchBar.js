@@ -54,7 +54,7 @@ class SearchBar extends React.PureComponent {
       }),
       input: base => ({
         ...base,
-        color: mainTheme.primaryFont,
+        color: mainTheme.white,
       }),
       menu: base => ({
         ...base,
@@ -88,10 +88,23 @@ class SearchBar extends React.PureComponent {
       }),
     };
 
-    const userOptions = Object.values(data).map(u => ({
-      value: u.id,
-      label: u.username,
-    }));
+    const userOptions = Object.values(data)
+      .map(u => ({
+        value: u.id,
+        label: u.username,
+      }))
+      .sort((a, b) => {
+        if (!a.label) return -1;
+        if (!b.label) return 1;
+        if (a.label.toUpperCase() < b.label.toUpperCase()) {
+          return -1;
+        }
+        if (a.label.toUpperCase() > b.label.toUpperCase()) {
+          return 1;
+        }
+        return 0;
+      })
+      .filter(u => u.label && u.value);
 
     return (
       <Select

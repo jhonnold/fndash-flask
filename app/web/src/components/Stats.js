@@ -31,15 +31,11 @@ const StatBox = styled.div`
   background: ${({ theme }) => theme.primary};
   border-left: 0.0625rem solid ${({ theme, color }) => theme[color] || theme.lightBlue};
   border-radius: 0.5rem;
-  padding: 1rem 2rem;
+  padding: 1rem;
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  @media (max-width: 768px) {
-    padding: 0.5rem 1rem;
-  }
 `;
 
 const StatNumber = styled.div`

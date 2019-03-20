@@ -17,13 +17,14 @@ const GameDiv = styled.div`
   }
 
   > div {
-    flex: 1;
+    flex: 2;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 
     &:last-of-type {
       align-items: flex-end;
+      flex: 1;
     }
   }
 
