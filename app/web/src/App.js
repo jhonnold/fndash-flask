@@ -4,6 +4,7 @@ import { ConnectedRouter } from 'connected-react-router';
 import createHistory from 'history/createBrowserHistory';
 import { hot } from 'react-hot-loader';
 import { ThemeProvider } from 'styled-components';
+import ReactGA from 'react-ga';
 import rootSaga from './sagas';
 import configureStore from './store';
 import Routes from './containers/Routes';
@@ -11,6 +12,11 @@ import { theme } from './assets/constants/colors';
 
 const history = createHistory();
 const store = configureStore(history);
+
+ReactGA.initialize('UA-136695217-1');
+history.listen((location) => {
+  ReactGA.pageview(location.pathname + location.search);
+});
 
 store.runSaga(rootSaga);
 
