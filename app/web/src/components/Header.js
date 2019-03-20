@@ -29,6 +29,16 @@ const Row = styled.div`
   width: 100%;
 `;
 
+const ResponsiveRow = styled(Row)`
+  flex-wrap: wrap;
+  margin-top: 2rem;
+
+  @media (max-width: 639px) {
+    margin-top: 0rem;
+    justify-content: center;
+  }
+`;
+
 const SiteTitle = styled.span`
   margin: 0.5rem 1rem 0.5rem 0;
 
@@ -46,6 +56,10 @@ const HeaderBreak = styled.div`
 const Name = styled.h1`
   text-transform: uppercase;
   margin: 0;
+
+  @media (max-width: 639px) {
+    margin: 0.5rem;
+  }
 `;
 
 const TabList = styled.ul`
@@ -54,6 +68,10 @@ const TabList = styled.ul`
   margin: 0;
   display: flex;
   align-items: center;
+
+  @media (max-width: 639px) {
+    margin: 0.5rem;
+  }
 `;
 
 const Tab = styled.li`
@@ -102,7 +120,7 @@ class Header extends React.PureComponent {
               <SearchBar placeholder="Select User..." />
             </Row>
             <HeaderBreak />
-            <Row style={{ marginTop: '2rem' }}>
+            <ResponsiveRow>
               <Name>{username}</Name>
               <TabList>
                 {['all', 'solo', 'duo', 'squad'].map(v => (
@@ -113,7 +131,7 @@ class Header extends React.PureComponent {
                   </Tab>
                 ))}
               </TabList>
-            </Row>
+            </ResponsiveRow>
           </HeaderContainer>
         </HeaderDiv>
       </React.Fragment>
