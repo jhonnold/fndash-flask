@@ -2,9 +2,8 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { actions as gamesActions } from '../ducks/games';
 import { actions as userActions } from '../ducks/users';
-import GamesList from '../components/GamesList';
+import UsersList from '../components/UsersList';
 import Column from '../components/Column';
 import SearchBar from '../components/SearchBar';
 import Container from '../components/Container';
@@ -15,19 +14,19 @@ import logo from '../assets/images/vertical-logo.png';
 
 const Banner = styled.div`
   width: 100%;
-  box-shadow: 0px 4px 2px -2px ${({ theme }) => theme.primary};
   text-align: center;
   padding: 2.25rem 0 2rem;
   background-color: ${({ theme }) => theme.primary};
 
-  h1 {
-    font-size: 50px;
-    font-weight: 500;
-    color: ${({ theme }) => theme.primary};
+  h5 {
+    color: ${({ theme }) => theme.offWhite};
+    text-align: center;
+    margin: 1rem 0;
+    font-style: italic;
   }
 
   img {
-    max-height: 16rem;
+    max-height: 14rem;
   }
 `;
 
@@ -35,13 +34,16 @@ const HomeContainer = styled(Container)`
   flex-direction: column;
   align-items: center;
   padding-top: 4rem;
+  flex: 1;
 `;
 
 const HomeColumn = styled(Column)`
   margin-top: 4rem;
+  max-width: 750px
+  width: 100%;
 
   @media (min-width: 640px) {
-    width: 750px;
+    width: 100%;
   }
 `;
 
@@ -50,14 +52,16 @@ const homeStyles = {
     ...base,
     fontWeight: '200',
     color: mainTheme.primary,
-    width: '100%',
-    maxWidth: 760,
+    width: 'calc(100% - 2rem)',
+    maxWidth: 'calc(750px - 2rem)',
+    margin: '0 1rem',
   }),
   control: base => ({
     ...base,
     backgroundColor: mainTheme.primary,
     width: '100%',
     height: '100%',
+    minHeight: 50,
     border: 'none',
     boxShadow: 'none',
     cursor: 'text',
@@ -125,9 +129,15 @@ class Homepage extends React.PureComponent {
   }
 
   componentDidMount() {
-    const { requestRecentGames } = this.props;
+    const { startRequestingActiveUsers } = this.props;
 
-    requestRecentGames();
+    startRequestingActiveUsers();
+  }
+
+  componentWillUnmount() {
+    const { stopRequestingActiveUsers } = this.props;
+
+    stopRequestingActiveUsers();
   }
 
   onJoin(username) {
@@ -138,9 +148,9 @@ class Homepage extends React.PureComponent {
 
   render() {
     const { signupOpen } = this.state;
-    const { games, users } = this.props;
+    const { users } = this.props;
 
-    const data = games.data.games;
+    const { activeUsers } = users.data;
 
     return (
       <React.Fragment>
@@ -153,11 +163,12 @@ class Homepage extends React.PureComponent {
         )}
         <Banner>
           <img src={logo} alt="Logo" />
+          <h5>Detailed Fortnite Stat Tracking</h5>
         </Banner>
         <HomeContainer>
-          <SearchBar styles={homeStyles} placeholder="Select User..." />
+          <SearchBar styles={homeStyles} placeholder="Select Player..." />
           <HomeColumn>
-            <GamesList games={data} title="All Recent Games" />
+            <UsersList users={activeUsers} title="Active Players" />
           </HomeColumn>
         </HomeContainer>
         <Footer />
@@ -166,13 +177,12 @@ class Homepage extends React.PureComponent {
   }
 }
 
-const mapStateToProps = ({ games, users }) => ({
-  games,
+const mapStateToProps = ({ users }) => ({
   users,
 });
 
 const matchDispatchToProps = dispatch => ({
-  ...bindActionCreators(gamesActions, dispatch),
+  ...bindActionCreators(userActions, dispatch),
   requestJoinUser: uid => dispatch(userActions.requestJoinUser(uid)),
 });
 

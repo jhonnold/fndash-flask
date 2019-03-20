@@ -1,7 +1,7 @@
 #!/bin/sh
 if [ -f /tmp/celerybeat.pid ]
 then
-  kill -9 $(cat celerybeat.pid)
+  kill -9 $(cat /tmp/celerybeat.pid)
   rm /tmp/celerybeat.pid
 fi
 

@@ -54,7 +54,7 @@ class SearchBar extends React.PureComponent {
       }),
       input: base => ({
         ...base,
-        color: mainTheme.primaryFont,
+        color: mainTheme.white,
       }),
       menu: base => ({
         ...base,
