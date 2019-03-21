@@ -5,12 +5,13 @@ import { theme, pSBC } from '../assets/constants/colors';
 
 const chartOptions = {
   responsive: true,
-  aspectRatio: 2.5,
   legend: {
-    display: false,
+    display: true,
     position: 'bottom',
     labels: {
       fontColor: theme.offWhite,
+      boxWidth: 12,
+      padding: 4,
     },
   },
   scales: {
@@ -43,7 +44,6 @@ const datasetOptions = {
   borderWidth: 2,
   fill: true,
   pointRadius: 4,
-  // lineTension: 0,
 };
 
 const datasetNames = ['Daily K/D', 'Lifetime K/D'];
