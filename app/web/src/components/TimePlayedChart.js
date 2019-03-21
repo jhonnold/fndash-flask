@@ -1,24 +1,29 @@
 import React from 'react';
 import { Pie as PieChart } from 'react-chartjs-2';
 import Card from './Card';
-import { theme, pSBC } from '../assets/constants/colors';
+import { theme } from '../assets/constants/colors';
+
+const genLabels = [
+  { text: 'Solo', fillStyle: theme.lightBlue },
+  { text: 'Duo', fillStyle: theme.purple },
+  { text: 'Squad', fillStyle: theme.pink },
+];
+
+const colors = [theme.lightBlue, theme.purple, theme.pink];
 
 const chartOptions = {
   aspectRatio: 2,
   legend: {
-    display: false,
-    position: 'bottom',
+    display: true,
+    position: 'right',
     labels: {
-      fontColor: theme.fontColor,
+      fontColor: theme.offWhite,
+      boxWidth: 12,
+      padding: 4,
+      generateLabels: () => genLabels,
     },
   },
 };
-
-const colors = [
-  theme.lightGreen,
-  pSBC(-0.375, theme.lightGreen, false, true),
-  pSBC(-0.75, theme.lightGreen, false, true),
-];
 
 function TimePlayedChart({ datasets, labels }) {
   const chartData = {

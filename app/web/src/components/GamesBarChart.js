@@ -7,10 +7,12 @@ const chartOptions = {
   responsive: true,
   aspectRatio: 2.5,
   legend: {
-    display: false,
+    display: true,
     position: 'bottom',
     labels: {
-      fontColor: theme.fontColor,
+      fontColor: theme.offWhite,
+      padding: 4,
+      boxWidth: 12,
     },
   },
   scales: {
