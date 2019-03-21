@@ -2,7 +2,6 @@ version: '3'
 
 services:
   postgres:
-    restart: always
     image: postgres:10
     ports:
       - 5432:5432
@@ -17,7 +16,6 @@ services:
       context: .
       dockerfile: docker/DockerFile
     image: fn-dash
-    restart: always
     command: python manage.py runserver
     environment:
       - FLASK_APP=manage.py
@@ -30,7 +28,6 @@ services:
       - .:/usr/share/fn-dash
 
   redis:
-    restart: always
     image: redis
     volumes:
       - redis:/data
@@ -40,7 +37,6 @@ services:
       context: .
       dockerfile: docker/DockerFile
     image: fn-dash
-    restart: always
     command: sh docker/docker.celery.sh
     volumes:
       - .:/usr/share/fn-dash
