@@ -152,10 +152,16 @@ def minutes_played_per_playlist_mode(user, included_playlists, included_modes):
     labels, minutes = [], []
 
     for mode in included_modes:
-        stat = user.stats.filter(Stat.name.in_(included_playlists)).filter(
-            Stat.mode == mode).first()
+        stats = user.stats.filter(Stat.name.in_(included_playlists)).filter(
+            Stat.mode == mode).all()
+
+        if stats is None:
+            continue
+
+        minutes.append(0)
+        for stat in stats:
+            minutes[len(minutes) - 1] += stat.minutesplayed if stat is not None else 0
 
         labels.append('{} Minutes'.format(mode.capitalize()))
-        minutes.append(stat.minutesplayed if stat is not None else 0)
 
     return labels, minutes
