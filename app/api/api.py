@@ -28,7 +28,8 @@ def active_users():
             lambda r: dict(
                 username=r.User.username,
                 id=r.User.id,
-                playedAt=r.Game.time_played), results))
+                playedAt=r.Game.time_played)
+                kills=r.Game.kills, results))
 
     return jsonify(
         sorted(
