@@ -28,6 +28,8 @@ function UsersList({ title, users = [] }) {
       <h5>
         <Link to={`/users/${u.id}`}>{u.username}</Link>
       </h5>
+      <h6>{u.kills}</h6>
+      <h6>{u.playedAt}</h6>
     </Username>
   ));
 
