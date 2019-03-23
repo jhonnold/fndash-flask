@@ -23,8 +23,6 @@ def active_users():
         User, Game).join(Game).filter(Game.time_played >= time).distinct(
             User.id).all()
 
-    current_app.logger.info(results)
-
     serialized_users = []
     for res in results:
         mapped = dict()

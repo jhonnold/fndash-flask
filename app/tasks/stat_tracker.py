@@ -15,92 +15,21 @@ USER_STATS_ENDPOINT = BASE_URL + '/users/public/br_stats_v2?platform=pc&user_id=
 
 
 @celery.task(ignore_result=True)
-def get_user_from_fortnite_api(url):
+def stat_tracker():
     with app.app_context():
-        r = requests.get(url)
-        r.raise_for_status()
+        users = User.query.all()
 
-        json = r.json()
-        return json
+        for user in users:
+            logger.info('Starting to update info for {}'.format(user))
+            get_user_from_fortnite_api.apply_async((user.id, user.uid))
 
 
 @celery.task(ignore_result=True)
-def update_or_create_stat(user_id, mode, playlist, data):
+def get_user_from_fortnite_api(user_id, uid):
     with app.app_context():
-        stat = Stat.query.filter_by(
-            user_id=user_id, mode=mode, name=playlist).first()
-
-        just_created = False
-        if stat is None:
-            logger.info('No Stat ({}/{}) for user_id: {}'.format(
-                playlist, mode, user_id))
-            logger.info('Creating...')
-            stat = Stat(
-                user_id=user_id,
-                name=playlist,
-                mode=mode,
-                matchesplayed=0,
-                kills=0,
-                placements=dict(),
-                is_ltm=(playlist != 'default'))
-            just_created = True
-            db.session.add(stat)
-
-        if stat.matchesplayed < data.get('matchesplayed', 0):
-            if not just_created:
-                game = create_game(user_id, mode, playlist, stat, data)
-                if game is not None:
-                    db.session.add(game)
-
-            stat.placements = get_placements(data)
-            stat.kills = data.get('kills', 0)
-            stat.matchesplayed = data.get('matchesplayed', 0)
-            stat.playersoutlived = data.get('playersoutlived', 0)
-            stat.minutesplayed = data.get('minutesplayed', 0)
-            stat.updated = datetime.datetime.now()
-
-        db.session.commit()
-
-
-def create_game(user_id, mode, playlist, stat, data):
-    logger.info('Creating game for {}, in playlist/mode - {}/{}'.format(
-        user_id, playlist, mode))
-               
-    stat_placements = stat.placements 
-    if type(stat_placements) is list:
-        stat_placements = stat_placements[0]   
-       
-    placements = get_placements(data)
-    placement = 'Loss'
-    place = 101
-
-    # Go thru our placements
-    for key in placements.keys():
-        # If this placement is less than the other one that means its calculating
-        if (stat_placements.get(key, 0) < placements.get(key)):
-            # Get the placement number
-            new_place = int(re.findall(r'\d+', key)[0])
-            # If its less than it is more important
-            # place 1 is better than place 3, but place1 affects place 3
-            if new_place < place:
-                place = new_place
-
-    if place == 1:
-        placement = 'Victory'
-    elif place != 101:
-        placement = 'Top {}'.format(place)
-
-    kills = data.get('kills', 0) - stat.kills
-
-    if kills >= 0 and kills <= 99:
-        return Game(
-            user_id=user_id,
-            mode=mode,
-            playlist=playlist,
-            placement=placement,
-            kills=kills)
-
-    return None
+        r = requests.get(USER_STATS_ENDPOINT.format(uid))
+        json = r.json()
+        update_user_stats.apply((json, user_id))
 
 
 @celery.task(ignore_result=True)
@@ -116,7 +45,7 @@ def update_user_stats(json, user_id):
         if 'error' in json:
             logger.error(
                 'There was an error in fetching data for {}'.format(user))
-            logger.error(json.error)
+            logger.error(json.get('error'))
             return
 
         if 'overallData' not in json or 'data' not in json:
@@ -180,12 +109,79 @@ def update_user_stats(json, user_id):
 
 
 @celery.task(ignore_result=True)
-def stat_tracker():
+def update_or_create_stat(user_id, mode, playlist, data):
     with app.app_context():
-        users = User.query.all()
+        stat = Stat.query.filter_by(
+            user_id=user_id, mode=mode, name=playlist).first()
 
-        for user in users:
-            logger.info('Starting to update info for {}'.format(user))
-            get_user_from_fortnite_api.apply(
-                (USER_STATS_ENDPOINT.format(user.uid), ),
-                link=update_user_stats.s(user.id))
+        just_created = False
+        if stat is None:
+            logger.info('No Stat ({}/{}) for user_id: {}'.format(
+                playlist, mode, user_id))
+            logger.info('Creating...')
+            stat = Stat(
+                user_id=user_id,
+                name=playlist,
+                mode=mode,
+                matchesplayed=0,
+                kills=0,
+                placements=dict(),
+                is_ltm=(playlist != 'default'))
+            just_created = True
+            db.session.add(stat)
+
+        if stat.matchesplayed < data.get('matchesplayed', 0):
+            if not just_created:
+                game = create_game(user_id, mode, playlist, stat, data)
+                if game is not None:
+                    db.session.add(game)
+
+            stat.placements = get_placements(data)
+            stat.kills = data.get('kills', 0)
+            stat.matchesplayed = data.get('matchesplayed', 0)
+            stat.playersoutlived = data.get('playersoutlived', 0)
+            stat.minutesplayed = data.get('minutesplayed', 0)
+            stat.updated = datetime.datetime.now()
+
+        db.session.commit()
+
+
+def create_game(user_id, mode, playlist, stat, data):
+    logger.info('Creating game for {}, in playlist/mode - {}/{}'.format(
+        user_id, playlist, mode))
+
+    stat_placements = stat.placements
+    if type(stat_placements) is list:
+        stat_placements = stat_placements[0]
+
+    placements = get_placements(data)
+    placement = 'Loss'
+    place = 101
+
+    # Go thru our placements
+    for key in placements.keys():
+        # If this placement is less than the other one that means its calculating
+        if (stat_placements.get(key, 0) < placements.get(key)):
+            # Get the placement number
+            new_place = int(re.findall(r'\d+', key)[0])
+            # If its less than it is more important
+            # place 1 is better than place 3, but place1 affects place 3
+            if new_place < place:
+                place = new_place
+
+    if place == 1:
+        placement = 'Victory'
+    elif place != 101:
+        placement = 'Top {}'.format(place)
+
+    kills = data.get('kills', 0) - stat.kills
+
+    if kills >= 0 and kills <= 99:
+        return Game(
+            user_id=user_id,
+            mode=mode,
+            playlist=playlist,
+            placement=placement,
+            kills=kills)
+
+    return None
