@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { Helmet } from 'react-helmet';
 import Container from '../components/Container';
 import Banner from '../components/Banner';
 import Footer from '../components/Footer';
@@ -29,6 +30,7 @@ const P = styled.p`
 
 export default () => (
   <React.Fragment>
+    <Helmet><title>FN Dash - About Us</title></Helmet>
     <Banner />
     <FlexContainer>
       <H2>About Us</H2>

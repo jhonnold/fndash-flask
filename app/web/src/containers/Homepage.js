@@ -2,6 +2,7 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { Helmet } from 'react-helmet';
 import { actions as userActions } from '../ducks/users';
 import UsersList from '../components/UsersList';
 import Column from '../components/Column';
@@ -136,6 +137,7 @@ class Homepage extends React.PureComponent {
 
     return (
       <React.Fragment>
+        <Helmet><title>FN Dash</title></Helmet>
         {signupOpen && (
           <SignUp
             users={users}
