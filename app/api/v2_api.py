@@ -8,7 +8,9 @@ from app.charts import kd_per_day, games_played_per_day, minutes_played_per_play
 
 v2_api = Blueprint('v2_api', __name__, url_prefix='/v2/api')
 
-IMPORTANT_MODES = ['default', 'showdownalt', 'showdown', 'showdowntournament', 'blitz']
+IMPORTANT_MODES = [
+    'default', 'showdownalt', 'showdown', 'showdowntournament', 'blitz'
+]
 
 
 def tomorrow(timezone):
@@ -154,7 +156,7 @@ def user_games(user, params):
         Game.time_played < params.t_to).filter(
             Game.playlist.in_(params.included_playlists)).filter(
                 Game.mode.in_(params.included_modes)).order_by(
-                    Game.time_played.desc()).all()
+                    Game.time_played.desc()).limit(25).all()
 
     return jsonify([g.serialize() for g in games])
 
