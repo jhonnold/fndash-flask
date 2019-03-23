@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bar as BarChart } from 'react-chartjs-2';
+import { Bar as BarChart } from './Charts';
 import Card from './Card';
 import { theme, pSBC } from '../assets/constants/colors';
 
