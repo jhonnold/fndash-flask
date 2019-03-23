@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Container from './Container';
 
@@ -31,7 +32,22 @@ const FooterDiv = styled.div`
 
 const FooterContainer = styled(Container)`
   text-align: center;
-  justify-content: space-around;
+
+  h6 {
+    color: ${({ theme }) => theme.offWhite};
+  }
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+
+    @media (min-width: 640px) {
+      flex: 1;
+      width: auto;
+    }
+  }
 `;
 
 function Footer() {
@@ -39,23 +55,42 @@ function Footer() {
     <FooterDiv>
       <FooterContainer>
         <div>
-          <a href="https://fortniteapi.com/" rel="noopener noreferrer" target="_blank">
-            https://fortniteapi.com
-          </a>
-          <a href="https://github.com/jhonnold/fndash" rel="noopener noreferrer" target="_blank">
-            <i className="fab fa-github" />
-          </a>
+          <h6>Pages</h6>
+          <p>
+            <Link to="/">Home</Link>
+          </p>
+          <p>
+            <Link to="/about">About Us</Link>
+          </p>
+          <p>
+            <a href="https://github.com/jhonnold/fndash" rel="noopener noreferrer" target="_blank">
+              <i className="fab fa-github" /> Github
+            </a>
+          </p>
         </div>
-        <p>
-          Created By
-          <a href="https://github.com/jhonnold" rel="noopener noreferrer" target="_blank">
-            Jay Honnold
-          </a>
-          and
-          <a href="https://github.com/JackSomm" rel="noopener noreferrer" target="_blank">
-            Jack Sommer
-          </a>
-        </p>
+        <div>
+          <div>
+            <p>
+              Created By
+              <a href="https://github.com/jhonnold" rel="noopener noreferrer" target="_blank">
+                Jay Honnold
+              </a>
+              and
+              <a href="https://github.com/JackSomm" rel="noopener noreferrer" target="_blank">
+                Jack Sommer
+              </a>
+            </p>
+          </div>
+          <div>
+            <p>
+              Powered By
+              <a href="https://fortniteapi.com/" rel="noopener noreferrer" target="_blank">
+                Fornite Api
+              </a>
+            </p>
+            {/**/}
+          </div>
+        </div>
       </FooterContainer>
     </FooterDiv>
   );
