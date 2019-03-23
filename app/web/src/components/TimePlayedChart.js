@@ -40,7 +40,7 @@ function TimePlayedChart({ datasets, labels }) {
   return (
     <Card>
       <h3>Time Played</h3>
-      <PieChart data={chartData} options={chartOptions} />
+      <PieChart redraw data={chartData} options={chartOptions} />
     </Card>
   );
 }

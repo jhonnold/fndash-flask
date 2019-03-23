@@ -65,7 +65,7 @@ function GamesBarChart({ labels, datasets }) {
   return (
     <Card>
       <h3>Games per Day</h3>
-      <BarChart data={chartData} options={chartOptions} />
+      <BarChart redraw data={chartData} options={chartOptions} />
     </Card>
   );
 }

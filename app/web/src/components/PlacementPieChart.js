@@ -97,7 +97,7 @@ function PlacementPieChart({ data, mode }) {
   return (
     <Card>
       <h3>Placements</h3>
-      <PieChart data={chartData} options={chartOptions} />
+      <PieChart redraw data={chartData} options={chartOptions} />
     </Card>
   );
 }

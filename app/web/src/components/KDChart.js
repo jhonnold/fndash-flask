@@ -67,7 +67,7 @@ function KDChart({ labels, datasets }) {
   return (
     <Card>
       <h3>K/D per Day</h3>
-      <LineChart data={chartData} options={chartOptions} />
+      <LineChart redraw data={chartData} options={chartOptions} />
     </Card>
   );
 }

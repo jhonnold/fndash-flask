@@ -398,5 +398,4 @@ export class Scatter extends React.Component {
 
 export const defaults = Chart.defaults;
 export { Chart };
-
 /* eslint-enable */
