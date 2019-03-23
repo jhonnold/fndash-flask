@@ -5,7 +5,7 @@ from sqlalchemy import exc
 from sqlalchemy.orm import joinedload
 from flask import Blueprint, jsonify, request, current_app, Response, abort
 from app.models import User, Game
-from app.util import get_user, kd_per_day, games_per_day
+from app.util import get_user, kd_per_day, games_per_day, get_user_lifetime_stats
 from app.database import db
 
 api = Blueprint('api', __name__, url_prefix='/api')
@@ -23,12 +23,18 @@ def active_users():
         User, Game).join(Game).filter(Game.time_played >= time).distinct(
             User.id).all()
 
-    serialized_users = list(
-        map(
-            lambda r: dict(
-                username=r.User.username,
-                id=r.User.id,
-                playedAt=r.Game.time_played), results))
+    current_app.logger.info(results)
+
+    serialized_users = []
+    for res in results:
+        mapped = dict()
+        lifetime_stats = get_user_lifetime_stats(res.User)
+        mapped['username'] = res.User.username
+        mapped['id'] = res.User.id
+        mapped['playedAt'] = res.Game.time_played
+        mapped['kd'] = lifetime_stats.get('kd', 0)
+        mapped['kills'] = lifetime_stats.get('kills', 0)
+        serialized_users.append(mapped)
 
     return jsonify(
         sorted(
