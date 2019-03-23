@@ -3,6 +3,8 @@ import axios from 'axios';
 const BASE_URL = process.env.NODE_ENV !== 'production' ? 'http://localhost:5000/api' : '/api';
 const BASE_URL_V2 = process.env.NODE_ENV !== 'production' ? 'http://localhost:5000/v2/api' : '/v2/api';
 
+const tz = -Math.floor(new Date().getTimezoneOffset() / 60);
+
 export const apiBase = axios.create({
   baseURL: process.env.BASE_URL || BASE_URL,
 });
@@ -31,9 +33,9 @@ export const api2 = {
   getUser: id => apiV2Base.get(`/users/${id}`),
   getUserGames: (id, mode) => apiV2Base.get(`/users/${id}/games?${mode === 'all' ? '' : `m=${mode}`}`),
   getUserRecords: id => apiV2Base.get(`/users/${id}/records`),
-  getKdChart: (id, mode) => apiV2Base.get(`/users/${id}/kd?${mode === 'all' ? '' : `m=${mode}`}`),
+  getKdChart: (id, mode) => apiV2Base.get(`/users/${id}/kd?tz=${tz}&${mode === 'all' ? '' : `m=${mode}`}`),
   getPlacementChart: id => apiV2Base.get(`/users/${id}/placements`),
-  getGamesPerDayChart: (id, mode) => apiV2Base.get(`/users/${id}/games_count?${mode === 'all' ? '' : `m=${mode}`}`),
+  getGamesPerDayChart: (id, mode) => apiV2Base.get(`/users/${id}/games_count?tz=${tz}&${mode === 'all' ? '' : `m=${mode}`}`),
   getTimePlayedChart: id => apiV2Base.get(`/users/${id}/time_played`),
   // postNewUser: uid => apiV2Base.post('/new_user', { uid }),
 };
