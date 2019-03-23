@@ -1,5 +1,5 @@
 import React from 'react';
-import { Line as LineChart } from 'react-chartjs-2';
+import { Line as LineChart } from './Charts';
 import Card from './Card';
 import { theme, pSBC } from '../assets/constants/colors';
 
@@ -67,7 +67,7 @@ function KDChart({ labels, datasets }) {
   return (
     <Card>
       <h3>K/D per Day</h3>
-      <LineChart data={chartData} options={chartOptions} />
+      <LineChart redraw data={chartData} options={chartOptions} />
     </Card>
   );
 }

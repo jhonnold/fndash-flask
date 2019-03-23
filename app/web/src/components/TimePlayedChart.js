@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pie as PieChart } from 'react-chartjs-2';
+import { Pie as PieChart } from './Charts';
 import Card from './Card';
 import { theme } from '../assets/constants/colors';
 
@@ -40,7 +40,7 @@ function TimePlayedChart({ datasets, labels }) {
   return (
     <Card>
       <h3>Time Played</h3>
-      <PieChart data={chartData} options={chartOptions} />
+      <PieChart redraw data={chartData} options={chartOptions} />
     </Card>
   );
 }

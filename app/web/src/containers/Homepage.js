@@ -2,6 +2,7 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { Helmet } from 'react-helmet';
 import { actions as userActions } from '../ducks/users';
 import UsersList from '../components/UsersList';
 import Column from '../components/Column';
@@ -9,26 +10,8 @@ import SearchBar from '../components/SearchBar';
 import Container from '../components/Container';
 import Footer from '../components/Footer';
 import SignUp from '../components/SignUp';
+import Banner from '../components/Banner';
 import { theme as mainTheme } from '../assets/constants/colors';
-import logo from '../assets/images/vertical-logo.png';
-
-const Banner = styled.div`
-  width: 100%;
-  text-align: center;
-  padding: 2.25rem 0 2rem;
-  background-color: ${({ theme }) => theme.primary};
-
-  h5 {
-    color: ${({ theme }) => theme.offWhite};
-    text-align: center;
-    margin: 1rem 0;
-    font-style: italic;
-  }
-
-  img {
-    max-height: 14rem;
-  }
-`;
 
 const HomeContainer = styled(Container)`
   flex-direction: column;
@@ -154,6 +137,7 @@ class Homepage extends React.PureComponent {
 
     return (
       <React.Fragment>
+        <Helmet><title>FN Dash</title></Helmet>
         {signupOpen && (
           <SignUp
             users={users}
@@ -161,10 +145,7 @@ class Homepage extends React.PureComponent {
             onClose={() => this.setState({ signupOpen: false })}
           />
         )}
-        <Banner>
-          <img src={logo} alt="Logo" />
-          <h5>Detailed Fortnite Stat Tracking</h5>
-        </Banner>
+        <Banner />
         <HomeContainer>
           <SearchBar styles={homeStyles} placeholder="Select Player..." />
           <HomeColumn>

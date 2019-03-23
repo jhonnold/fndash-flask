@@ -23,6 +23,7 @@ ReactGA.initialize('UA-136695217-1');
 ReactGA.pageview(window.location.pathname + window.location.search);
 
 history.listen((location) => {
+  window.scrollTo(0, 0);
   if (!isLocalHost(window.location.hostname)) ReactGA.pageview(location.pathname + location.search);
 });
 

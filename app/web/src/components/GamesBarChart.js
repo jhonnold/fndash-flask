@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bar as BarChart } from 'react-chartjs-2';
+import { Bar as BarChart } from './Charts';
 import Card from './Card';
 import { theme, pSBC } from '../assets/constants/colors';
 
@@ -65,7 +65,7 @@ function GamesBarChart({ labels, datasets }) {
   return (
     <Card>
       <h3>Games per Day</h3>
-      <BarChart data={chartData} options={chartOptions} />
+      <BarChart redraw data={chartData} options={chartOptions} />
     </Card>
   );
 }

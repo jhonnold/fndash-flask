@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pie as PieChart } from 'react-chartjs-2';
+import { Pie as PieChart } from './Charts';
 import Card from './Card';
 import { theme, pSBC } from '../assets/constants/colors';
 
@@ -97,7 +97,7 @@ function PlacementPieChart({ data, mode }) {
   return (
     <Card>
       <h3>Placements</h3>
-      <PieChart data={chartData} options={chartOptions} />
+      <PieChart redraw data={chartData} options={chartOptions} />
     </Card>
   );
 }

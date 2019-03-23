@@ -128,7 +128,11 @@ export default (state = initialState, action) => {
     case PLACEMENT_CHART_REQUESTED: {
       return {
         ...state,
-        placementChart: initialState.placementChart,
+        placementChart: {
+          ...state.placementChart,
+          loading: true,
+          error: null,
+        },
       };
     }
     case PLACEMENT_CHART_RECEIVED: {

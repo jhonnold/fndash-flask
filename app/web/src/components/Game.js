@@ -90,7 +90,7 @@ function Game({
             {playlist} {mode} Match
           </h5>
           {/* <p>{moment(timePlayed).format('MMM Do - h:mm a')}</p> */}
-          <p>{moment(timePlayed).calendar()}</p>
+          <p>{moment(timePlayed).fromNow()}</p>
         </GameHeader>
         <p>
           {placement === 'Victory' ? (
