@@ -6,25 +6,6 @@ from boto.utils import get_instance_metadata
 
 logger = get_task_logger(__name__)
 
-
-def send_multi_metrics(instance_id,
-                       region,
-                       metrics,
-                       namespace='EC2/FNDash',
-                       unit='Seconds'):
-    '''
-    Send multiple metrics to CloudWatch
-    metrics is expected to be a map of key -> value pairs of metrics
-    '''
-    cw = cloudwatch.connect_to_region(region)
-    cw.put_metric_data(
-        namespace,
-        metrics.keys(),
-        metrics.values(),
-        unit=unit,
-        dimensions={"InstanceId": instance_id})
-
-
 @celery.task()
 def upload_stat_tracker_metrics(time):
     metadata = get_instance_metadata(timeout=1, num_retries=1)
@@ -37,7 +18,13 @@ def upload_stat_tracker_metrics(time):
     region = metadata.get('placement').get('availability-zone')[0:-1]
 
     app_name = os.environ.get('APP_NAME')
-    metric_name = 'StatTrackerTime{}'.format(app_name.captitalize())
-    metrics = {metric_name: time}
+    metric_name = 'StatTrackerTime{}'.format(app_name.capitalize())
 
-    send_multi_metrics(instance_id, region, metrics)
+    cw = cloudwatch.connect_to_region(region)
+    cw.put_metric_data(
+        'FNDash',
+        metric_name,
+        time,
+        unit='Seconds',
+        dimensions={"InstanceId": instance_id}
+    )
