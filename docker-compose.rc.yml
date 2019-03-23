@@ -11,6 +11,7 @@ services:
     environment:
       - FLASK_APP=manage.py
       - FLASK_ENV=production
+      - APP_NAME=rc
     ports:
       - 5050:5000
 
@@ -27,6 +28,8 @@ services:
     image: fn-dash-rc
     restart: always
     command: sh docker/docker.celery.sh
+    environment:
+      - APP_NAME=rc
     depends_on:
       - redis
   

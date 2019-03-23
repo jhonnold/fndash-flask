@@ -10,6 +10,7 @@ psycopg2-binary
 celery
 redis
 eventlet
+boto
 
 gunicorn
 
