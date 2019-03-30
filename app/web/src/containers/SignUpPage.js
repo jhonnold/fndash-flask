@@ -7,6 +7,7 @@ import Banner from '../components/Banner';
 import Container from '../components/Container';
 import Column from '../components/Column';
 import Footer from '../components/Footer';
+import Loader from '../components/Loader';
 
 const HomeContainer = styled(Container)`
   flex-direction: column;
@@ -15,7 +16,7 @@ const HomeContainer = styled(Container)`
 `;
 
 const HomeColumn = styled(Column)`
-  max-width: 25rem;
+  max-width: 750px;
   width: 100%;
   align-items: center;
   margin-top: 2rem;
@@ -55,14 +56,25 @@ const Button = styled.button`
   padding: 0.5rem 1rem;
   color: ${({ theme }) => theme.white};
   border-radius: 0.25rem;
-  background: ${({ theme }) => `linear-gradient(to top right, ${theme.purple}, ${theme.magenta})`};
+  background: ${({ theme }) => `linear-gradient(to top right, ${theme.lightBlue}, ${theme.lightGreen})`};
   font-weight: bold;
   margin: 2rem 1rem;
   cursor: pointer;
 `;
 
-function SignUpPage({ register }) {
+const Error = styled.h6`
+  margin: 0.5rem 0;
+  color: ${({ theme }) => theme.pink};
+`;
+
+const Confirm = styled.h6`
+  margin: 0.5rem 0;
+  color: ${({ theme }) => theme.lightGreen};
+`;
+
+function SignUpPage({ register, users }) {
   const [username, setUsername] = useState('');
+  const { error, signedUp, loading } = users;
 
   return (
     <React.Fragment>
@@ -74,19 +86,39 @@ function SignUpPage({ register }) {
         <HomeColumn>
           <h2>Sign Up</h2>
           <Divider />
-          <Div>
-            <H6>In-game Username</H6>
-            <Input
-              name="username"
-              value={username}
-              onChange={({ target }) => setUsername(target.value)}
-              onKeyPress={({ key }) => {
-                if (key === 'Enter') register(username);
-              }}
-              placeholder="Enter your username..."
-            />
-          </Div>
-          <Button onClick={() => register(username)}>Track my Stats!</Button>
+          {loading ? (
+            <Loader />
+          ) : (
+            <Div>
+              <H6>In-game Username</H6>
+              <Input
+                name="username"
+                value={username}
+                onChange={({ target }) => setUsername(target.value)}
+                onKeyPress={({ key }) => {
+                  if (key === 'Enter') {
+                    register(username);
+                    setUsername('');
+                  }
+                }}
+                placeholder="Enter your username..."
+              />
+              {signedUp && (
+                <Confirm>
+                  Thanks for Signing Up! Please wait a minute for your stats to be loaded.
+                </Confirm>
+              )}
+              {error && <Error>{error}</Error>}
+            </Div>
+          )}
+          <Button
+            onClick={() => {
+              register(username);
+              setUsername('');
+            }}
+          >
+            Track my Stats!
+          </Button>
         </HomeColumn>
       </HomeContainer>
       <Footer />
