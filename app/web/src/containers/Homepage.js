@@ -44,7 +44,6 @@ const homeStyles = {
     backgroundColor: mainTheme.primary,
     width: '100%',
     height: '100%',
-    minHeight: 50,
     border: 'none',
     boxShadow: 'none',
     cursor: 'text',
