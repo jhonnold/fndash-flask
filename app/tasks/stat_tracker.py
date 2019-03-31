@@ -19,6 +19,12 @@ USER_STATS_ENDPOINT = BASE_URL + '/users/public/br_stats_v2?platform=pc&user_id=
 def stat_tracker():
     with app.app_context():
         time1 = time.time()
+
+        # reset metrics
+        redis.set('stat_tracker_games', 0)
+        redis.set('stat_tracker_api_success', 0)
+        redis.set('stat_tracker_api_errors', 0)
+
         users = User.query.all()
 
         groupJob = celery.group(
@@ -29,20 +35,42 @@ def stat_tracker():
             pass
 
         time2 = time.time()
-        upload_stat_tracker_metrics.apply_async((time2 - time1, ))
 
-        # for user in users:
-        #     logger.info('Starting to update info for {}'.format(user))
-        #     get_user_from_fortnite_api.apply_async((user.id, user.uid))
+        games = int(redis.get('stat_tracker_games'))
+        api_success = int(redis.get('stat_tracker_api_success'))
+        api_errors = int(redis.get('stat_tracker_api_errors'))
+
+        upload_stat_tracker_metrics.apply_async((time2 - time1, games, api_success, api_errors))
 
 
 @celery.task()
 def fortnite_api_lookup(user_id, uid):
     with app.app_context():
-        r = requests.get(USER_STATS_ENDPOINT.format(uid))
-        json = r.json()
-        update_user_stats.apply((json, user_id))
-        return
+        try:
+            r = requests.get(USER_STATS_ENDPOINT.format(uid), timeout=5)
+
+            if r.status_code != 200:
+                r.raise_for_status()
+
+            redis.set('stat_tracker_api_success', int(redis.get('stat_tracker_api_success')) + 1)
+
+            json = r.json()
+            update_user_stats.apply((json, user_id))
+            return
+
+        except requests.exceptions.HTTPError as e:
+            logger.error('fortnite_api_lookup: Error in fetching data for user_id: {} - uid: {}'.format(user_id, uid))
+            logger.error('fortnite_api_lookup: Message: {}'.format(str(e)))
+            redis.set('stat_tracker_api_errors', int(redis.get('stat_tracker_api_errors')) + 1)
+            return
+        except requests.exceptions.ConnectTimeout:
+            logger.error('fortnite_api_lookup: Connect Timed out fetching data for user_id: {} - uid: {}'.format(user_id, uid))
+            redis.set('stat_tracker_api_errors', int(redis.get('stat_tracker_api_errors')) + 1)
+            return
+        except requests.exceptions.ReadTimeout:
+            logger.error('fortnite_api_lookup: Read Timed out fetching data for user_id: {} - uid: {}'.format(user_id, uid))
+            redis.set('stat_tracker_api_errors', int(redis.get('stat_tracker_api_errors')) + 1)
+            return
 
 
 @celery.task()
@@ -68,9 +96,9 @@ def update_user_stats(json, user_id):
 
         overall_data = json.get('overallData')
 
-        default_modes_data = overall_data.get('defaultModes')
-        ltm_modes_data = overall_data.get('ltmModes')
-        large_team_data = overall_data.get('largeTeamModes')
+        default_modes_data = overall_data.get('defaultModes', {})
+        ltm_modes_data = overall_data.get('ltmModes', {})
+        large_team_data = overall_data.get('largeTeamModes', {})
 
         default_matchesplayed = redis.get('{}_user_default_matches'.format(
             user.id))
@@ -174,6 +202,7 @@ def update_or_create_stat(user_id, mode, playlist, data):
 def create_game(user_id, mode, playlist, stat, data):
     logger.info('Creating game for {}, in playlist/mode - {}/{}'.format(
         user_id, playlist, mode))
+    redis.set('stat_tracker_games', int(redis.get('stat_tracker_games')) + 1)
 
     stat_placements = stat.placements
     if type(stat_placements) is list:

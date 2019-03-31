@@ -9,7 +9,6 @@ import Column from '../components/Column';
 import SearchBar from '../components/SearchBar';
 import Container from '../components/Container';
 import Footer from '../components/Footer';
-import SignUp from '../components/SignUp';
 import Banner from '../components/Banner';
 import { theme as mainTheme } from '../assets/constants/colors';
 
@@ -44,7 +43,6 @@ const homeStyles = {
     backgroundColor: mainTheme.primary,
     width: '100%',
     height: '100%',
-    minHeight: 50,
     border: 'none',
     boxShadow: 'none',
     cursor: 'text',
@@ -101,16 +99,6 @@ const homeStyles = {
 };
 
 class Homepage extends React.PureComponent {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      signupOpen: true,
-    };
-
-    this.onJoin = this.onJoin.bind(this);
-  }
-
   componentDidMount() {
     const { startRequestingActiveUsers } = this.props;
 
@@ -123,28 +111,13 @@ class Homepage extends React.PureComponent {
     stopRequestingActiveUsers();
   }
 
-  onJoin(username) {
-    const { requestJoinUser } = this.props;
-
-    requestJoinUser(username);
-  }
-
   render() {
-    const { signupOpen } = this.state;
     const { users } = this.props;
-
     const { activeUsers } = users.data;
 
     return (
       <React.Fragment>
         <Helmet><title>FN Dash</title></Helmet>
-        {signupOpen && (
-          <SignUp
-            users={users}
-            onSubmit={this.onJoin}
-            onClose={() => this.setState({ signupOpen: false })}
-          />
-        )}
         <Banner />
         <HomeContainer>
           <SearchBar styles={homeStyles} placeholder="Select Player..." />
@@ -164,7 +137,6 @@ const mapStateToProps = ({ users }) => ({
 
 const matchDispatchToProps = dispatch => ({
   ...bindActionCreators(userActions, dispatch),
-  requestJoinUser: uid => dispatch(userActions.requestJoinUser(uid)),
 });
 
 export default connect(

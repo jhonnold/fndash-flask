@@ -48,7 +48,7 @@ export default () => (
         <br />
         Signing up is entirely free, FN Dash doesn{"'"}t even ask for your email, simply just your{' '}
         ingame name. If you are ready to signup and join the many other FN Dash players in
-        their endeavor to improve, <Link to="/">click here.</Link>
+        their endeavor to improve, <Link to="/signup">click here.</Link>
       </P>
     </FlexContainer>
     <Footer />

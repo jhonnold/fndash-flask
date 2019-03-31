@@ -63,6 +63,9 @@ function Footer() {
             <Link to="/about">About Us</Link>
           </p>
           <p>
+            <Link to="/signup">Sign Up</Link>
+          </p>
+          <p>
             <a href="https://github.com/jhonnold/fndash" rel="noopener noreferrer" target="_blank">
               <i className="fab fa-github" /> Github
             </a>
