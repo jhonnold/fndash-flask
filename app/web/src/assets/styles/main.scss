@@ -1,11 +1,11 @@
 @charset 'utf-8';
 
-@import url('https://fonts.googleapis.com/css?family=Roboto:400,600');
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,800');
 
 @import 'settings';
 @import 'foundation-sites/scss/foundation.scss';
 @include foundation-global-styles;
-@include foundation-typography; 
+@include foundation-typography;
 
 html,
 body {
@@ -15,7 +15,7 @@ body {
 body {
   display: flex;
   flex-direction: column;
-  background-color: #343F56;
+  background-color: #343f56;
   overflow-x: hidden;
 }
 

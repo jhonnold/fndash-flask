@@ -1,5 +1,6 @@
 export const theme = {
   primary: '#2B2E3D',
+  offPrimary: '#282B39',
   secondary: '#343F56',
   white: '#fafafa',
   offWhite: '#91A6B5',
