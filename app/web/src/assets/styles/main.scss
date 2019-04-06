@@ -2,6 +2,11 @@
 
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,800');
 
+@font-face {
+  font-family: Burbank;
+  src: url('../fonts/burbank-big-condensed-bold.otf');
+}
+
 @import 'settings';
 @import 'foundation-sites/scss/foundation.scss';
 @include foundation-global-styles;
@@ -10,6 +15,7 @@
 html,
 body {
   min-height: 100vh;
+  line-height: 1;
 }
 
 body {
