@@ -1,6 +1,16 @@
 version: '3'
 
 services:
+  postgres:
+    image: postgres:10
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=fndash
+    volumes:
+      - db:/var/lib/postgresql/data
+
   app:
     build:
       context: .
@@ -14,6 +24,8 @@ services:
       - APP_NAME=prod
     ports:
       - 5000:5000
+    depends_on:
+      - postgres
 
   redis:
     restart: always
@@ -32,15 +44,19 @@ services:
       - APP_NAME=prod
     depends_on:
       - redis
+      - postgres
   
   upgrade:
     build:
       context: .
       dockerfile: docker/DockerFileProd
     image: fn-dash-prod
-    command: bash -c 'while ! nc -q 1 ${DB_HOST} 5432 </dev/null; do sleep 1; done && flask db upgrade'
+    command: bash -c 'while ! nc -q 1 postgres 5432 </dev/null; do sleep 1; done && flask db upgrade'
     environment:
       - FLASK_APP=manage.py
+    depends_on:
+      - postgres
 
 volumes:
   redis:
+  db:
