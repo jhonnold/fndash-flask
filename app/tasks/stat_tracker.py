@@ -32,6 +32,7 @@ def stat_tracker():
         result = groupJob.apply_async()
 
         while not result.ready():
+            time.sleep(0.1)
             pass
 
         time2 = time.time()
