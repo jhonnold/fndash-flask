@@ -15,7 +15,7 @@ class CeleryConfig(object):
     CELERYBEAT_SCHEDULE = {
         'stat_tracker': {
             'task': 'app.tasks.stat_tracker.stat_tracker',
-            'schedule': crontab(minute='*/3'),
+            'schedule': crontab(minute='*/2'),
         },
         'kd_monitor': {
             'task': 'app.tasks.kd_monitor.record_stats',
