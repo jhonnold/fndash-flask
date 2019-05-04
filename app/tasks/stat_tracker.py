@@ -97,7 +97,7 @@ def update_user_stats(body, user_id):
 
         # Only run updateds if the overallData is different
         data_hash = hash(json.dumps(body.get('overallData', {}), sort_keys=True))
-        if (user.last_known_data_hash == data_hash):
+        if (user.last_known_data_hash is not None and int(user.last_known_data_hash) == data_hash):
             logger.info('{} has had no changes!'.format(user))
             return
 
@@ -140,7 +140,7 @@ def update_user_stats(body, user_id):
         while not result.ready():
             time.sleep(0.1)
 
-        user.last_known_data_hash = data_hash
+        user.last_known_data_hash = str(data_hash)
         user.updated_at = datetime.datetime.now()
         db.session.commit()
         return

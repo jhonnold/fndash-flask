@@ -7,7 +7,7 @@ class User(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     uid = db.Column(db.String(32), nullable=False, unique=True)
     username = db.Column(db.String(255))
-    last_known_data_hash = db.Column(db.BigInteger())
+    last_known_data_hash = db.Column(db.String())
     updated_at = db.Column(db.DateTime(), default=datetime.datetime.now)
     created_at = db.Column(db.DateTime(), default=datetime.datetime.now)
 
