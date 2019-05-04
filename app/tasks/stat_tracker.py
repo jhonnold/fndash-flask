@@ -1,4 +1,4 @@
-import celery, requests, datetime, re, time, json
+import celery, requests, datetime, re, time, json, hashlib
 
 from app import db, app
 from app.models import User, Game, Stat, Input
@@ -96,8 +96,9 @@ def update_user_stats(body, user_id):
             return
 
         # Only run updateds if the overallData is different
-        data_hash = hash(json.dumps(body.get('overallData', {}), sort_keys=True))
-        if (user.last_known_data_hash is not None and int(user.last_known_data_hash) == data_hash):
+        overall_data = body.get('overallData', {})
+        data_hash = hashlib.md5(json.dumps(overall_data, sort_keys=True).encode('utf-8')).hexdigest()
+        if (user.last_known_data_hash == data_hash):
             logger.info('{} has had no changes!'.format(user))
             return
 
