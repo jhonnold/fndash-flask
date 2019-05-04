@@ -114,7 +114,7 @@ def update_user_stats(body, user_id):
 
             if _input is None:
                 logger.info(
-                    'Seeing new data for {} with input type: {}'.format(
+                    'New Input Type for user: {}, input_type: {}'.format(
                         user, input_type))
                 _input = Input(user_id=user.id, input_type=input_type)
                 db.session.add(_input)
@@ -157,8 +157,8 @@ def update_or_create_stat(input_id, mode, playlist, data):
         just_created = False
         if stat is None:
             logger.info(
-                'No Stat ({}/{}) for input: {}, user: {} \n Creating...'.
-                format(playlist, mode, _input, _input.user))
+                'No Stat {}--{} for user {} with {} \n Creating...'.
+                format(playlist, mode, _input.user, _input))
             stat = Stat(
                 input_id=input_id,
                 name=playlist,
@@ -189,8 +189,8 @@ def update_or_create_stat(input_id, mode, playlist, data):
 
 
 def create_game(stat, data):
-    logger.info('Creating game for {}, in playlist/mode - {}/{}'.format(
-        stat.input.user, stat.name, stat.mode))
+    logger.info('Creating game for {} with {} in {}'.format(
+        stat.input.user, stat.input, stat))
     redis.set('stat_tracker_games', int(redis.get('stat_tracker_games')) + 1)
 
     stat_placements = stat.placements
