@@ -24,7 +24,7 @@ def stat_tracker():
         redis.set('stat_tracker_api_success', 0)
         redis.set('stat_tracker_api_errors', 0)
 
-        users = User.query.order_by(User.id.asc()).limit(10).all()
+        users = User.query.all()
         groupJob = celery.group(
             fortnite_api_lookup.s(u.id, u.uid) for u in users)
         result = groupJob.apply_async()
