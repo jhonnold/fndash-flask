@@ -141,6 +141,7 @@ def update_user_stats(body, user_id):
             time.sleep(0.1)
 
         user.last_known_data_hash = data_hash
+        user.updated_at = datetime.datetime.now()
         db.session.commit()
         return
 
@@ -178,7 +179,7 @@ def update_or_create_stat(input_id, mode, playlist, data):
             stat.matchesplayed = data.get('matchesplayed', 0)
             stat.playersoutlived = data.get('playersoutlived', 0)
             stat.minutesplayed = data.get('minutesplayed', 0)
-            stat.updated = datetime.datetime.now()
+            stat.updated_at = datetime.datetime.now()
 
         db.session.commit()
 

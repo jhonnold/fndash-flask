@@ -37,7 +37,7 @@ class Stat(db.Model):
 
     def __repr__(self):
         return "<Stat '{}' - '{}'>".format(
-            self.name, self.mode, self.user_id)
+            self.name, self.mode)
 
     def serialize(self):
         data = dict(**self.__dict__)
