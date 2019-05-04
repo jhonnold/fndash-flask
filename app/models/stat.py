@@ -16,6 +16,7 @@ def get_placements(stat):
 class Stat(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     user_id = db.Column(db.Integer(), db.ForeignKey('user.id'))
+    input_id = db.Column(db.Integer(), db.ForeignKey('input.id'))
     name = db.Column(db.String())
     mode = db.Column(db.String())
     is_ltm = db.Column(db.Boolean(), nullable=False)
@@ -28,10 +29,12 @@ class Stat(db.Model):
 
     __table_args__ = (
         db.UniqueConstraint('user_id', 'name', 'mode', name='_name_mode_uc'),
+        db.UniqueConstraint('input_id', 'name', 'mode', name='_input_name_mode_uc'),
         db.Index('_name_mode_ix', 'name', 'mode'),
     )
 
     histories = db.relationship('StatHistory', backref='current_stat', lazy='dynamic')
+    games = db.relationship('Game', backref='stat', lazy='dynamic')
 
     def __repr__(self):
         return "<Stat '{}' - '{}' for user_id: {}>".format(

@@ -9,7 +9,7 @@ from app.charts import kd_per_day, games_played_per_day, minutes_played_per_play
 v2_api = Blueprint('v2_api', __name__, url_prefix='/v2/api')
 
 IMPORTANT_MODES = [
-    'default', 'showdownalt', 'showdown', 'showdowntournament', 'blitz'
+    'default', 'showdownalt', 'showdown', 'showdowntournament'
 ]
 
 
