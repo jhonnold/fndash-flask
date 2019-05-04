@@ -1,7 +1,7 @@
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 from app import app, db, celery
-from app.models import Game, User, KD, Stat, StatHistory, Input
+from app.models import Game, User, Stat, StatHistory, Input
 
 migrate = Migrate(app, db)
 
@@ -33,7 +33,7 @@ def recreate_db():
 
 @app.shell_context_processor
 def make_shell_context():
-    return dict(app=app, db=db, migrate=migrate, User=User, Game=Game, KD=KD, Stat=Stat, StatHistory=StatHistory, Input=Input)
+    return dict(app=app, db=db, migrate=migrate, User=User, Game=Game, Stat=Stat, StatHistory=StatHistory, Input=Input)
 
 
 if __name__ == "__main__":

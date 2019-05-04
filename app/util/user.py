@@ -1,7 +1,7 @@
 from app.models import User, Stat
 
 IMPORTANT_MODES = [
-    'default', 'showdownalt', 'showdown', 'showdowntournament', 'blitz'
+    'default', 'showdownalt', 'showdown', 'showdowntournament'
 ]
 
 

@@ -15,7 +15,6 @@ def get_placements(stat):
 
 class Stat(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
-    user_id = db.Column(db.Integer(), db.ForeignKey('user.id'))
     input_id = db.Column(db.Integer(), db.ForeignKey('input.id'))
     name = db.Column(db.String())
     mode = db.Column(db.String())
@@ -25,10 +24,10 @@ class Stat(db.Model):
     matchesplayed = db.Column(db.Integer(), default=0)
     playersoutlived = db.Column(db.Integer(), default=0)
     minutesplayed = db.Column(db.Integer(), default=0)
-    updated = db.Column(db.DateTime(), default=datetime.datetime.now)
+    updated_at = db.Column(db.DateTime(), default=datetime.datetime.now)
+    created_at = db.Column(db.DateTime(), default=datetime.datetime.now)
 
     __table_args__ = (
-        db.UniqueConstraint('user_id', 'name', 'mode', name='_name_mode_uc'),
         db.UniqueConstraint('input_id', 'name', 'mode', name='_input_name_mode_uc'),
         db.Index('_name_mode_ix', 'name', 'mode'),
     )
@@ -37,7 +36,7 @@ class Stat(db.Model):
     games = db.relationship('Game', backref='stat', lazy='dynamic')
 
     def __repr__(self):
-        return "<Stat '{}' - '{}' for user_id: {}>".format(
+        return "<Stat '{}' - '{}'>".format(
             self.name, self.mode, self.user_id)
 
     def serialize(self):
