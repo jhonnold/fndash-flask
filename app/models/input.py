@@ -9,7 +9,7 @@ class Input(db.Model):
     input_type = db.Column(db.String())
     created_at = db.Column(db.DateTime(), default=datetime.datetime.now)
 
-    db.relationship('Stat', backref='input', lazy='dynamic')
+    stats = db.relationship('Stat', backref='input', lazy='dynamic')
 
     def __repr__(self):
         return "<Input '{}' - '{}'>".format(self.user_id, self.input_type)

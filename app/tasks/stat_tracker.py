@@ -1,7 +1,7 @@
-import celery, requests, datetime, re, time
+import celery, requests, datetime, re, time, json
 
 from app import db, app
-from app.models import User, Game, Stat
+from app.models import User, Game, Stat, Input
 from app.models.stat import get_placements
 from app.tasks.metrics import upload_stat_tracker_metrics
 from celery.utils.log import get_task_logger
@@ -18,161 +18,149 @@ USER_STATS_ENDPOINT = BASE_URL + '/users/public/br_stats_v2?platform=pc&user_id=
 @celery.task()
 def stat_tracker():
     with app.app_context():
-        time1 = time.time()
-
         # reset metrics
+        start_time = time.time()
         redis.set('stat_tracker_games', 0)
         redis.set('stat_tracker_api_success', 0)
         redis.set('stat_tracker_api_errors', 0)
 
-        users = User.query.all()
-
+        users = User.query.limit(10).all()
         groupJob = celery.group(
             fortnite_api_lookup.s(u.id, u.uid) for u in users)
         result = groupJob.apply_async()
 
         while not result.ready():
             time.sleep(0.1)
-            pass
 
-        time2 = time.time()
-
+        # collect metrics (not 100% accurate as redis isnt locked)
+        end_time = time.time()
         games = int(redis.get('stat_tracker_games'))
         api_success = int(redis.get('stat_tracker_api_success'))
         api_errors = int(redis.get('stat_tracker_api_errors'))
 
-        upload_stat_tracker_metrics.apply_async((time2 - time1, games, api_success, api_errors))
+        upload_stat_tracker_metrics.apply_async((end_time - start_time, games,
+                                                 api_success, api_errors))
 
 
 @celery.task()
 def fortnite_api_lookup(user_id, uid):
     with app.app_context():
+        user = User.query.filter_by(id=user_id).first()
+
         try:
             r = requests.get(USER_STATS_ENDPOINT.format(uid), timeout=5)
 
             if r.status_code != 200:
                 r.raise_for_status()
 
-            redis.set('stat_tracker_api_success', int(redis.get('stat_tracker_api_success')) + 1)
+            redis.set('stat_tracker_api_success',
+                      int(redis.get('stat_tracker_api_success')) + 1)
 
-            json = r.json()
-            update_user_stats.apply((json, user_id))
+            body = r.json()
+            update_user_stats.apply((body, user_id))
             return
 
         except requests.exceptions.HTTPError as e:
-            logger.error('fortnite_api_lookup: Error in fetching data for user_id: {} - uid: {}'.format(user_id, uid))
+            logger.error(
+                'fortnite_api_lookup: Error in fetching data for user: {} - uid: {}'
+                .format(user, uid))
             logger.error('fortnite_api_lookup: Message: {}'.format(str(e)))
-            redis.set('stat_tracker_api_errors', int(redis.get('stat_tracker_api_errors')) + 1)
+            redis.set('stat_tracker_api_errors',
+                      int(redis.get('stat_tracker_api_errors')) + 1)
             return
         except requests.exceptions.ConnectTimeout:
-            logger.error('fortnite_api_lookup: Connect Timed out fetching data for user_id: {} - uid: {}'.format(user_id, uid))
-            redis.set('stat_tracker_api_errors', int(redis.get('stat_tracker_api_errors')) + 1)
+            logger.error(
+                'fortnite_api_lookup: Connect Timed out fetching data for user: {} - uid: {}'
+                .format(user, uid))
+            redis.set('stat_tracker_api_errors',
+                      int(redis.get('stat_tracker_api_errors')) + 1)
             return
         except requests.exceptions.ReadTimeout:
-            logger.error('fortnite_api_lookup: Read Timed out fetching data for user_id: {} - uid: {}'.format(user_id, uid))
-            redis.set('stat_tracker_api_errors', int(redis.get('stat_tracker_api_errors')) + 1)
+            logger.error(
+                'fortnite_api_lookup: Read Timed out fetching data for user: {} - uid: {}'
+                .format(user, uid))
+            redis.set('stat_tracker_api_errors',
+                      int(redis.get('stat_tracker_api_errors')) + 1)
             return
 
 
 @celery.task()
-def update_user_stats(json, user_id):
+def update_user_stats(body, user_id):
     with app.app_context():
         user = User.query.filter_by(id=user_id).first()
 
-        if json is None:
-            logger.error(
-                'There was an error in fetching data for {}'.format(user))
+        # Something went wrong on the response?
+        if body is None or 'overallData' not in body or 'data' not in body:
+            logger.warn('BODY returned in invalid format {}'.format(user))
+            logger.warn(body)
             return
 
-        if 'error' in json:
-            logger.error(
-                'There was an error in fetching data for {}'.format(user))
-            logger.error(json.get('error'))
+        # Only run updateds if the overallData is different
+        overall_data = body.get('overallData', {})
+        data_hash = hash(json.dumps(overall_data, sort_keys=True))
+        prev_data_hash = redis.get('{}_data_hash'.format(user.id))
+
+        if (prev_data_hash is not None and int(prev_data_hash) == data_hash):
+            logger.info('{} has had no changes!'.format(user))
             return
 
-        if 'overallData' not in json or 'data' not in json:
-            logger.warn('JSON returned in invalid format {}'.format(user))
-            logger.warn(json)
-            return
+        redis.set('{}_data_hash'.format(user.id), data_hash)
 
-        overall_data = json.get('overallData')
+        # Start going through the data, its mega nested
+        data, jobs = body.get('data'), []
+        for input_type in data.keys():
+            _input = Input.query.filter_by(
+                user_id=user.id, input_type=input_type).first()
 
-        default_modes_data = overall_data.get('defaultModes', {})
-        ltm_modes_data = overall_data.get('ltmModes', {})
-        large_team_data = overall_data.get('largeTeamModes', {})
+            if _input is None:
+                logger.info(
+                    'Seeing new data for {} with input type: {}'.format(
+                        user, input_type))
+                _input = Input(user_id=user.id, input_type=input_type)
+                db.session.add(_input)
+                db.session.commit()
 
-        default_matchesplayed = redis.get('{}_user_default_matches'.format(
-            user.id))
-        ltm_matchesplayed = redis.get('{}_user_ltm_matches'.format(user.id))
-        large_team_matchesplayed = redis.get(
-            '{}_user_large_team_matches'.format(user.id))
+            input_data = data.get(input_type)
 
-        if (default_matchesplayed is not None and ltm_matchesplayed is not None
-                and large_team_matchesplayed is not None):
-            if (int(default_matchesplayed) == default_modes_data.get(
-                    'matchesplayed', 0)
-                    and int(ltm_matchesplayed) == ltm_modes_data.get(
-                        'matchesplayed', 0)
-                    and int(large_team_matchesplayed) == large_team_data.get(
-                        'matchesplayed', 0)):
-                logger.info('{} has had no changes!'.format(user))
-                return
+            for playlist in input_data.keys():
+                playlist_data = input_data.get(playlist)
 
-        redis.set('{}_user_default_matches'.format(user.id),
-                  default_modes_data.get('matchesplayed', 0))
-        redis.set('{}_user_ltm_matches'.format(user.id),
-                  ltm_modes_data.get('matchesplayed', 0))
-        redis.set('{}_user_large_team_matches'.format(user.id),
-                  large_team_data.get('matchesplayed', 0))
+                for mode in playlist_data.keys():
+                    mode_data = playlist_data.get(mode)
 
-        user.kills_total = default_modes_data.get('kills', 0)
-        user.wins_total = default_modes_data.get('placetop1', 0)
-        user.matchesplayed_total = default_modes_data.get('matchesplayed', 0)
-        db.session.commit()
+                    if (playlist in [
+                            'defaultsolo', 'defaultduo', 'defaultsquad'
+                    ]):
+                        mode = playlist[7:]
+                        playlist = 'default'
 
-        input_types = json.get('data')
-        if 'keyboardmouse' not in input_types:
-            logger.warn('User {} has no keyboardmouse data'.format(user))
-            return
-
-        jobs = []
-        pc_data = input_types.get('keyboardmouse')
-        for playlist in pc_data.keys():
-            playlist_data = pc_data.get(playlist)
-
-            for mode in playlist_data.keys():
-                mode_data = playlist_data.get(mode)
-
-                if (playlist in ['defaultsolo', 'defaultduo', 'defaultsquad']):
-                    mode = playlist[7:]
-                    playlist = 'default'
-
-                jobs.append(
-                    update_or_create_stat.s(user_id, mode, playlist,
-                                            mode_data))
+                    # Add the update/create to the jobs array
+                    jobs.append(
+                        update_or_create_stat.s(_input.id, mode, playlist,
+                                                mode_data))
 
         groupJob = celery.group(jobs)
         result = groupJob.apply_async()
 
         while not result.ready():
-            pass
+            time.sleep(0.1)
 
         return
 
 
 @celery.task()
-def update_or_create_stat(user_id, mode, playlist, data):
+def update_or_create_stat(input_id, mode, playlist, data):
     with app.app_context():
-        stat = Stat.query.filter_by(
-            user_id=user_id, mode=mode, name=playlist).first()
+        _input = Input.query.filter_by(id=input_id).first()
+        stat = _input.stats.filter_by(mode=mode, name=playlist).first()
 
         just_created = False
         if stat is None:
-            logger.info('No Stat ({}/{}) for user_id: {}'.format(
-                playlist, mode, user_id))
-            logger.info('Creating...')
+            logger.info(
+                'No Stat ({}/{}) for input: {}, user: {} \n Creating...'.
+                format(playlist, mode, _input, _input.user))
             stat = Stat(
-                user_id=user_id,
+                input_id=input_id,
                 name=playlist,
                 mode=mode,
                 matchesplayed=0,
@@ -182,11 +170,11 @@ def update_or_create_stat(user_id, mode, playlist, data):
             just_created = True
             db.session.add(stat)
 
-        if stat.matchesplayed < data.get('matchesplayed', 0):
-            if not just_created:
-                game = create_game(user_id, mode, playlist, stat, data)
-                if game is not None:
-                    db.session.add(game)
+        if stat.matchesplayed < data.get('matchesplayed',
+                                         0) and not just_created:
+            game = create_game(stat, data)
+            if game is not None:
+                db.session.add(game)
 
             stat.placements = get_placements(data)
             stat.kills = data.get('kills', 0)
@@ -200,9 +188,9 @@ def update_or_create_stat(user_id, mode, playlist, data):
     return None
 
 
-def create_game(user_id, mode, playlist, stat, data):
+def create_game(stat, data):
     logger.info('Creating game for {}, in playlist/mode - {}/{}'.format(
-        user_id, playlist, mode))
+        stat.input.user, stat.name, stat.mode))
     redis.set('stat_tracker_games', int(redis.get('stat_tracker_games')) + 1)
 
     stat_placements = stat.placements
@@ -232,11 +220,6 @@ def create_game(user_id, mode, playlist, stat, data):
     kills = data.get('kills', 0) - stat.kills
 
     if kills >= 0 and kills <= 99:
-        return Game(
-            user_id=user_id,
-            mode=mode,
-            playlist=playlist,
-            placement=placement,
-            kills=kills)
+        return Game(stat_id=stat.id, placement=placement, kills=kills)
 
     return None
