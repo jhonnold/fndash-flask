@@ -24,7 +24,7 @@ def stat_tracker():
         redis.set('stat_tracker_api_success', 0)
         redis.set('stat_tracker_api_errors', 0)
 
-        users = User.query.all()
+        users = User.query.order_by(User.id.asc()).limit(10).all()
         groupJob = celery.group(
             fortnite_api_lookup.s(u.id, u.uid) for u in users)
         result = groupJob.apply_async()
@@ -96,15 +96,10 @@ def update_user_stats(body, user_id):
             return
 
         # Only run updateds if the overallData is different
-        overall_data = body.get('overallData', {})
-        data_hash = hash(json.dumps(overall_data, sort_keys=True))
-        prev_data_hash = redis.get('{}_data_hash'.format(user.id))
-
-        if (prev_data_hash is not None and int(prev_data_hash) == data_hash):
+        data_hash = hash(json.dumps(body.get('overallData', {}), sort_keys=True))
+        if (user.last_known_data_hash == data_hash):
             logger.info('{} has had no changes!'.format(user))
             return
-
-        redis.set('{}_data_hash'.format(user.id), data_hash)
 
         # Start going through the data, its mega nested
         data, jobs = body.get('data'), []
@@ -145,6 +140,8 @@ def update_user_stats(body, user_id):
         while not result.ready():
             time.sleep(0.1)
 
+        user.last_known_data_hash = data_hash
+        db.session.commit()
         return
 
 
@@ -185,7 +182,7 @@ def update_or_create_stat(input_id, mode, playlist, data):
 
         db.session.commit()
 
-    return None
+        return None
 
 
 def create_game(stat, data):
