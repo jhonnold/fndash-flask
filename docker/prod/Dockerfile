@@ -1,13 +1,3 @@
-FROM node:10 as react
-WORKDIR /usr/share/fn-dash/app/web
-
-COPY app/web/package*.json .
-RUN yarn install
-
-COPY app/web .
-RUN yarn build
-
-
 FROM python:3.6
 WORKDIR /usr/share/fn-dash
 
@@ -18,7 +8,6 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
-COPY --from=react /usr/share/fn-dash/app/web /usr/share/fn-dash/app/web
 
 ENV FLASK_APP=manage.py
 ENV FLASK_ENV=production

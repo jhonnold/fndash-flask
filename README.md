@@ -1,6 +1,4 @@
-# Fortnite Dashboard
-
-![screenshot](https://i.imgur.com/ezM16Lp.png)
+# FN Dash
 
 This is a simple fortnite dashboard designed to allow a select group of people quick access to all their stats. We track all the standard statistics that are avaialable to us (kills/placements/matches), and also generate stats on a *game* to *game* basis.
 
@@ -59,20 +57,16 @@ Simply load into the app container and follow the [Flask-Migration Docs](https:/
 |   +-- _api (The main server endpoints)
 |   +-- _models (Database model files)
 |   +-- _tasks (Celery tasks)
-|   +-- _util (A set of helpful function for manipulating data)
-|   +-- _web (React front end)
 |   +-- __init__.py (Main core of Flask app)
 |   +-- celery.py
 |   +-- config.py
 |   +-- database.py
++-- _docker (Docker build files/scripts)
 +-- _migrations (Database migrations folder, managed by alembic)
 +-- _util (Bash scripts for Docker mostly)
-+-- docker-compose.override.yml (Override for development purposes)
++-- docker-compose.dev.yml (docker-compose for development)
 +-- docker-compose.yml (Main docker-compose management file)
-+-- Dockerfile (Builds the flask app)
-+-- DockerfileCelery (Builds the celery app)
 +-- LICENSE
-+-- manage_celery.py (Python script file to start celery)
 +-- manage.py (Python script file for managing the app)
 +-- README.md
 +-- requirements.txt
