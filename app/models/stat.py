@@ -40,19 +40,17 @@ class Stat(db.Model):
             self.name, self.mode)
 
     def serialize(self):
-        data = dict(**self.__dict__)
-        del data['_sa_instance_state']
-
-        # Sometimes JSONB stores dict as list?
-        if (type(self.placements) is list):
-            data['placements'] = data.get('placements')[0]
-        
-        wins = data.get('placements', dict()).get('placetop1', 0)
-
-        denominator = self.matchesplayed - wins
-        if denominator == 0:
-            denominator = 1
-
-        data['kd'] = self.kills / denominator
-
-        return data
+        return {
+            'id': self.id,
+            'input': self.input.serialize(),
+            'name': self.name,
+            'mode': self.mode,
+            'is_ltm': self.is_ltm,
+            'placements': self.placements,
+            'kills': self.kills,
+            'matchesplayed': self.matchesplayed,
+            'playersoutslived': self.playersoutlived,
+            'minutesplayed': self.minutesplayed,
+            'updated_at': self.updated_at,
+            'created_at': self.created_at
+        }

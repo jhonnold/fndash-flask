@@ -1,5 +1,3 @@
-import requests
-
 from flask import Response, request
 from flask.json import jsonify
 from sqlalchemy.orm import joinedload
@@ -17,10 +15,13 @@ def inputs_index():
     if user_id is not None:
         if not user_id.isdigit():
             return Response('User ID must be a number', 400)
-        query = query.filter_by(user_id=user_id)
+        query = query.filter(Input.user_id == user_id)
 
-    inputs = query.order_by(Input.id.asc()).options(
-        joinedload('user')).all()
+    inputs = query\
+                .order_by(Input.id.asc())\
+                .options(joinedload('user'))\
+                .all()
+
     return jsonify([i.serialize() for i in inputs])
 
 
@@ -29,7 +30,7 @@ def inputs_show(id):
     if not id.isdigit():
         return Response('ID must be a number', 400)
 
-    _input = Input.query.get(id)
+    _input = Input.query.options(joinedload('user')).get(id)
     if _input is None:
         return Response('Input not found!', 404)
 
