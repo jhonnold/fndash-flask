@@ -2,13 +2,12 @@ import datetime, os
 
 from flask import Flask, Response
 from flask_cors import CORS
-from app.api import api
-from app.database import db
-
 from celery import Celery
 
 from .config import DevConfig, ProdConfig
 from .celery import CeleryConfig
+from .api import api
+from .database import db
 
 app = Flask(__name__)
 CORS(app)

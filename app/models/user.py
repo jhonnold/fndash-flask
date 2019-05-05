@@ -16,8 +16,11 @@ class User(db.Model):
     def __repr__(self):
         return "<User '{}'>".format(self.username)
 
-    def serialize(self, include_stats=False):
-        user_data = dict(**self.__dict__)
-        del user_data['_sa_instance_state']
-
-        return user_data
+    def serialize(self):
+        return {
+            'id': self.id,
+            'uid': self.uid,
+            'username': self.username,
+            'updated_at': self.updated_at,
+            'created_at': self.created_at
+        }
