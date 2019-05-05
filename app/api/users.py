@@ -9,13 +9,16 @@ from . import api
 
 
 @api.route('/users')
-def index():
+def users_index():
     users = User.query.order_by(User.username.asc()).all()
     return jsonify([u.serialize() for u in users])
 
 
 @api.route('/users/<id>')
-def show(id):
+def users_show(id):
+    if not id.isdigit():
+        return Response('ID must be a number', 400)
+
     user = User.query.get(id)
     if user is None:
         return Response('User not found!', 404)
@@ -23,7 +26,7 @@ def show(id):
 
 
 @api.route('/users', methods=['POST'])
-def create():
+def users_create():
     data = request.get_json()
     username = data.get('username')
     if username is None:

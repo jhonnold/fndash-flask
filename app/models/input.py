@@ -13,3 +13,10 @@ class Input(db.Model):
 
     def __repr__(self):
         return "<Input '{}' - '{}'>".format(self.user_id, self.input_type)
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'user': self.user.serialize(),
+            'input_type': self.input_type,
+        }
