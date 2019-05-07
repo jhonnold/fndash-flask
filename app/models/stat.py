@@ -39,10 +39,9 @@ class Stat(db.Model):
         return "<Stat '{}' - '{}'>".format(
             self.name, self.mode)
 
-    def serialize(self):
-        return {
+    def serialize(self, loaded = []):
+        dict = {
             'id': self.id,
-            'input': self.input.serialize(),
             'name': self.name,
             'mode': self.mode,
             'is_ltm': self.is_ltm,
@@ -54,3 +53,10 @@ class Stat(db.Model):
             'updated_at': self.updated_at,
             'created_at': self.created_at
         }
+
+        if 'input' in loaded:
+            dict['input'] = self.input.serialize(loaded)
+        else:
+            dict['input_id'] = self.input_id
+
+        return dict

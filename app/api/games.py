@@ -121,4 +121,4 @@ def games_search():
     games = query.options(
         joinedload('stat').joinedload('input')).all()
 
-    return jsonify([g.serialize() for g in games])
+    return jsonify([g.serialize(['game', 'stat']) for g in games])
