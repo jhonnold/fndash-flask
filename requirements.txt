@@ -15,3 +15,4 @@ boto
 gunicorn
 
 requests
+python-dateutil

@@ -1,9 +1,8 @@
-from flask import Response, request, current_app
+from flask import Response, request
 from flask.json import jsonify
 from sqlalchemy.orm import joinedload
 
 from app.models import Stat, Input
-from app.database import db
 from . import api
 
 

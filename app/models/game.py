@@ -14,8 +14,10 @@ class Game(db.Model):
         return "<Game '{}/{}' - '{}'>".format(self.playlist, self.mode, self.time_played)
 
     def serialize(self):
-        return dict(
-            kills=self.kills,
-            placement=self.placement,
-            time_played=self.time_played,
-            id=self.id)
+        return {
+            'id': self.id,
+            'stat': self.stat.serialize(),
+            'time_played': self.time_played,
+            'kills': self.kills,
+            'placement': self.placement
+        }
