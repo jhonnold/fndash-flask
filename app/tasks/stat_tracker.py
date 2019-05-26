@@ -29,6 +29,7 @@ def stat_tracker():
                 fortnite_api_lookup.s(u.uid),
                 find_changed_stats.s(u.id),
                 update_stats.s(),
+                update_hash.s(u.id),
             ) for u in User.query.all()
         ]
 
@@ -80,19 +81,19 @@ def find_changed_stats(body, user_id):
         user = User.query.filter_by(id=user_id).first()
 
         if body is None:
-            return []
+            return None, []
 
         # Something went wrong on the response?
         if 'overallData' not in body or 'data' not in body:
             logger.warn('BODY returned in invalid format {}'.format(user))
-            return []
+            return None, []
 
         # Only run updateds if the overallData is different
         overall_data = body.get('overallData', {})
         data_hash = hashlib.md5(json.dumps(overall_data, sort_keys=True).encode('utf-8')).hexdigest()
         if (user.last_known_data_hash == data_hash):
             logger.info('{} has had no changes!'.format(user))
-            return []
+            return None, []
 
         # Start going through the data, its mega nested
         data, changed_stats = body.get('data'), []
@@ -114,15 +115,13 @@ def find_changed_stats(body, user_id):
                     if stat is None or stat.matchesplayed != mode_data.get('matchesplayed', 0):
                         changed_stats.append((_input.id, mode, playlist, mode_data))
 
-        user.last_known_data_hash = str(data_hash)
-        user.updated_at = datetime.datetime.now()
-        db.session.commit()
-
-        return changed_stats
+        return data_hash, changed_stats
 
 
-@celery.task(ignore_results=True)
-def update_stats(changed_stats):
+@celery.task()
+def update_stats(args):
+    data_hash, changed_stats = args
+
     with app.app_context():
         for input_id, mode, playlist, data in changed_stats:
             _input = Input.query.filter_by(id=input_id).first()
@@ -156,6 +155,7 @@ def update_stats(changed_stats):
                 stat.updated_at = datetime.datetime.now()
 
         db.session.commit()
+        return data_hash
 
 
 def create_game(stat, data):
@@ -192,3 +192,17 @@ def create_game(stat, data):
         return Game(stat_id=stat.id, placement=placement, kills=kills)
 
     return None
+
+@celery.task()
+def update_hash(data_hash, id):
+    if data_hash is None:
+        return
+
+    with app.app_context():
+        user = User.query.get(id)
+
+        logger.warn('User {} updated. Setting hash to {}'.format(user, data_hash))
+
+        user.last_known_data_hash = str(data_hash)
+        user.updated_at = datetime.datetime.now()
+        db.session.commit()
