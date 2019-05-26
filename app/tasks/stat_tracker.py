@@ -4,6 +4,7 @@ from app import db, app
 from app.models import User, Game, Stat, Input
 from app.models.stat import get_placements
 from app.tasks.metrics import upload_stat_tracker_metrics
+from celery import chain
 from celery.utils.log import get_task_logger
 from redis import Redis
 
@@ -11,8 +12,7 @@ logger = get_task_logger(__name__)
 
 redis = Redis(host='redis', port=6379)
 
-BASE_URL = 'https://fortnite-public-api.theapinetwork.com/prod09'
-USER_STATS_ENDPOINT = BASE_URL + '/users/public/br_stats_v2?platform=pc&user_id={}'
+BR_STATS_URI = 'https://fortnite-public-api.theapinetwork.com/prod09/users/public/br_stats_v2?platform=pc&user_id={}'
 
 
 @celery.task()
@@ -24,12 +24,21 @@ def stat_tracker():
         redis.set('stat_tracker_api_success', 0)
         redis.set('stat_tracker_api_errors', 0)
 
-        users = User.query.all()
-        groupJob = celery.group(fortnite_api_lookup.s(u.id, u.uid) for u in users)
+        chains = [chain(
+            fortnite_api_lookup.s(u.uid),
+            find_changed_stats.s(u.id),
+        ) for u in User.query.all()]
+
+        groupJob = celery.group(chains)
         result = groupJob.apply_async()
 
         while not result.ready():
-            time.sleep(0.1)
+            time.sleep(0.5)
+
+        for updates in result.get():
+            # This cud be chained, but this is a massive set of updates at times
+            # and needs to be run 1 update set at a time
+            update_stats.delay(updates)
 
         # collect metrics (not 100% accurate as redis isnt locked)
         end_time = time.time()
@@ -41,129 +50,114 @@ def stat_tracker():
 
 
 @celery.task()
-def fortnite_api_lookup(user_id, uid):
+def fortnite_api_lookup(uid):
     with app.app_context():
-        user = User.query.filter_by(id=user_id).first()
-
         try:
-            r = requests.get(USER_STATS_ENDPOINT.format(uid), timeout=5)
+            r = requests.get(BR_STATS_URI.format(uid), timeout=5)
 
             if r.status_code != 200:
                 r.raise_for_status()
 
             redis.set('stat_tracker_api_success', int(redis.get('stat_tracker_api_success')) + 1)
-
-            body = r.json()
-            update_user_stats.apply((body, user_id))
-            return
+            return r.json()
 
         except requests.exceptions.HTTPError as e:
-            logger.error('fortnite_api_lookup: Error in fetching data for user: {} - uid: {}'.format(user, uid))
+            logger.error('fortnite_api_lookup: Error in fetching data for uid: {}'.format(uid))
             logger.error('fortnite_api_lookup: Message: {}'.format(str(e)))
             redis.set('stat_tracker_api_errors', int(redis.get('stat_tracker_api_errors')) + 1)
             return
         except requests.exceptions.ConnectTimeout:
-            logger.error('fortnite_api_lookup: Connect Timed out fetching data for user: {} - uid: {}'.format(
-                user, uid))
+            logger.error('fortnite_api_lookup: Connect Timed out fetching data for uid: {}'.format(uid))
             redis.set('stat_tracker_api_errors', int(redis.get('stat_tracker_api_errors')) + 1)
             return
         except requests.exceptions.ReadTimeout:
-            logger.error('fortnite_api_lookup: Read Timed out fetching data for user: {} - uid: {}'.format(user, uid))
+            logger.error('fortnite_api_lookup: Read Timed out fetching data for uid: {}'.format(uid))
             redis.set('stat_tracker_api_errors', int(redis.get('stat_tracker_api_errors')) + 1)
             return
 
 
 @celery.task()
-def update_user_stats(body, user_id):
+def find_changed_stats(body, user_id):
     with app.app_context():
         user = User.query.filter_by(id=user_id).first()
 
+        if body is None:
+            return []
+
         # Something went wrong on the response?
-        if body is None or 'overallData' not in body or 'data' not in body:
+        if 'overallData' not in body or 'data' not in body:
             logger.warn('BODY returned in invalid format {}'.format(user))
-            logger.warn(body)
-            return
+            return []
 
         # Only run updateds if the overallData is different
         overall_data = body.get('overallData', {})
         data_hash = hashlib.md5(json.dumps(overall_data, sort_keys=True).encode('utf-8')).hexdigest()
         if (user.last_known_data_hash == data_hash):
             logger.info('{} has had no changes!'.format(user))
-            return
+            return []
 
         # Start going through the data, its mega nested
-        data, jobs = body.get('data'), []
-        for input_type in data.keys():
+        data, changed_stats = body.get('data'), []
+        for input_type, input_data in data.items():
             _input = Input.query.filter_by(user_id=user.id, input_type=input_type).first()
 
             if _input is None:
                 logger.info('New Input Type for user: {}, input_type: {}'.format(user, input_type))
                 _input = Input(user_id=user.id, input_type=input_type)
                 db.session.add(_input)
-                db.session.commit()
 
-            input_data = data.get(input_type)
-
-            for playlist in input_data.keys():
-                playlist_data = input_data.get(playlist)
-
-                for mode in playlist_data.keys():
-                    mode_data = playlist_data.get(mode)
-
+            for playlist, playlist_data in input_data.items():
+                for mode, mode_data in playlist_data.items():
                     if (playlist in ['defaultsolo', 'defaultduo', 'defaultsquad']):
                         mode = playlist[7:]
                         playlist = 'default'
 
-                    # Add the update/create to the jobs array
-                    jobs.append(update_or_create_stat.s(_input.id, mode, playlist, mode_data))
-
-        groupJob = celery.group(jobs)
-        result = groupJob.apply_async()
-
-        while not result.ready():
-            time.sleep(0.1)
+                    stat = _input.stats.filter_by(mode=mode, name=playlist).first()
+                    if stat is None or stat.matchesplayed != mode_data.get('matchesplayed', 0):
+                        changed_stats.append((_input.id, mode, playlist, mode_data))
 
         user.last_known_data_hash = str(data_hash)
         user.updated_at = datetime.datetime.now()
         db.session.commit()
-        return
+
+        return changed_stats
 
 
-@celery.task()
-def update_or_create_stat(input_id, mode, playlist, data):
+@celery.task(ignore_results=True)
+def update_stats(stats_to_be_updated):
     with app.app_context():
-        _input = Input.query.filter_by(id=input_id).first()
-        stat = _input.stats.filter_by(mode=mode, name=playlist).first()
+        for input_id, mode, playlist, data in stats_to_be_updated:
+            _input = Input.query.filter_by(id=input_id).first()
+            stat = _input.stats.filter_by(mode=mode, name=playlist).first()
 
-        just_created = False
-        if stat is None:
-            logger.info('No Stat {}--{} for user {} with {} \n Creating...'.format(playlist, mode, _input.user, _input))
-            stat = Stat(
-                input_id=input_id,
-                name=playlist,
-                mode=mode,
-                matchesplayed=0,
-                kills=0,
-                placements=dict(),
-                is_ltm=(playlist != 'default'))
-            just_created = True
-            db.session.add(stat)
+            just_created = False
+            if stat is None:
+                logger.info('No Stat {}--{} for user {} with {} \n Creating...'.format(
+                    playlist, mode, _input.user, _input))
+                stat = Stat(
+                    input_id=input_id,
+                    name=playlist,
+                    mode=mode,
+                    matchesplayed=0,
+                    kills=0,
+                    placements=dict(),
+                    is_ltm=(playlist != 'default'))
+                just_created = True
+                db.session.add(stat)
 
-        if stat.matchesplayed < data.get('matchesplayed', 0) and not just_created:
-            game = create_game(stat, data)
-            if game is not None:
-                db.session.add(game)
+            if stat.matchesplayed < data.get('matchesplayed', 0) and not just_created:
+                game = create_game(stat, data)
+                if game is not None:
+                    db.session.add(game)
 
-            stat.placements = get_placements(data)
-            stat.kills = data.get('kills', 0)
-            stat.matchesplayed = data.get('matchesplayed', 0)
-            stat.playersoutlived = data.get('playersoutlived', 0)
-            stat.minutesplayed = data.get('minutesplayed', 0)
-            stat.updated_at = datetime.datetime.now()
+                stat.placements = get_placements(data)
+                stat.kills = data.get('kills', 0)
+                stat.matchesplayed = data.get('matchesplayed', 0)
+                stat.playersoutlived = data.get('playersoutlived', 0)
+                stat.minutesplayed = data.get('minutesplayed', 0)
+                stat.updated_at = datetime.datetime.now()
 
         db.session.commit()
-
-        return None
 
 
 def create_game(stat, data):
@@ -179,9 +173,9 @@ def create_game(stat, data):
     place = 101
 
     # Go thru our placements
-    for key in placements.keys():
+    for key, value in placements.items():
         # If this placement is less than the other one that means its calculating
-        if (stat_placements.get(key, 0) < placements.get(key)):
+        if (stat_placements.get(key, 0) < value):
             # Get the placement number
             new_place = int(re.findall(r'\d+', key)[0])
             # If its less than it is more important
