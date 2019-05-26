@@ -13,6 +13,7 @@ eventlet
 boto
 
 gunicorn
+flower
 
 requests
 python-dateutil

@@ -40,6 +40,8 @@ services:
     command: sh docker/docker.celery.sh
     environment:
       - APP_NAME=prod
+    ports:
+      - 5555:5555
     depends_on:
       - redis
       - postgres

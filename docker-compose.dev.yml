@@ -39,6 +39,8 @@ services:
       - APP_NAME=dev
     volumes:
       - .:/usr/share/fn-dash
+    ports:
+      - 5555:5555
     depends_on:
       - postgres
       - redis
