@@ -28,7 +28,7 @@ def users_show(id):
 @api.route('/users', methods=['POST'])
 def users_create():
     data = request.get_json()
-    
+
     username = data.get('username')
     if username is None:
         return Response('Username Required', 400)

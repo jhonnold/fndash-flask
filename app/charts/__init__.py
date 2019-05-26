@@ -12,10 +12,8 @@ def kd_per_day(user, included_playlists, included_modes, t_to, t_from):
     labels, kds = [], []
 
     while (upper_date > t_from):
-        games = user.games.filter(Game.time_played >= lower_date).filter(
-            Game.time_played < upper_date).filter(
-                Game.playlist.in_(included_playlists)).filter(
-                    Game.mode.in_(included_modes)).all()
+        games = user.games.filter(Game.time_played >= lower_date).filter(Game.time_played < upper_date).filter(
+            Game.playlist.in_(included_playlists)).filter(Game.mode.in_(included_modes)).all()
 
         kills, wins = 0, 0
         for game in games:
@@ -31,25 +29,22 @@ def kd_per_day(user, included_playlists, included_modes, t_to, t_from):
     return labels, kds
 
 
-def lifetime_kd_progression(user, included_playlists, included_modes, t_to,
-                            t_from):
+def lifetime_kd_progression(user, included_playlists, included_modes, t_to, t_from):
     lower_date = t_from
     upper_date = lower_date + one_day
 
     labels, kds = [], []
 
-    stats = user.stats.filter(Stat.name.in_(included_playlists)).filter(
-        Stat.mode.in_(included_modes)).all()
+    stats = user.stats.filter(Stat.name.in_(included_playlists)).filter(Stat.mode.in_(included_modes)).all()
 
-
-    if stats is None or len(stats) == 0: return [], []
+    if stats is None or len(stats) == 0:
+        return [], []
 
     while (lower_date < t_to):
         kills, games, wins = 0, 0, 0
         for stat in stats:
-            historical_stat = stat.histories.filter(
-                StatHistory.created_at >= lower_date).filter(
-                    StatHistory.created_at < upper_date).first()
+            historical_stat = stat.histories.filter(StatHistory.created_at >= lower_date).filter(
+                StatHistory.created_at < upper_date).first()
 
             if historical_stat is None:
                 continue
@@ -58,8 +53,7 @@ def lifetime_kd_progression(user, included_playlists, included_modes, t_to,
             games += historical_stat.matchesplayed
 
             placements = historical_stat.placements if type(
-                historical_stat.placements
-            ) is not list else historical_stat.placements[0]
+                historical_stat.placements) is not list else historical_stat.placements[0]
             wins += placements.get('placetop1', 0)
 
         labels.append(lower_date.__format__('%b %-d'))
@@ -70,18 +64,15 @@ def lifetime_kd_progression(user, included_playlists, included_modes, t_to,
     return labels, kds
 
 
-def games_played_per_day(user, included_playlists, included_modes, t_to,
-                         t_from):
+def games_played_per_day(user, included_playlists, included_modes, t_to, t_from):
     upper_date = t_to
     lower_date = upper_date - one_day
 
     labels, play_count = [], []
 
     while (upper_date > t_from):
-        games = user.games.filter(Game.time_played >= lower_date).filter(
-            Game.time_played < upper_date).filter(
-                Game.playlist.in_(included_playlists)).filter(
-                    Game.mode.in_(included_modes))
+        games = user.games.filter(Game.time_played >= lower_date).filter(Game.time_played < upper_date).filter(
+            Game.playlist.in_(included_playlists)).filter(Game.mode.in_(included_modes))
 
         labels.insert(0, lower_date.__format__('%b %-d'))
         play_count.insert(0, games.count())
@@ -95,8 +86,7 @@ def placements_per_mode(user, included_playlists, included_modes):
     labels, datasets = [], []
 
     for idx, mode in enumerate(included_modes):
-        stats = user.stats.filter(
-            Stat.name.in_(included_playlists)).filter(Stat.mode == mode).all()
+        stats = user.stats.filter(Stat.name.in_(included_playlists)).filter(Stat.mode == mode).all()
 
         # No stats? Shove on empty data
         if len(stats) == 0:
@@ -108,8 +98,7 @@ def placements_per_mode(user, included_playlists, included_modes):
 
         # Summate the placement dictionaries, add in placetop100 (Loss)
         for stat in stats:
-            placements = stat.placements[0] if type(
-                stat.placements) is list else stat.placements
+            placements = stat.placements[0] if type(stat.placements) is list else stat.placements
             for place in placements.keys():
                 if place not in datasets[idx]:
                     datasets[idx][place] = 0
@@ -126,14 +115,12 @@ def placements_per_mode(user, included_playlists, included_modes):
         for key in datasets[idx].keys():
             possible_placements.append(int(re.findall(r'\d+', key)[0]))
         possible_placements.sort()
-        datasets[idx] = [
-            datasets[idx].get('placetop{}'.format(p))
-            for p in possible_placements
-        ]
+        datasets[idx] = [datasets[idx].get('placetop{}'.format(p)) for p in possible_placements]
 
         # Modify placement logic to correct values by going thru array backwards
         for j, e in reversed(list(enumerate(datasets[idx]))):
-            if j == 0: break
+            if j == 0:
+                break
             datasets[idx][j] -= datasets[idx][j - 1]
 
         labels.append(len(possible_placements) * [None])
@@ -152,8 +139,7 @@ def minutes_played_per_playlist_mode(user, included_playlists, included_modes):
     labels, minutes = [], []
 
     for mode in included_modes:
-        stats = user.stats.filter(Stat.name.in_(included_playlists)).filter(
-            Stat.mode == mode).all()
+        stats = user.stats.filter(Stat.name.in_(included_playlists)).filter(Stat.mode == mode).all()
 
         if stats is None:
             continue

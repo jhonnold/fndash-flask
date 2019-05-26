@@ -43,9 +43,7 @@ def games_search():
             user = User.query.filter(User.username == username).first()
 
             if user is None:
-                return Response(
-                    'A user by this username is not being tracked by us! Get them signed up!',
-                    404)
+                return Response('A user by this username is not being tracked by us! Get them signed up!', 404)
 
             _input = Input.query\
                               .filter(Input.user_id == user.id)\
@@ -57,8 +55,7 @@ def games_search():
                 400)
 
         if _input is None:
-            return Response('This user doesn\'t play with this type of input!',
-                            400)
+            return Response('This user doesn\'t play with this type of input!', 400)
 
         input_id = _input.id
 
@@ -68,9 +65,7 @@ def games_search():
     if playlists is not None:
         query = query.filter(Stat.name.in_(playlists))
     else:
-        query = query.filter(
-            Stat.name.in_(
-                ['default', 'showdown', 'showdownalt', 'showdowntournament']))
+        query = query.filter(Stat.name.in_(['default', 'showdown', 'showdownalt', 'showdowntournament']))
 
     if modes is not None:
         query = query.filter(Stat.mode.in_(modes))
@@ -82,8 +77,7 @@ def games_search():
         t_end_str = time.get('end')
 
         if t_end_str is None or t_start_str is None:
-            return Response(
-                'When specifying time, both start and end must be given', 400)
+            return Response('When specifying time, both start and end must be given', 400)
 
         if t_start_str is not None:
             try:
@@ -105,8 +99,7 @@ def games_search():
 
     if order_by is not None:
         if order_by != 'kills' and order_by != 'time':
-            return Response('Invalid ordering, must be either kills or time',
-                            400)
+            return Response('Invalid ordering, must be either kills or time', 400)
 
         if order_by == 'kills':
             query = query.order_by(Game.kills.desc())
@@ -118,7 +111,6 @@ def games_search():
             return Response('Limit must be a number!', 400)
         query = query.limit(limit)
 
-    games = query.options(
-        joinedload('stat').joinedload('input')).all()
+    games = query.options(joinedload('stat').joinedload('input')).all()
 
     return jsonify([g.serialize(['game', 'stat']) for g in games])

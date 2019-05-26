@@ -2,8 +2,7 @@ from celery.schedules import crontab
 
 
 class CeleryConfig(object):
-    CELERY_IMPORTS = ('app.tasks.stat_tracker', 'app.tasks.stat_history',
-                      'app.tasks.metrics')
+    CELERY_IMPORTS = ('app.tasks.stat_tracker', 'app.tasks.stat_history', 'app.tasks.metrics')
     CELERY_TASK_RESULT_EXPIRES = 60
     CELERY_TIMEZONE = 'UTC'
 

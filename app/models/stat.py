@@ -3,6 +3,7 @@ import datetime
 from sqlalchemy.dialects.postgresql import JSONB
 from app.database import db
 
+
 def get_placements(stat):
     placements = dict()
 
@@ -36,10 +37,9 @@ class Stat(db.Model):
     games = db.relationship('Game', backref='stat', lazy='dynamic')
 
     def __repr__(self):
-        return "<Stat '{}' - '{}'>".format(
-            self.name, self.mode)
+        return "<Stat '{}' - '{}'>".format(self.name, self.mode)
 
-    def serialize(self, loaded = []):
+    def serialize(self, loaded=[]):
         dict = {
             'id': self.id,
             'name': self.name,

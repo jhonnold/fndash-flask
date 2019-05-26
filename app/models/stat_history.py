@@ -3,6 +3,7 @@ import datetime
 from sqlalchemy.dialects.postgresql import JSONB
 from app.database import db
 
+
 class StatHistory(db.Model):
     __tablename__ = 'stat_history'
 
