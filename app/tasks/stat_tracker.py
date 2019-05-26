@@ -24,21 +24,19 @@ def stat_tracker():
         redis.set('stat_tracker_api_success', 0)
         redis.set('stat_tracker_api_errors', 0)
 
-        chains = [chain(
-            fortnite_api_lookup.s(u.uid),
-            find_changed_stats.s(u.id),
-        ) for u in User.query.all()]
+        chains = [
+            chain(
+                fortnite_api_lookup.s(u.uid),
+                find_changed_stats.s(u.id),
+                update_stats.s(),
+            ) for u in User.query.all()
+        ]
 
         groupJob = celery.group(chains)
         result = groupJob.apply_async()
 
         while not result.ready():
             time.sleep(0.5)
-
-        for updates in result.get():
-            # This cud be chained, but this is a massive set of updates at times
-            # and needs to be run 1 update set at a time
-            update_stats.delay(updates)
 
         # collect metrics (not 100% accurate as redis isnt locked)
         end_time = time.time()
@@ -124,9 +122,9 @@ def find_changed_stats(body, user_id):
 
 
 @celery.task(ignore_results=True)
-def update_stats(stats_to_be_updated):
+def update_stats(changed_stats):
     with app.app_context():
-        for input_id, mode, playlist, data in stats_to_be_updated:
+        for input_id, mode, playlist, data in changed_stats:
             _input = Input.query.filter_by(id=input_id).first()
             stat = _input.stats.filter_by(mode=mode, name=playlist).first()
 
