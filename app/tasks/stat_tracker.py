@@ -131,6 +131,7 @@ def find_changed_stats(body, user_id):
                 logger.info('New Input Type for user: {}, input_type: {}'.format(user, input_type))
                 _input = Input(user_id=user.id, input_type=input_type)
                 db.session.add(_input)
+                db.session.commit()
 
             for playlist, playlist_data in input_data.items():
                 for mode, mode_data in playlist_data.items():
