@@ -1,21 +1,21 @@
-import celery, os
+import celery, os, time
 
 from celery.utils.log import get_task_logger
 from boto.ec2 import cloudwatch
 from boto.utils import get_instance_metadata
+from app.util import metrics
 
 logger = get_task_logger(__name__)
 
 
 @celery.task()
-def upload_stat_tracker_metrics(time, games_played, api_success, api_errors):
+def upload_stat_tracker_metrics():
+
+    time = time.time() - metrics.start_time
 
     logger.warn('*' * 80)
-    logger.warn('Stats for this session:')
-    logger.warn('Duration: {}'.format(time))
-    logger.warn('Games Played: {}'.format(games_played))
-    logger.warn('FortniteAPI Successes: {}'.format(api_success))
-    logger.warn('FortniteAPI Errors: {}'.format(api_errors))
+    logger.warn('time: {}'.format(time))
+    logger.warn('{}'.format(metrics))
     logger.warn('*' * 80)
 
     metadata = get_instance_metadata(timeout=1, num_retries=1)
@@ -34,10 +34,13 @@ def upload_stat_tracker_metrics(time, games_played, api_success, api_errors):
     cw.put_metric_data('FNDash', metric_name, time, unit='Seconds', dimensions={"InstanceId": instance_id})
 
     metric_name = 'StatTrackerGames{}'.format(app_name)
-    cw.put_metric_data('FNDash', metric_name, games_played, unit='Count', dimensions={"InstanceId": instance_id})
+    cw.put_metric_data(
+        'FNDash', metric_name, metrics.get('games', 0), unit='Count', dimensions={"InstanceId": instance_id})
 
     metric_name = 'StatTrackerAPISuccess{}'.format(app_name)
-    cw.put_metric_data('FNDash', metric_name, api_success, unit='Count', dimensions={"InstanceId": instance_id})
+    cw.put_metric_data(
+        'FNDash', metric_name, metrics.get('api_successes', 0), unit='Count', dimensions={"InstanceId": instance_id})
 
     metric_name = 'StatTrackerAPIErrors{}'.format(app_name)
-    cw.put_metric_data('FNDash', metric_name, api_errors, unit='Count', dimensions={"InstanceId": instance_id})
+    cw.put_metric_data(
+        'FNDash', metric_name, metrics.get('api_failures', 0), unit='Count', dimensions={"InstanceId": instance_id})

@@ -18,4 +18,5 @@ def record_stats():
                 minutesplayed=stat.minutesplayed,
             )
             db.session.add(stat)
-            db.session.commit()
+        
+        db.session.commit()

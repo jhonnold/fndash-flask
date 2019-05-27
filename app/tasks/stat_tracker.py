@@ -4,52 +4,19 @@ from app import db, app
 from app.models import User, Game, Stat, Input
 from app.models.stat import get_placements
 from app.tasks.metrics import upload_stat_tracker_metrics
+from app.util import metrics
 from celery import chain
 from celery.utils.log import get_task_logger
-from redis import Redis
 
 logger = get_task_logger(__name__)
 
-redis = Redis(host='redis', port=6379)
-api_success_lock = threading.Lock()
-api_failure_lock = threading.Lock()
-games_played_lock = threading.Lock()
-
 BR_STATS_URI = 'https://fortnite-public-api.theapinetwork.com/prod09/users/public/br_stats_v2?platform=pc&user_id={}'
-
-
-def increment_api_success():
-    api_success_lock.acquire()
-    try:
-        redis.set('stat_tracker_api_success', int(redis.get('stat_tracker_api_success')) + 1)
-    finally:
-        api_success_lock.release()
-
-
-def increment_api_failures():
-    api_failure_lock.acquire()
-    try:
-        redis.set('stat_tracker_api_errors', int(redis.get('stat_tracker_api_errors')) + 1)
-    finally:
-        api_failure_lock.release()
-
-
-def increment_games_played():
-    games_played_lock.acquire()
-    try:
-        redis.set('stat_tracker_games', int(redis.get('stat_tracker_games')) + 1)
-    finally:
-        games_played_lock.release()
 
 
 @celery.task()
 def stat_tracker():
     with app.app_context():
-        # reset metrics
-        start_time = time.time()
-        redis.set('stat_tracker_games', 0)
-        redis.set('stat_tracker_api_success', 0)
-        redis.set('stat_tracker_api_errors', 0)
+        metrics.reset()
 
         chains = [
             chain(
@@ -57,7 +24,7 @@ def stat_tracker():
                 find_changed_stats.s(u.id),
                 update_stats.s(),
                 update_hash.s(u.id),
-            ) for u in User.query.all()
+            ) for u in User.query.limit(5).all()
         ]
 
         groupJob = celery.group(chains)
@@ -66,13 +33,7 @@ def stat_tracker():
         while not result.ready():
             time.sleep(0.5)
 
-        # collect metrics (not 100% accurate as redis isnt locked)
-        end_time = time.time()
-        games = int(redis.get('stat_tracker_games'))
-        api_success = int(redis.get('stat_tracker_api_success'))
-        api_errors = int(redis.get('stat_tracker_api_errors'))
-
-        upload_stat_tracker_metrics.apply_async((end_time - start_time, games, api_success, api_errors))
+        upload_stat_tracker_metrics.apply_async()
 
 
 @celery.task()
@@ -84,21 +45,21 @@ def fortnite_api_lookup(uid):
             if r.status_code != 200:
                 r.raise_for_status()
 
-            increment_api_success()
+            metrics.inc('api_successes')
             return r.json()
 
         except requests.exceptions.HTTPError as e:
             logger.error('fortnite_api_lookup: Error in fetching data for uid: {}'.format(uid))
             logger.error('fortnite_api_lookup: Message: {}'.format(str(e)))
-            increment_api_failures()
+            metrics.inc('api_failures')
             return
         except requests.exceptions.ConnectTimeout:
             logger.error('fortnite_api_lookup: Connect Timed out fetching data for uid: {}'.format(uid))
-            increment_api_failures()
+            metrics.inc('api_failures')
             return
         except requests.exceptions.ReadTimeout:
             logger.error('fortnite_api_lookup: Read Timed out fetching data for uid: {}'.format(uid))
-            increment_api_failures()
+            metrics.inc('api_failures')
             return
 
 
@@ -188,7 +149,7 @@ def update_stats(args):
 
 def create_game(stat, data):
     logger.info('Creating game for {} with {} in {}'.format(stat.input.user, stat.input, stat))
-    increment_games_played()
+    metrics.inc('games')
 
     stat_placements = stat.placements
     if type(stat_placements) is list:
