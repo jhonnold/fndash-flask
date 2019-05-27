@@ -1,4 +1,4 @@
-import celery, requests, datetime, re, time, json, hashlib
+import celery, requests, datetime, re, time, json, hashlib, threading
 
 from app import db, app
 from app.models import User, Game, Stat, Input
@@ -11,8 +11,35 @@ from redis import Redis
 logger = get_task_logger(__name__)
 
 redis = Redis(host='redis', port=6379)
+api_success_lock = threading.Lock()
+api_failure_lock = threading.Lock()
+games_played_lock = threading.Lock()
 
 BR_STATS_URI = 'https://fortnite-public-api.theapinetwork.com/prod09/users/public/br_stats_v2?platform=pc&user_id={}'
+
+
+def increment_api_success():
+    api_success_lock.acquire()
+    try:
+        redis.set('stat_tracker_api_success', int(redis.get('stat_tracker_api_success')) + 1)
+    finally:
+        api_success_lock.release()
+
+
+def increment_api_failures():
+    api_failure_lock.acquire()
+    try:
+        redis.set('stat_tracker_api_errors', int(redis.get('stat_tracker_api_errors')) + 1)
+    finally:
+        api_failure_lock.release()
+
+
+def increment_games_played():
+    games_played_lock.acquire()
+    try:
+        redis.set('stat_tracker_games', int(redis.get('stat_tracker_games')) + 1)
+    finally:
+        games_played_lock.release()
 
 
 @celery.task()
@@ -57,21 +84,21 @@ def fortnite_api_lookup(uid):
             if r.status_code != 200:
                 r.raise_for_status()
 
-            redis.set('stat_tracker_api_success', int(redis.get('stat_tracker_api_success')) + 1)
+            increment_api_success()
             return r.json()
 
         except requests.exceptions.HTTPError as e:
             logger.error('fortnite_api_lookup: Error in fetching data for uid: {}'.format(uid))
             logger.error('fortnite_api_lookup: Message: {}'.format(str(e)))
-            redis.set('stat_tracker_api_errors', int(redis.get('stat_tracker_api_errors')) + 1)
+            increment_api_failures()
             return
         except requests.exceptions.ConnectTimeout:
             logger.error('fortnite_api_lookup: Connect Timed out fetching data for uid: {}'.format(uid))
-            redis.set('stat_tracker_api_errors', int(redis.get('stat_tracker_api_errors')) + 1)
+            increment_api_failures()
             return
         except requests.exceptions.ReadTimeout:
             logger.error('fortnite_api_lookup: Read Timed out fetching data for uid: {}'.format(uid))
-            redis.set('stat_tracker_api_errors', int(redis.get('stat_tracker_api_errors')) + 1)
+            increment_api_failures()
             return
 
 
@@ -160,7 +187,7 @@ def update_stats(args):
 
 def create_game(stat, data):
     logger.info('Creating game for {} with {} in {}'.format(stat.input.user, stat.input, stat))
-    redis.set('stat_tracker_games', int(redis.get('stat_tracker_games')) + 1)
+    increment_games_played()
 
     stat_placements = stat.placements
     if type(stat_placements) is list:
@@ -192,6 +219,7 @@ def create_game(stat, data):
         return Game(stat_id=stat.id, placement=placement, kills=kills)
 
     return None
+
 
 @celery.task()
 def update_hash(data_hash, id):
