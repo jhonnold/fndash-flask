@@ -24,7 +24,7 @@ def stat_tracker():
                 find_changed_stats.s(u.id),
                 update_stats.s(),
                 update_hash.s(u.id),
-            ) for u in User.query.limit(5).all()
+            ) for u in User.query.all()
         ]
 
         groupJob = celery.group(chains)
@@ -48,17 +48,8 @@ def fortnite_api_lookup(uid):
             metrics.inc('api_successes')
             return r.json()
 
-        except requests.exceptions.HTTPError as e:
-            logger.error('fortnite_api_lookup: Error in fetching data for uid: {}'.format(uid))
-            logger.error('fortnite_api_lookup: Message: {}'.format(str(e)))
-            metrics.inc('api_failures')
-            return
-        except requests.exceptions.ConnectTimeout:
-            logger.error('fortnite_api_lookup: Connect Timed out fetching data for uid: {}'.format(uid))
-            metrics.inc('api_failures')
-            return
-        except requests.exceptions.ReadTimeout:
-            logger.error('fortnite_api_lookup: Read Timed out fetching data for uid: {}'.format(uid))
+        except Exception as e:
+            logger.error('fortnite_api_lookup: {}'.format(str(e)))
             metrics.inc('api_failures')
             return
 
@@ -83,15 +74,13 @@ def find_changed_stats(body, user_id):
             logger.info('{} has had no changes!'.format(user))
             return None, []
 
-        # Start going through the data, its mega nested
         data, changed_stats = body.get('data'), []
         for input_type, input_data in data.items():
             _input = Input.query.filter_by(user_id=user.id, input_type=input_type).first()
 
             if _input is None:
                 logger.info('New Input Type for user: {}, input_type: {}'.format(user, input_type))
-                _input = Input(user_id=user.id, input_type=input_type)
-                db.session.add(_input)
+                db.session.add(Input(user_id=user.id, input_type=input_type))
                 db.session.commit()
 
             for playlist, playlist_data in input_data.items():
