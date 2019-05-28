@@ -11,10 +11,10 @@ logger = get_task_logger(__name__)
 @celery.task()
 def upload_stat_tracker_metrics():
 
-    time = time.time() - metrics.start_time
+    run_time = time.time() - metrics.start_time
 
     logger.warn('*' * 80)
-    logger.warn('time: {}'.format(time))
+    logger.warn('time: {}'.format(run_time))
     logger.warn('{}'.format(metrics))
     logger.warn('*' * 80)
 
@@ -31,7 +31,7 @@ def upload_stat_tracker_metrics():
     app_name = os.environ.get('APP_NAME').capitalize()
 
     metric_name = 'StatTrackerTime{}'.format(app_name)
-    cw.put_metric_data('FNDash', metric_name, time, unit='Seconds', dimensions={"InstanceId": instance_id})
+    cw.put_metric_data('FNDash', metric_name, run_time, unit='Seconds', dimensions={"InstanceId": instance_id})
 
     metric_name = 'StatTrackerGames{}'.format(app_name)
     cw.put_metric_data(
