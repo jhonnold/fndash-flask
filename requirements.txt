@@ -16,4 +16,5 @@ gunicorn
 flower
 
 requests
+python-dotenv
 python-dateutil

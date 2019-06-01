@@ -1,4 +1,4 @@
-import celery, requests
+import celery, requests, os
 
 from app.util import metrics
 from app.tasks import AppContextBase
@@ -11,7 +11,7 @@ BR_STATS_URI = 'https://fortnite-public-api.theapinetwork.com/prod09/users/publi
 @celery.task(base=AppContextBase, bind=True, name="fortnite_api_lookup")
 def fortnite_api_lookup(self, uid):
     try:
-        r = requests.get(BR_STATS_URI.format(uid), timeout=5)
+        r = requests.get(BR_STATS_URI.format(uid), timeout=30, headers={'Authorization': os.getenv('FORTNITE_API_AUTH')})
         if r.status_code != 200:
             r.raise_for_status()
 
