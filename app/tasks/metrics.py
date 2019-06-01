@@ -8,7 +8,7 @@ from app.util import metrics
 logger = get_task_logger(__name__)
 
 
-@celery.task()
+@celery.task(name="upload_stat_tracker_metrics")
 def upload_stat_tracker_metrics():
 
     run_time = time.time() - metrics.start_time
