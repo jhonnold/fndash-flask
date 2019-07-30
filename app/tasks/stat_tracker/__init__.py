@@ -6,7 +6,6 @@ from app.models import User
 from celery import chain
 from celery.utils.log import get_task_logger
 
-from app.tasks import upload_stat_tracker_metrics
 from .fortnite_api_lookup import fortnite_api_lookup
 from .find_changed_stats import find_changed_stats
 from .update_stats import update_stats
@@ -37,4 +36,9 @@ def stat_tracker():
     while not result.ready():
         time.sleep(0.5)
 
-    upload_stat_tracker_metrics.apply_async()
+    run_time = time.time() - metrics.start_time
+
+    logger.warn('*' * 80)
+    logger.warn('time: {}'.format(run_time))
+    logger.warn('{}'.format(metrics))
+    logger.warn('*' * 80)

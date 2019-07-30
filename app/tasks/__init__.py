@@ -11,6 +11,5 @@ class AppContextBase(Task):
             return super(AppContextBase, self).__call__(*args, **kwargs)
 
 
-from .metrics import upload_stat_tracker_metrics
 from .stat_history import record_stats
 from .stat_tracker import find_changed_stats, fortnite_api_lookup, update_hash, update_stats
