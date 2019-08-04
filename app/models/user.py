@@ -15,12 +15,3 @@ class User(db.Model):
 
     def __repr__(self):
         return "<User '{}'>".format(self.username)
-
-    def serialize(self):
-        return {
-            'id': self.id,
-            'uid': self.uid,
-            'username': self.username,
-            'updated_at': self.updated_at,
-            'created_at': self.created_at
-        }

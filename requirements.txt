@@ -5,6 +5,9 @@ flask-cors
 
 flask-migrate
 flask-sqlalchemy
+flask-restless
+flask-marshmallow
+marshmallow-sqlalchemy
 psycopg2-binary
 
 celery

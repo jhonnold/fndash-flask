@@ -19,18 +19,6 @@ def runworker():
     app.run(debug=False)
 
 
-@manager.command
-def recreate_db():
-    """
-    Recreates a database. This should only be used once
-    when there's a new database instance. This shouldn't be
-    used when you migrate your database.
-    """
-    db.drop_all()
-    db.create_all()
-    db.session.commit()
-
-
 @app.shell_context_processor
 def make_shell_context():
     return dict(app=app, db=db, migrate=migrate, User=User, Game=Game, Stat=Stat, StatHistory=StatHistory, Input=Input)

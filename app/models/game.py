@@ -12,13 +12,3 @@ class Game(db.Model):
 
     def __repr__(self):
         return "<Game '{}/{}' - '{}'>".format(self.playlist, self.mode, self.time_played)
-
-    def serialize(self, loaded=[]):
-        dict = {'id': self.id, 'time_played': self.time_played, 'kills': self.kills, 'placement': self.placement}
-
-        if 'stat' in loaded:
-            dict['stat'] = self.stat.serialize(loaded)
-        else:
-            dict['stat_id'] = self.stat_id
-
-        return dict
